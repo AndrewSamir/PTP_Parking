@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Parking</string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="hint_email">Email</string>
+    <string name="agree">agree</string>
+    <string name="cancel">Cancel</string>
+    <string name="no">No</string>
+    <string name="success">Success</string>
+    <string name="internet_connection">Internet Connection Error</string>
+    <string name="full_name">Full Name</string>
+    <string name="hint_Phone_number">Phone Number</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="account_details">Account Details</string>
+    <string name="next">Next</string>
+    <string name="title_activity_sign_up_car_details">Signup</string>
+    <string name="car_details">Car Details</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="CarBrand">Car Brand</string>
+    <string name="car_model">Car Model</string>
+    <string name="if_you_don_t_have_account">If you don\'t have account !</string>
+    <string name="sign_up">Signup</string>
+    <string name="login">Login</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_password">Forgot Password ?</string>
+</resources>

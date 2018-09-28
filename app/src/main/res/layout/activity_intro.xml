@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.IntroActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:src="@drawable/img_try"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/hero"
+            tools:ignore="ContentDescription" />
+
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnIntroLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/background_btn_border"
+        android:text="@string/login"
+        android:textColor="@color/colorAccent" />
+
+    <ImageView
+        android:id="@+id/btnIntroSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_colord"
+        tools:ignore="ContentDescription" />
+</LinearLayout>

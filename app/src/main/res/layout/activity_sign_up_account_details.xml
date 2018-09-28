@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="@dimen/_7sdp"
+    android:layout_marginStart="@dimen/_7sdp"
+    android:orientation="vertical"
+    tools:context=".activities.Account.SignUpAccountDetailsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_25sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:text="@string/account_details"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_16sdp"
+        android:textStyle="bold" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textColorHint="@color/colorHint"
+        android:theme="@style/Theme.AppCompat">
+
+        <EditText
+            android:id="@+id/edtRegisterName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBackEdit"
+            android:hint="@string/full_name"
+            android:inputType="text"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorHint" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textColorHint="@color/colorHint"
+        android:theme="@style/Theme.AppCompat">
+
+        <EditText
+            android:id="@+id/edtRegisterPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_Phone_number"
+            android:inputType="phone"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorHint" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textColorHint="@color/colorHint"
+        android:theme="@style/Theme.AppCompat">
+
+        <EditText
+            android:id="@+id/edtRegisterMail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBackEdit"
+            android:hint="@string/hint_email"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorHint" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textColorHint="@color/colorHint"
+        android:theme="@style/Theme.AppCompat">
+
+        <EditText
+            android:id="@+id/edtRegisterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBackEdit"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorHint" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textColorHint="@color/colorHint"
+        android:theme="@style/Theme.AppCompat">
+
+        <EditText
+            android:id="@+id/edtRegisterConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorBackEdit"
+            android:hint="@string/hint_confirm_password"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorHint" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnRegisterNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/background_btn_border"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/next"
+        android:textColor="@color/colorAccent" />
+
+</LinearLayout>
