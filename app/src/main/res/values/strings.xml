@@ -24,4 +24,6 @@
     <string name="login">Login</string>
     <string name="remember_me">Remember Me</string>
     <string name="forgot_password">Forgot Password ?</string>
+    <string name="title_activity_seeker_maps">Map</string>
+    <string name="where">Where …</string>
 </resources>

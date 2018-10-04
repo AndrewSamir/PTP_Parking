@@ -6,4 +6,6 @@
     <color name="colorHint">#BCC5D3</color>
     <color name="colorBackEdit">#E2E8ED</color>
     <color name="colorText">#4C5264</color>
+    <color name="colorHintMap">#78849E</color>
+
 </resources>
