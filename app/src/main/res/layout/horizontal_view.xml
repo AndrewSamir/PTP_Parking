@@ -5,6 +5,6 @@
 
     <View
         android:background="#F4F4F6"
-        android:layout_width="@dimen/_1sdp"
+        android:layout_width="1dp"
         android:layout_height="match_parent" />
 </FrameLayout>

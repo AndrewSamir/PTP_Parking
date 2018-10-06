@@ -18,11 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".activities.SplashScreenActivity">
-            <intent-filter>
+        <!--    <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".activities.IntroActivity"
@@ -57,6 +57,7 @@
         <activity
             android:name=".activities.Seeker.SeekerMapsActivity"
             android:label="@string/title_activity_seeker_maps"
+            android:theme="@style/SeekerMap"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

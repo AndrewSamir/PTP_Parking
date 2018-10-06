@@ -7,8 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,17 +23,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import parking.com.slash.parking.R;
 
-public class SeekerMapsActivity extends FragmentActivity implements OnMapReadyCallback
-{
+public class SeekerMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_maps);
+//        getActionBar().hide();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorWhite));
+        }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -48,8 +54,7 @@ public class SeekerMapsActivity extends FragmentActivity implements OnMapReadyCa
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
@@ -59,20 +64,16 @@ public class SeekerMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    private Bitmap getBitmapMarker(String mText, boolean isSelected)
-    {
-        try
-        {
+    private Bitmap getBitmapMarker(String mText, boolean isSelected) {
+        try {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
             Resources resources = getResources();
             float scale = resources.getDisplayMetrics().density;
             Bitmap bitmap = null;
-            if (!isSelected)
-            {
+            if (!isSelected) {
                 paint.setColor(Color.WHITE);
                 bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin_avaliable_selected); // pin_with_price
-            } else
-            {
+            } else {
                 paint.setColor(Color.BLACK);
                 bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin_now);
             }
@@ -104,8 +105,7 @@ public class SeekerMapsActivity extends FragmentActivity implements OnMapReadyCa
             canvas.drawText(mText, x, y - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), paint);
             return bitmap;
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
     }

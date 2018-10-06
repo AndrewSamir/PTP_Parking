@@ -19,14 +19,14 @@
 
     <include layout="@layout/xml_map_search_bar" />
 
-    <android.support.v7.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_120sdp"
         android:layout_gravity="bottom"
-        android:background="@null"
-        app:cardElevation="@dimen/_5sdp">
+        android:background="@null">
 
         <LinearLayout
+            android:padding="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/banner_background"
@@ -82,9 +82,10 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:layout_marginStart="@dimen/_20sdp"
+                    android:textColor="@color/colorPrimary"
                     android:background="@drawable/background_btn_border"
                     android:text="BOOK" />
             </FrameLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </RelativeLayout>
 </FrameLayout>
