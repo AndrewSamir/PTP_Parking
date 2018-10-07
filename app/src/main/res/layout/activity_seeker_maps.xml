@@ -20,17 +20,19 @@
     <include layout="@layout/xml_map_search_bar" />
 
     <RelativeLayout
+        android:id="@+id/rlSeekerMapsDetailsCard"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_120sdp"
         android:layout_gravity="bottom"
-        android:background="@null">
+        android:background="@null"
+        android:visibility="gone">
 
         <LinearLayout
-            android:padding="@dimen/_10sdp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/banner_background"
             android:orientation="vertical"
+            android:padding="@dimen/_10sdp"
             android:weightSum="5">
 
             <LinearLayout
@@ -45,30 +47,35 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
 
                     <TextView
+                        android:id="@+id/tvSeekerMapsTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="jk,mbnvvnvbvb" />
+                        tools:text="jk,mbnvvnvbvb" />
 
                     <TextView
+                        android:id="@+id/tvSeekerMapsStreet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="jk,mbnvvnvbvb" />
+                        tools:text="jk,mbnvvnvbvb" />
 
                     <TextView
+                        android:id="@+id/tvSeekerMapsArea"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="jk,mbnvvnvbvb" />
+                        tools:text="jk,mbnvvnvbvb" />
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tvSeekerMapsPrice"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="20 EGP" />
+                    tools:text="20 \n EGP" />
             </LinearLayout>
 
             <FrameLayout
@@ -82,9 +89,9 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/_20sdp"
                     android:layout_marginStart="@dimen/_20sdp"
-                    android:textColor="@color/colorPrimary"
                     android:background="@drawable/background_btn_border"
-                    android:text="BOOK" />
+                    android:text="@string/book"
+                    android:textColor="@color/colorPrimary" />
             </FrameLayout>
         </LinearLayout>
     </RelativeLayout>

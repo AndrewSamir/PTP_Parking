@@ -2,7 +2,6 @@ package parking.com.slash.parking.activities.Account;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,7 +18,6 @@ import butterknife.OnClick;
 import parking.com.slash.parking.R;
 import parking.com.slash.parking.activities.BaseActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
-import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
 import parking.com.slash.parking.model.ModelLoginRequest.ModelLoginRequest;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
@@ -122,7 +120,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         ModelLoginRequest modelLoginRequest = new ModelLoginRequest();
         modelLoginRequest.setUsername(edtLoginEmail.getText().toString());
         modelLoginRequest.setPassword(edtLoginPassword.getText().toString());
-        Call call = HandleCalls.restSha3er.getClientService().callLogin(modelLoginRequest);
+        Call call = HandleCalls.restParki.getClientService().callLogin(modelLoginRequest);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callCheckExist.name(), true);
     }
 

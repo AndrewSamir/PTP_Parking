@@ -124,7 +124,7 @@ public class SignUpAccountDetailsActivity extends BaseActivity implements Valida
         ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
         modelCommonRequest.setEmail(edtRegisterMail.getText().toString());
         modelCommonRequest.setMobile(edtRegisterPhone.getText().toString());
-        Call call = HandleCalls.restSha3er.getClientService().callCheckExist(modelCommonRequest);
+        Call call = HandleCalls.restParki.getClientService().callCheckExist(modelCommonRequest);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callCheckExist.name(), true);
     }
 

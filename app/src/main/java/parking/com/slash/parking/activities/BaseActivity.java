@@ -37,7 +37,8 @@ import io.reactivex.subjects.PublishSubject;
 import parking.com.slash.parking.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public abstract class BaseActivity extends RxAppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity
+{
     //region variables
     public final String content_Fragment = "Content_Fragment";
     protected String TAG;
@@ -50,12 +51,14 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     //region life cycle
 
     @Override
-    protected void attachBaseContext(Context newBase) {
+    protected void attachBaseContext(Context newBase)
+    {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         mainProgressBar = findViewById(R.id.progress);
@@ -70,17 +73,20 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
     }
 
@@ -89,7 +95,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     //region handling back pressed
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         super.onBackPressed();
         //        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
@@ -98,21 +105,25 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     //region keyboard handlers
 
-    public void hideVirtualKeyBoard() {
-        try {
+    public void hideVirtualKeyBoard()
+    {
+        try
+        {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             //			if(getCurrentFocus() != null)
             //			{
             imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView()
                     .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             //			}
-        } catch (NullPointerException mException) {
+        } catch (NullPointerException mException)
+        {
 //            LoggerHelper.i(this.getClass().getSimpleName(), "null pointer to hide keyboard");
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    public void showVirtualKeyBoard() {
+    public void showVirtualKeyBoard()
+    {
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -122,6 +133,12 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     //region helper methods
 
+
+    protected void hideToolBar()
+    {
+        getSupportActionBar().hide();
+
+    }
    /* public void addContentFragment(Fragment fragment, boolean addToBackStack) {
         hideVirtualKeyBoard();
         showLoading(false);
@@ -140,7 +157,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }*/
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState)
+    {
 //        super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -184,9 +202,11 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     /**
      * clear backStack for the fragments and go back to the first fragment in the application
      */
-    public void fclearBackStack() {
+    public void fclearBackStack()
+    {
         FragmentManager manager = getSupportFragmentManager();
-        if (manager.getBackStackEntryCount() > 0) {
+        if (manager.getBackStackEntryCount() > 0)
+        {
             //			FragmentManager.BackStackEntry first = manager.getBackStackEntryAt(0);
             manager.popBackStack(content_Fragment, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
@@ -214,40 +234,49 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      *
      * @param loading true to show loading, false otherwise
      */
-    public void showLoading(boolean loading) {
-        if (mainProgressBar == null) {
+    public void showLoading(boolean loading)
+    {
+        if (mainProgressBar == null)
+        {
             return;
         }
-        if (loading) {
+        if (loading)
+        {
             mainProgressBar.setVisibility(View.VISIBLE);
-            mainProgressBar.setOnClickListener(new View.OnClickListener() {
+            mainProgressBar.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
 
                 }
             });
 //            showProgressDialog();
-        } else {
+        } else
+        {
             mainProgressBar.setVisibility(View.GONE);
             mainProgressBar.setOnClickListener(null);
         }
     }
 
 
-    private void showProgressDialog() {
+    private void showProgressDialog()
+    {
         ProgressDialog progressDialog = new ProgressDialog(this, R.style.CustomDialog);
 //        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setIcon(R.drawable.common_full_open_on_phone);
         progressDialog.show();
     }
 
-    public String getShowDate(String receivedDate) {
+    public String getShowDate(String receivedDate)
+    {
 
         String[] dateItems = receivedDate.split("-");
         String day = dateItems[2];
         String year = dateItems[0];
         String month;
-        switch (dateItems[1]) {
+        switch (dateItems[1])
+        {
 
             case "01":
                 month = "Jan";
@@ -293,32 +322,40 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
 
     //region showing message in dialog
-    public MaterialDialog.Builder getMaterialDialogBuilder() {
+    public MaterialDialog.Builder getMaterialDialogBuilder()
+    {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
 //        builder.typeface("TheSansArabic-Bold.otf", "TheSansArabic-Plain.otf");
 
         return builder;
     }
 
-    public void showMessage(@StringRes int stringResourceId) {
+    public void showMessage(@StringRes int stringResourceId)
+    {
         showMessage(null, getString(stringResourceId));
     }
 
-    public void showMessage(String message) {
+    public void showMessage(String message)
+    {
         showMessage(null, message);
     }
 
-    public void showMessage(@Nullable String title, @NonNull String message) {
-        if (!isFinishing()) {
+    public void showMessage(@Nullable String title, @NonNull String message)
+    {
+        if (!isFinishing())
+        {
             MaterialDialog.Builder builder = getMaterialDialogBuilder();
             builder.content(message);
-            if (title != null) {
+            if (title != null)
+            {
                 builder.title(title);
             }
 
-            builder.content(message).positiveText(R.string.agree).onPositive(new MaterialDialog.SingleButtonCallback() {
+            builder.content(message).positiveText(R.string.agree).onPositive(new MaterialDialog.SingleButtonCallback()
+            {
                 @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+                {
                     dialog.dismiss();
                 }
             }).autoDismiss(true).titleGravity(GravityEnum.CENTER).contentGravity(GravityEnum.CENTER).show();
@@ -330,12 +367,15 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      * <br></br> This dialog will not auto dismissed. you need to dismiss it yourself in any click
      */
     public void showMessage(String message, @NonNull MaterialDialog.SingleButtonCallback positiveClick, @Nullable
-            MaterialDialog.SingleButtonCallback negativeClick) {
-        if (!isFinishing()) {
+            MaterialDialog.SingleButtonCallback negativeClick)
+    {
+        if (!isFinishing())
+        {
             MaterialDialog.Builder builder = getMaterialDialogBuilder().content(message).positiveText(R.string.agree)
                     .onPositive(positiveClick).positiveColor(getResources()
                             .getColor(R.color.colorPrimary)).titleGravity(GravityEnum.CENTER).contentGravity(GravityEnum.CENTER);
-            if (negativeClick != null) {
+            if (negativeClick != null)
+            {
                 builder.negativeText(R.string.cancel);
                 builder.onNegative(negativeClick);
                 builder.typeface("TheSansArabic-Plain.otf", "TheSansArabic-Plain.otf");
@@ -351,12 +391,15 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      * <br></br> This dialog will not auto dismissed. you need to dismiss it yourself in any click
      */
     public void showMessage(String message, String positiveText, @NonNull MaterialDialog.SingleButtonCallback positiveClick,
-                            String negativeText, @Nullable MaterialDialog.SingleButtonCallback negativeClick) {
-        if (!isFinishing()) {
+                            String negativeText, @Nullable MaterialDialog.SingleButtonCallback negativeClick)
+    {
+        if (!isFinishing())
+        {
             MaterialDialog.Builder builder = getMaterialDialogBuilder().content(message).positiveText(positiveText)
                     .onPositive(positiveClick).positiveColor(getResources()
                             .getColor(R.color.colorPrimary)).titleGravity(GravityEnum.CENTER).contentGravity(GravityEnum.CENTER);
-            if (negativeClick != null) {
+            if (negativeClick != null)
+            {
                 builder.negativeText(negativeText);
                 builder.onNegative(negativeClick);
                 builder.negativeColor(getResources().getColor(R.color.colorPrimary));
@@ -368,15 +411,18 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
 
     public void showMessage(Activity activity, @NonNull String message, @NonNull MaterialDialog.SingleButtonCallback
-            positiveClick, @Nullable MaterialDialog.SingleButtonCallback negativeClick) {
-        if (activity != null && !activity.isFinishing()) {
+            positiveClick, @Nullable MaterialDialog.SingleButtonCallback negativeClick)
+    {
+        if (activity != null && !activity.isFinishing())
+        {
             MaterialDialog.Builder builder = getMaterialDialogBuilder().content(message).positiveText(R.string.agree)
                     .onPositive(positiveClick)
                     .positiveColor(activity.getResources()
                             .getColor(R.color.colorPrimary))
                     .titleGravity(GravityEnum.CENTER)
                     .contentGravity(GravityEnum.CENTER);
-            if (negativeClick != null) {
+            if (negativeClick != null)
+            {
                 builder.negativeText(R.string.no);
                 builder.onNegative(negativeClick);
             }
@@ -416,7 +462,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     //endregion
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
        /* BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerID());
         if (fragment != null) {

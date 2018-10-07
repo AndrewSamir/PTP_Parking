@@ -5,6 +5,6 @@ package parking.com.slash.parking.utlities;
  */
 public enum DataEnum
 {
-    callCheckExist
+    callGetNearby, callCheckExist
 
 }

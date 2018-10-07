@@ -20,7 +20,7 @@ import retrofit2.Response;
 public class HandleCalls {
     private static Context context;
     private static HandleCalls instance = null;
-    public static RestSha3er restSha3er;
+    public static RestParki restParki;
     private HandleRetrofitResp onRespnse;
     private HandleRetrofitRespAdapter onRespnseAdapter;
     //private HandleNoContent onNoContent;
@@ -31,7 +31,7 @@ public class HandleCalls {
 
         if (instance == null) {
             instance = new HandleCalls();
-            restSha3er = RestSha3er.getInstance(context);
+            restParki = RestParki.getInstance(context);
         }
         return instance;
     }

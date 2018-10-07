@@ -70,4 +70,8 @@ dependencies {
     implementation 'com.mobsandgeeks:android-saripaar:2.0.3'
     //circle image
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+
+    //permissions
+    implementation 'com.karumi:dexter:4.1.0'
 }

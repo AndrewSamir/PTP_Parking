@@ -6,7 +6,7 @@
     <string name="agree">agree</string>
     <string name="cancel">Cancel</string>
     <string name="no">No</string>
-    <string name="success">Success</string>
+    <string name="success">1</string>
     <string name="internet_connection">Internet Connection Error</string>
     <string name="full_name">Full Name</string>
     <string name="hint_Phone_number">Phone Number</string>
@@ -26,4 +26,7 @@
     <string name="forgot_password">Forgot Password ?</string>
     <string name="title_activity_seeker_maps">Map</string>
     <string name="where">Where …</string>
+    <string name="please_grant_permissions">please_grant_permissions</string>
+    <string name="permissions_needed">permissions_needed</string>
+    <string name="book">BOOK</string>
 </resources>
