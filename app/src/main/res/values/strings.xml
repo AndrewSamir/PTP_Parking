@@ -29,4 +29,13 @@
     <string name="please_grant_permissions">please_grant_permissions</string>
     <string name="permissions_needed">permissions_needed</string>
     <string name="book">BOOK</string>
+    <string name="edit_profile_details">Edit Profile Details</string>
+    <string name="change_password">Change Password</string>
+    <string name="invite_friends">Invite Friends</string>
+    <string name="saved_places">Saved Places</string>
+    <string name="help_and_support">Help and Support</string>
+    <string name="your_feedback">Your Feedback</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="notifications">Notifications</string>
+    <string name="wallet_and_payment">Wallet and Payment</string>
 </resources>

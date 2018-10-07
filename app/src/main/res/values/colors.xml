@@ -7,5 +7,7 @@
     <color name="colorBackEdit">#E2E8ED</color>
     <color name="colorText">#4C5264</color>
     <color name="colorHintMap">#78849E</color>
+    <color name="colorTextBrown">#2E2E2E</color>
+    <color name="colorTextBlue">#11007D</color>
 
 </resources>
