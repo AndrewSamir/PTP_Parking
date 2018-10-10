@@ -26,6 +26,9 @@ public interface ApiCall
     @POST(Constant.baseUrl + "Requests/GetNearby")
     Call<ModelCommenResponse> callGetNearby(@Body ModelGetNearByRequest modelGetNearByRequest);
 
+    @GET(Constant.baseUrl + "Requests/SeekerBook")
+    Call<ModelCommenResponse> callSeekerBook(@Query("RequestID") String RequestID);
+
     @POST(Constant.baseUrl + "Account/Register")
     Call<ModelCommenResponse> callRegister(@Query("email") String email,
                                            @Query("password") String password,

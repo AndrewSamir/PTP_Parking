@@ -20,6 +20,7 @@ android {
 
 dependencies {
 
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
     configurations {
         all*.exclude group: 'com.android.support', module: 'support-v13'
     }
@@ -74,7 +75,15 @@ dependencies {
     //rounded image
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
-
     //permissions
     implementation 'com.karumi:dexter:4.1.0'
+
+    implementation 'com.github.kickstartinteractiveandroidteam:KsiProjectMate:v1.1'
+
+    //draw route
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
+    implementation 'com.google.maps:google-maps-services:0.9.0'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

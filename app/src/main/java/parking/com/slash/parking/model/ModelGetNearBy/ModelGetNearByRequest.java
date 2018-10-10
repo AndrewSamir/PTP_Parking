@@ -6,9 +6,13 @@ import com.google.gson.annotations.SerializedName;
 public class ModelGetNearByRequest
 {
 
+
     @Expose
-    @SerializedName("Price")
-    private int price;
+    @SerializedName("PriceFrom")
+    private int PriceFrom;
+    @Expose
+    @SerializedName("PriceTo")
+    private int PriceTo;
     @Expose
     @SerializedName("Type")
     private int type;
@@ -22,14 +26,25 @@ public class ModelGetNearByRequest
     @SerializedName("Longitude")
     private String longitude;
 
-    public int getPrice()
+
+    public int getPriceFrom()
     {
-        return price;
+        return PriceFrom;
     }
 
-    public void setPrice(int price)
+    public void setPriceFrom(int priceFrom)
     {
-        this.price = price;
+        PriceFrom = priceFrom;
+    }
+
+    public int getPriceTo()
+    {
+        return PriceTo;
+    }
+
+    public void setPriceTo(int priceTo)
+    {
+        PriceTo = priceTo;
     }
 
     public int getType()

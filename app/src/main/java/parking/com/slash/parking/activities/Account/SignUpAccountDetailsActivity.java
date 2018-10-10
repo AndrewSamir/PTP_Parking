@@ -1,5 +1,6 @@
 package parking.com.slash.parking.activities.Account;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -24,7 +25,7 @@ import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
 import retrofit2.Call;
 
-public class SignUpAccountDetailsActivity extends BaseActivity implements Validator.ValidationListener, HandleRetrofitResp {
+public class SignUpAccountDetailsActivity extends Activity implements Validator.ValidationListener, HandleRetrofitResp {
 
     //region fields
     Validator validator;
@@ -93,7 +94,7 @@ public class SignUpAccountDetailsActivity extends BaseActivity implements Valida
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                showMessage(message);
+//                showMessage(message);
             }
         }
     }

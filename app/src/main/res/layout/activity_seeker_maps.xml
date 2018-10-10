@@ -84,6 +84,7 @@
                 android:layout_weight="2">
 
                 <Button
+                    android:id="@+id/btnSeekerMapsBook"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -91,6 +92,175 @@
                     android:layout_marginStart="@dimen/_20sdp"
                     android:background="@drawable/background_btn_border"
                     android:text="@string/book"
+                    android:textColor="@color/colorPrimary" />
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlSeekerMapsDetailsCardBooked"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:layout_gravity="bottom"
+        android:background="@null"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/banner_background"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp"
+            android:weightSum="9">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:layoutDirection="locale"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
+
+                    <TextView
+                        android:id="@+id/tvSeekerMapsTimeBooked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="jk,mbnvvnvbvb" />
+
+                    <TextView
+                        android:id="@+id/tvSeekerMapsStreetBooked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="jk,mbnvvnvbvb" />
+
+                    <TextView
+                        android:id="@+id/tvSeekerMapsAreaBooked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="jk,mbnvvnvbvb" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvSeekerMapsPriceBooked"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    tools:text="20 \n EGP" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:layoutDirection="locale"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_launcher" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:weightSum="5">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/car"
+                            android:textSize="@dimen/_9sdp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_10sdp"
+                            tools:text="Renault Logan - Silver" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="viewStart"
+                            android:textSize="@dimen/_10sdp"
+                            tools:text="هـ د ب 941" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/car"
+                                android:textSize="@dimen/_9sdp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/_10sdp"
+                                tools:text="Renault Logan - Silver" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|end"
+                                android:src="@drawable/icon_phone_call" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
+                <Button
+                    android:id="@+id/btnSeekerMapsBooked"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:background="@drawable/background_btn_border"
+                    android:text="@string/Cancel"
                     android:textColor="@color/colorPrimary" />
             </FrameLayout>
         </LinearLayout>

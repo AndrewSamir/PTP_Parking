@@ -1,10 +1,14 @@
 package parking.com.slash.parking.activities.Account;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -17,13 +21,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import parking.com.slash.parking.R;
 import parking.com.slash.parking.activities.BaseActivity;
+import parking.com.slash.parking.activities.Seeker.SeekerMapsActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
+import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByResponse;
 import parking.com.slash.parking.model.ModelLoginRequest.ModelLoginRequest;
+import parking.com.slash.parking.model.ModelLoginResponse.ModelLoginResponse;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
+import parking.com.slash.parking.utlities.SharedPrefHelper;
 import retrofit2.Call;
 
-public class LoginActivity extends BaseActivity implements Validator.ValidationListener, HandleRetrofitResp {
+public class LoginActivity extends Activity implements Validator.ValidationListener, HandleRetrofitResp
+{
 
 
     //region fields
@@ -45,7 +54,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     //region lifecycle
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -60,21 +70,26 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
     //region validation
     @Override
-    public void onValidationSucceeded() {
+    public void onValidationSucceeded()
+    {
         callLogin();
     }
 
     @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        for (ValidationError error : errors) {
+    public void onValidationFailed(List<ValidationError> errors)
+    {
+        for (ValidationError error : errors)
+        {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
 
             // Display error messages ;)
-            if (view instanceof EditText) {
+            if (view instanceof EditText)
+            {
                 ((EditText) view).setError(message);
-            } else {
-                showMessage(message);
+            } else
+            {
+//                showMessage(message);
             }
         }
     }
@@ -84,12 +99,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     //region clicks
 
     @OnClick(R.id.btnLoginLogin)
-    public void onClickbtnLoginLogin() {
+    public void onClickbtnLoginLogin()
+    {
         validator.validate();
     }
 
     @OnClick(R.id.btnLoginSignUp)
-    public void onClickbtnLoginSignUp() {
+    public void onClickbtnLoginSignUp()
+    {
         startActivity(new Intent(this, SignUpAccountDetailsActivity.class));
         finish();
     }
@@ -98,30 +115,45 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
+    public void onResponseSuccess(String flag, Object o)
+    {
+        if (flag.equals(DataEnum.callLogin.name()))
+        {
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
+            ModelLoginResponse modelGetNearByResponse = gson.fromJson(jsonObject, ModelLoginResponse.class);
+
+            SharedPrefHelper.getInstance(this).setUser(modelGetNearByResponse.getModel());
+            startActivity(new Intent(this, SeekerMapsActivity.class));
+            finish();
+
+        }
+    }
+
+    @Override
+    public void onNoContent(String flag, int code)
+    {
 
     }
 
     @Override
-    public void onNoContent(String flag, int code) {
-
-    }
-
-    @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
     //endregion
 
     //region calls
-    private void callLogin() {
+    private void callLogin()
+    {
 
         ModelLoginRequest modelLoginRequest = new ModelLoginRequest();
         modelLoginRequest.setUsername(edtLoginEmail.getText().toString());
         modelLoginRequest.setPassword(edtLoginPassword.getText().toString());
+        modelLoginRequest.setDevicetoken(FirebaseInstanceId.getInstance().getToken());
         Call call = HandleCalls.restParki.getClientService().callLogin(modelLoginRequest);
-        HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callCheckExist.name(), true);
+        HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callLogin.name(), true);
     }
 
     //endregion

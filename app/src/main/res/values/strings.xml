@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Parking</string>
+    <string name="app_name">Parki</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="hint_email">Email</string>
@@ -38,4 +38,18 @@
     <string name="sign_out">Sign Out</string>
     <string name="notifications">Notifications</string>
     <string name="wallet_and_payment">Wallet and Payment</string>
+    <string name="car">Car</string>
+    <string name="Cancel">Cancel</string>
+    <string name="your_instant_parking_helper">Your instant parking helper</string>
+    <string name="car_brand">Car Brand</string>
+    <string name="car_model">Car Model</string>
+    <string name="car_number">Car Number</string>
+    <string name="car_color">Car Color</string>
+    <string name="car_image">Car Image</string>
+    <string name="select_your_car_image">Select your car image</string>
+    <string name="browse">Browse</string>
+    <string name="payment">Payment</string>
+    <string name="connect_your_paypal_account">Connect your Paypal Account</string>
+    <string name="accept_all_the">Accept all the</string>
+    <string name="terms_and_conditions"><u>Terms and Conditions</u></string>
 </resources>

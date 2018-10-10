@@ -2,6 +2,7 @@ package parking.com.slash.parking.activities.Seeker;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -37,19 +39,33 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import developer.mokadim.projectmate.dialog.IndicatorStyle;
+import developer.mokadim.projectmate.dialog.ProgressDialog;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import parking.com.slash.parking.R;
@@ -68,13 +84,17 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
 
     //region fields
     Disposable disposable_location;
-
+    Dialog progressDialog;
     private GoogleMap mMap;
-
+    private String selectedRequestId;
+    List<Marker> markerList;
     //endregion
 
+    //region views
     @BindView(R.id.rlSeekerMapsDetailsCard)
     RelativeLayout rlSeekerMapsDetailsCard;
+    @BindView(R.id.rlSeekerMapsDetailsCardBooked)
+    RelativeLayout rlSeekerMapsDetailsCardBooked;
 
     @BindView(R.id.tvSeekerMapsTime)
     TextView tvSeekerMapsTime;
@@ -84,6 +104,8 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
     TextView tvSeekerMapsArea;
     @BindView(R.id.tvSeekerMapsPrice)
     TextView tvSeekerMapsPrice;
+
+    //endregion
 
     //region life cycle
     @Override
@@ -96,12 +118,16 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
 
         ButterKnife.bind(this);
         showLoading(true);
+//        progressDialog = new ProgressDialog(this, IndicatorStyle.BallBeat).show();
+//        progressDialog.show();
+
         hideToolBar();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorWhite));
         }
+
+        markerList = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -119,6 +145,8 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
 
     //endregion
 
+    //region map
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -132,8 +160,10 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap)
     {
         mMap = googleMap;
-        requestUserCurrentLocation();
+//        requestUserCurrentLocation();
         googleMap.setOnMarkerClickListener(this);
+
+drawaRoutr();
         // Add a marker in Sydney and move the camera
        /* LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney")
@@ -292,6 +322,202 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
     }
 
 
+    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng)
+    {
+        if (mMap != null)
+        {
+            mMap.clear();
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            /*mMap.addMarker(new MarkerOptions().position(latLng)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.master_card)));*/
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
+            progressDialog.dismiss();
+            showLoading(false);
+            callGetNearby();
+        }
+    }
+
+    private void setMarkers(List<Model> modelList)
+    {
+        if (mMap != null)
+        {
+
+            mMap.clear();
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+            for (Model model : modelList)
+            {
+                LatLng latLng = new LatLng(model.getLatitude(), model.getLongitude());
+
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", false))));
+
+        /*        MarkerOptions position = new MarkerOptions().position(latLng);
+                position.icon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", false)));
+                Marker marker = mMap.addMarker(position);
+        */
+                marker.setTag(model);
+                marker.setSnippet(model.getRequestid());
+                markerList.add(marker);
+
+            }
+
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker)
+    {
+        LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        for (Marker mMarker : markerList)
+        {
+
+            Model model = (Model) mMarker.getTag();
+            if (marker.getSnippet().equals(mMarker.getSnippet()))
+            {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", true)));
+                setDetailsCard(model);
+            } else
+            {
+                mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", false)));
+            }
+        }
+        return true;
+    }
+
+    private void drawaRoutr()
+    {
+
+        LatLng barcelona = new LatLng(41.385064, 2.173403);
+        mMap.addMarker(new MarkerOptions().position(barcelona).title("Marker in Barcelona"));
+
+        LatLng madrid = new LatLng(40.416775, -3.70379);
+        mMap.addMarker(new MarkerOptions().position(madrid).title("Marker in Madrid"));
+
+        LatLng zaragoza = new LatLng(41.648823, -0.889085);
+
+        //Define list to get all latlng for the route
+        List<LatLng> path = new ArrayList();
+
+
+        //Execute Directions API request
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("YOUR_API_KEY")
+                .build();
+        DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
+        try
+        {
+            DirectionsResult res = req.await();
+
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.length > 0)
+            {
+                DirectionsRoute route = res.routes[0];
+
+                if (route.legs != null)
+                {
+                    for (int i = 0; i < route.legs.length; i++)
+                    {
+                        DirectionsLeg leg = route.legs[i];
+                        if (leg.steps != null)
+                        {
+                            for (int j = 0; j < leg.steps.length; j++)
+                            {
+                                DirectionsStep step = leg.steps[j];
+                                if (step.steps != null && step.steps.length > 0)
+                                {
+                                    for (int k = 0; k < step.steps.length; k++)
+                                    {
+                                        DirectionsStep step1 = step.steps[k];
+                                        EncodedPolyline points1 = step1.polyline;
+                                        if (points1 != null)
+                                        {
+                                            //Decode polyline and add points to list of route coordinates
+                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                            for (com.google.maps.model.LatLng coord1 : coords1)
+                                            {
+                                                path.add(new LatLng(coord1.lat, coord1.lng));
+                                            }
+                                        }
+                                    }
+                                } else
+                                {
+                                    EncodedPolyline points = step.polyline;
+                                    if (points != null)
+                                    {
+                                        //Decode polyline and add points to list of route coordinates
+                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                        for (com.google.maps.model.LatLng coord : coords)
+                                        {
+                                            path.add(new LatLng(coord.lat, coord.lng));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex)
+        {
+            Log.e(TAG, ex.getLocalizedMessage());
+        }
+
+        //Draw the polyline
+        if (path.size() > 0)
+        {
+            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+            mMap.addPolyline(opts);
+        }
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 6));
+    }
+
+
+    private void drawRoute(List<LatLng> routeDirection)
+    {
+        if (routeDirection != null)
+        {
+            PolylineOptions lineOptions = new PolylineOptions();
+
+            // Adding all the points in the route to LineOptions
+            lineOptions.addAll(routeDirection);
+            lineOptions.width(12);
+            lineOptions.color(Color.rgb(79, 174, 175));
+
+            // Drawing polyline in the Google Map for the i-th route
+            mMap.addPolyline(lineOptions);
+
+            zoomRoute(mMap, routeDirection);
+        }
+    }
+
+    public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute)
+    {
+
+        if (googleMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : lstLatLngRoute)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 70;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
+    }
+
+    //endregion
+
+    //region functions
+
+
     private void showSettingsAlert()
     {
         getMaterialDialogBuilder().content("gps_network_not_enabled")
@@ -317,81 +543,6 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
 
     }
 
-    public MaterialDialog.Builder getMaterialDialogBuilder()
-    {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
-//        builder.typeface("TheSansArabic-Bold.otf", "TheSansArabic-Plain.otf");
-
-        return builder;
-    }
-
-    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng)
-    {
-        if (mMap != null)
-        {
-            mMap.clear();
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            /*mMap.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.master_card)));*/
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
-            showLoading(false);
-            callGetNearby();
-        }
-    }
-
-    private void setMarkers(List<Model> modelList)
-    {
-        if (mMap != null)
-        {
-
-            mMap.clear();
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-            for (Model model : modelList)
-            {
-                LatLng latLng = new LatLng(model.getLatitude(), model.getLongitude());
-                MarkerOptions position = new MarkerOptions().position(latLng);
-                position.icon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", false)));
-                Marker marker = mMap.addMarker(position);
-                marker.setTag(model);
-
-            }
-
-//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
-        }
-    }
-
-
-    public void showMessage(@StringRes int stringResourceId)
-    {
-        showMessage(null, getString(stringResourceId));
-    }
-
-    public void showMessage(@Nullable String title, @NonNull String message)
-    {
-        if (!isFinishing())
-        {
-            MaterialDialog.Builder builder = getMaterialDialogBuilder();
-//            builder.typeface("DroidKufi-Regular.ttf", "DroidKufi-Regular.ttf");
-            builder.content(message);
-            if (title != null)
-            {
-                builder.title(title);
-            }
-
-            builder.content(message).positiveText(R.string.agree).onPositive(new MaterialDialog.SingleButtonCallback()
-            {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-                {
-                    dialog.dismiss();
-                }
-            }).autoDismiss(true).titleGravity(GravityEnum.CENTER).contentGravity(GravityEnum.CENTER).show();
-        }
-    }
-
-    //region functions
-
     private void setDetailsCard(Model model)
     {
 
@@ -399,7 +550,7 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
         tvSeekerMapsStreet.setText(model.getLeavername());
         tvSeekerMapsArea.setText(model.getAddress());
         tvSeekerMapsPrice.setText(model.getFees() + " \n EGP");
-
+        selectedRequestId = model.getRequestid();
 
         rlSeekerMapsDetailsCard.setVisibility(View.VISIBLE);
     }
@@ -413,12 +564,20 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
         ModelGetNearByRequest modelGetNearByRequest = new ModelGetNearByRequest();
         modelGetNearByRequest.setLatitude("31.3786368");
         modelGetNearByRequest.setLongitude("30.0556288");
-        modelGetNearByRequest.setPrice(100);
-        modelGetNearByRequest.setRadius("100000");
-        modelGetNearByRequest.setType(1);
+        modelGetNearByRequest.setPriceFrom(200);
+        modelGetNearByRequest.setPriceTo(300);
+        modelGetNearByRequest.setRadius("1000000");
+        modelGetNearByRequest.setType(2);
 
         Call call = HandleCalls.restParki.getClientService().callGetNearby(modelGetNearByRequest);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callGetNearby.name(), true);
+    }
+
+
+    private void callSeekerBook()
+    {
+        Call call = HandleCalls.restParki.getClientService().callSeekerBook(selectedRequestId);
+        HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callSeekerBook.name(), true);
     }
 
     //endregion
@@ -433,6 +592,16 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             ModelGetNearByResponse modelGetNearByResponse = gson.fromJson(jsonObject, ModelGetNearByResponse.class);
             setMarkers(modelGetNearByResponse.getModel());
+
+
+        } else if (flag.equals(DataEnum.callSeekerBook.name()))
+        {
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
+            String ds = jsonObject.get("model").getAsString();
+            Log.d("datagotten", ds);
+            rlSeekerMapsDetailsCardBooked.setVisibility(View.VISIBLE);
+            rlSeekerMapsDetailsCard.setVisibility(View.GONE);
         }
     }
 
@@ -448,13 +617,15 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
 
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker)
+
+    //endregion
+
+    //region clicks
+
+    @OnClick(R.id.btnSeekerMapsBook)
+    void onClickbtnSeekerMapsBook(View view)
     {
-        Model model = (Model) marker.getTag();
-        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", true)));
-        setDetailsCard(model);
-        return true;
+        callSeekerBook();
     }
 
     //endregion
