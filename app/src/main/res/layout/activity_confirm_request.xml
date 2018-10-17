@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_15sdp"
+        tools:context=".activities.Seeker.ConfirmRequestActivity">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/awesome"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_17sdp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:gravity="center"
+            android:text="@string/successfully_parked"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tvConfirmRequestPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_28sdp"
+            android:textStyle="bold"
+            tools:text="E£ 20.00" />
+
+        <TextView
+            android:id="@+id/tvConfirmRequestDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="normal"
+            tools:text="Tuesday, 4 October 2018 - 05:41 PM" />
+
+        <TextView
+            android:id="@+id/tvConfirmRequestWithName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:gravity="center"
+            android:textColor="@color/colorSecondTextColor"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="normal"
+            tools:text="@string/exchanged_parking_with_s" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mvConfirmRequest"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:liteMode="true"
+            app:mapType="normal" />
+
+        <TextView
+            android:id="@+id/tvConfirmRequestStreet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13sdp"
+            android:textStyle="normal"
+            tools:text="El-Sayed El-Marghany" />
+
+        <TextView
+            android:id="@+id/tvConfirmRequestArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:alpha="0.56"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_9sdp"
+            android:textStyle="normal"
+            tools:text="Mansheya El-Bakry, Heliopolis" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:gravity="center"
+            android:textColor="@color/colorBorder"
+            android:textSize="@dimen/_9sdp"
+            android:textStyle="normal"
+            android:text="@string/a_full_receipt_has_been_sent_to_your_email" />
+
+        <Button
+            android:id="@+id/btnConfirmRequestShowFullReceipt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/background_btn_blue"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/show_the_full_receipt"
+            android:textColor="@color/colorWhite" />
+
+
+        <Button
+            android:id="@+id/btnConfirmRequestBackToHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/background_btn_border"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/back_to_home"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
+</ScrollView>

@@ -3,7 +3,9 @@ package parking.com.slash.parking.model.ModelGetNearBy;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Model
+import java.io.Serializable;
+
+public class Model implements Serializable
 {
     @Expose
     @SerializedName("address")

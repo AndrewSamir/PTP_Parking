@@ -18,7 +18,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +25,15 @@ import android.view.inputmethod.InputMethodManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.List;
@@ -35,6 +43,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import parking.com.slash.parking.R;
+import parking.com.slash.parking.fragments.BaseFragment;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public abstract class BaseActivity extends RxAppCompatActivity
@@ -44,8 +53,9 @@ public abstract class BaseActivity extends RxAppCompatActivity
     protected String TAG;
     protected View mainProgressBar;
 //    protected AppHeader appHeader;
-//    protected BottomNavigationViewEx bottomNavigationView;
-
+    protected BottomNavigationViewEx bottomNavigationView;
+//    private static FirebaseDatabase database;
+//    protected static DatabaseReference myRef;
     //endregion
 
     //region life cycle
@@ -60,15 +70,21 @@ public abstract class BaseActivity extends RxAppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(getBaseLayoutID());
         mainProgressBar = findViewById(R.id.progress);
 //        appHeader = findViewById(R.id.appHeader);
-//        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-//
-//        bottomNavigationView.enableAnimation(false);
-//        bottomNavigationView.enableShiftingMode(false);
-//        bottomNavigationView.enableItemShiftingMode(false);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+/*
 
+        bottomNavigationView.enableAnimation(false);
+        bottomNavigationView.enableShiftingMode(false);
+        bottomNavigationView.enableItemShiftingMode(false);
+*/
+
+        /*database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+        myRef.keepSynced(true);
+*/
         TAG = getClass().getSimpleName();
     }
 
@@ -133,28 +149,32 @@ public abstract class BaseActivity extends RxAppCompatActivity
 
     //region helper methods
 
-
-    protected void hideToolBar()
+    /**
+     * method to insert Fragments in ContentFragment
+     *
+     * @param fragment       Fragment to be addded
+     * @param addToBackStack record the transaction or not. True to record false other wise.
+     */
+    public void addContentFragment(Fragment fragment, boolean addToBackStack)
     {
-        getSupportActionBar().hide();
-
-    }
-   /* public void addContentFragment(Fragment fragment, boolean addToBackStack) {
         hideVirtualKeyBoard();
         showLoading(false);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(getFragmentContainerID(), fragment);
 
-        if (addToBackStack) {
+        if (addToBackStack)
+        {
             fragmentTransaction.addToBackStack(content_Fragment);
         }
-        try {
+        try
+        {
             fragmentTransaction.commit();
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
 //           LoggerHelper.e(ex);
         }
-    }*/
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState)
@@ -168,8 +188,9 @@ public abstract class BaseActivity extends RxAppCompatActivity
      * @param fragment       Fragment to be addded
      * @param addToBackStack record the transaction or not. True to record false other wise.
      */
-   /* @SuppressLint("ResourceType")
-    public void addContentFragment(Fragment fragment, boolean addToBackStack, @AnimRes int enterAnim, @AnimRes int exitAnim) {
+    @SuppressLint("ResourceType")
+    public void addContentFragment(Fragment fragment, boolean addToBackStack, @AnimRes int enterAnim, @AnimRes int exitAnim)
+    {
         hideVirtualKeyBoard();
         showLoading(false);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -179,30 +200,33 @@ public abstract class BaseActivity extends RxAppCompatActivity
 
         fragmentTransaction.replace(getFragmentContainerID(), fragment);
 
-        if (addToBackStack) {
+        if (addToBackStack)
+        {
             fragmentTransaction.addToBackStack(content_Fragment);
         }
-        try {
+        try
+        {
             fragmentTransaction.commit();
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
 //           LoggerHelper.e(ex);
         }
-    }*/
+    }
 
     /**
      * This is used to add Fragments
      */
-//    public  int getFragmentContainerID();
+    public abstract int getFragmentContainerID();
 
     /**
      * This is the main layout for activity
      */
-//    protected abstract int getBaseLayoutID();
+    protected abstract int getBaseLayoutID();
 
     /**
      * clear backStack for the fragments and go back to the first fragment in the application
      */
-    public void fclearBackStack()
+    public void clearBackStack()
     {
         FragmentManager manager = getSupportFragmentManager();
         if (manager.getBackStackEntryCount() > 0)
@@ -227,6 +251,39 @@ public abstract class BaseActivity extends RxAppCompatActivity
         startActivity(Intent.createChooser(intent, tempText));
     }*/
 
+    public void callPhone(final String phone)
+    {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
+        {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+            startActivity(callIntent);
+        } else
+        {
+            Dexter.withActivity(this).withPermission(Manifest.permission.CALL_PHONE).withListener(new PermissionListener()
+            {
+                @Override
+                public void onPermissionGranted(PermissionGrantedResponse response)
+                {
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(callIntent);
+                }
+
+                @Override
+                public void onPermissionDenied(PermissionDeniedResponse response)
+                {
+                    showMessage(getString(R.string.permissions_needed));
+                }
+
+                @Override
+                public void onPermissionRationaleShouldBeShown(com.karumi.dexter.listener.PermissionRequest permission, PermissionToken token)
+                {
+                    showPermissionRationaleMessage(token);
+
+                }
+
+            });
+        }
+    }
 
     /**
      * This will show the activity ProgressBar and will stop any interaction ont he screen. <br></br>
@@ -268,58 +325,25 @@ public abstract class BaseActivity extends RxAppCompatActivity
         progressDialog.show();
     }
 
-    public String getShowDate(String receivedDate)
-    {
 
-        String[] dateItems = receivedDate.split("-");
-        String day = dateItems[2];
-        String year = dateItems[0];
-        String month;
-        switch (dateItems[1])
-        {
-
-            case "01":
-                month = "Jan";
-                break;
-            case "02":
-                month = "Feb";
-                break;
-            case "03":
-                month = "Mar";
-                break;
-            case "04":
-                month = "Apr";
-                break;
-            case "05":
-                month = "May";
-                break;
-            case "06":
-                month = "Jun";
-                break;
-            case "07":
-                month = "Jul";
-                break;
-            case "08":
-                month = "Aug";
-                break;
-            case "09":
-                month = "Sep";
-                break;
-            case "10":
-                month = "Oct";
-                break;
-            case "11":
-                month = "Nov";
-                break;
-            default:
-                month = "Dec";
-                break;
-        }
-
-        return day + "/" + month + "/" + year;
-    }
     //endregion
 
+    //region getters
+//    public AppHeader getAppHeader()
+//    {
+//        return appHeader;
+//    }
+
+    public BottomNavigationViewEx getBottomNavigationView()
+    {
+        return bottomNavigationView;
+    }
+
+//    public DatabaseReference getMyRef()
+//    {
+//        return myRef;
+//    }
+    //endregion
 
     //region showing message in dialog
     public MaterialDialog.Builder getMaterialDialogBuilder()
@@ -409,6 +433,26 @@ public abstract class BaseActivity extends RxAppCompatActivity
         }
     }
 
+    public void showPermissionRationaleMessage(final PermissionToken token)
+    {
+        showMessage(this, getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback()
+        {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
+                token.continuePermissionRequest();
+                dialog.dismiss();
+            }
+        }, new MaterialDialog.SingleButtonCallback()
+        {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
+                token.cancelPermissionRequest();
+                dialog.dismiss();
+            }
+        });
+    }
 
     public void showMessage(Activity activity, @NonNull String message, @NonNull MaterialDialog.SingleButtonCallback
             positiveClick, @Nullable MaterialDialog.SingleButtonCallback negativeClick)
@@ -435,39 +479,142 @@ public abstract class BaseActivity extends RxAppCompatActivity
     //region photos
     PublishSubject<Uri> publishSubject_images;
 
-   /* public io.reactivex.Observable<Uri> takeImage() {
-        publishSubject_images = PublishSubject.create();
-        getMaterialDialogBuilder().title(getString(R.string.choose_image))
-                .titleColor(getResources().getColor(R.color.colorPrimary)).titleGravity(GravityEnum.CENTER)
-                .items(R.array.chooseImageDialogList).itemsGravity(GravityEnum.CENTER)
-                .itemsCallback(new MaterialDialog.ListCallback() {
+    /* public io.reactivex.Observable<Uri> takeImage() {
+         publishSubject_images = PublishSubject.create();
+         getMaterialDialogBuilder().title(getString(R.string.choose_image))
+                 .titleColor(getResources().getColor(R.color.colorPrimary)).titleGravity(GravityEnum.CENTER)
+                 .items(R.array.chooseImageDialogList).itemsGravity(GravityEnum.CENTER)
+                 .itemsCallback(new MaterialDialog.ListCallback() {
+                     @Override
+                     public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence
+                             text) {
+                         if (position == 0)//camera
+                         {
+                             cameraClicked();
+                         } else //gallery
+                         {
+                             galleryClicked();
+                         }
+                     }
+                 }).show();
+
+         return publishSubject_images;
+     }
+ */
+    private void galleryClicked()
+    {
+        Dexter.withActivity(this).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(new PermissionListener()
+        {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response)
+            {
+//                chooseFromGallery();
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response)
+            {
+                showMessage(getString(R.string.permissions_needed));
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(com.karumi.dexter.listener.PermissionRequest permission, PermissionToken token)
+            {
+                showPermissionRationaleMessage(token);
+
+            }
+
+        }).check();
+    }
+
+   /* private void chooseFromGallery()
+    {
+        RxImagePicker.with(this).requestImage(Sources.GALLERY).subscribe(new Observer<Uri>()
+        {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d)
+            {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull Uri uri)
+            {
+                publishSubject_images.onNext(uri);
+                publishSubject_images.onComplete();
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e)
+            {
+//               LoggerHelper.e(e);
+            }
+
+            @Override
+            public void onComplete()
+            {
+//               LoggerHelper.i(TAG, "images from gallery onComplete");
+            }
+        });
+    }*/
+
+    /**
+     * This will check permission and upon success, it will start taking picture
+     */
+    private void cameraClicked()
+    {
+        Dexter.withActivity(this).withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new MultiplePermissionsListener()
+                {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence
-                            text) {
-                        if (position == 0)//camera
+                    public void onPermissionsChecked(MultiplePermissionsReport report)
+                    {
+                        if (report.areAllPermissionsGranted())
                         {
-                            cameraClicked();
-                        } else //gallery
+//                            takePhotoInternally();
+                        } else if (report.isAnyPermissionPermanentlyDenied())
                         {
-                            galleryClicked();
+                            showMessage(getString(R.string.permissions_needed));
                         }
                     }
-                }).show();
 
-        return publishSubject_images;
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token)
+                    {
+
+                        showPermissionRationaleMessage(token);
+                    }
+
+
+                }).check();
     }
-*/
+/*
+    private void takePhotoInternally()
+    {
+        RxImagePicker.with(this).requestImage(Sources.CAMERA).subscribe(new Consumer<Uri>()
+        {
+            @Override
+            public void accept(@io.reactivex.annotations.NonNull Uri uri) throws Exception
+            {
+                *//*List<Uri list = new ArrayList<>(0);
+                list.add(uri);
+                *//*
+                publishSubject_images.onNext(uri);
+                publishSubject_images.onComplete();
 
-
+            }
+        });
+    }*/
     //endregion
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-       /* BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerID());
-        if (fragment != null) {
+        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerID());
+        if (fragment != null)
+        {
             fragment.onActivityResult(requestCode, resultCode, data);
-        }*/
+        }
     }
 }

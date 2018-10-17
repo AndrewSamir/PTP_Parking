@@ -17,13 +17,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activities.SplashScreenActivity">
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name" />
         <activity
             android:name=".activities.IntroActivity"
             android:label="@string/title_activity_intro" />
@@ -65,6 +70,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.Seeker.ConfirmRequestActivity"
+            android:label="@string/title_activity_confirm_request" />
+        <activity
+            android:name=".activities.Seeker.CancelRequestActivity"
+            android:label="@string/title_activity_cancel_request"></activity>
     </application>
 
 </manifest>

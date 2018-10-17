@@ -49,13 +49,11 @@ public class SharedPrefHelper {
 
         editor.apply();
     }
-/*
 
     public String getAccessToken()
     {
         return prefs.getString(DataEnum.shAccessToken.name(), null);
     }
-*/
 
 
 }

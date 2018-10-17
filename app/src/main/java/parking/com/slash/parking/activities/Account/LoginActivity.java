@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import parking.com.slash.parking.R;
 import parking.com.slash.parking.activities.BaseActivity;
+import parking.com.slash.parking.activities.MainActivity;
 import parking.com.slash.parking.activities.Seeker.SeekerMapsActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
 import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByResponse;
@@ -124,7 +125,7 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
             ModelLoginResponse modelGetNearByResponse = gson.fromJson(jsonObject, ModelLoginResponse.class);
 
             SharedPrefHelper.getInstance(this).setUser(modelGetNearByResponse.getModel());
-            startActivity(new Intent(this, SeekerMapsActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
 
         }

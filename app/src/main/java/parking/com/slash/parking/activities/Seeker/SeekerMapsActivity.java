@@ -15,7 +15,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,14 +25,19 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,9 +64,14 @@ import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
+import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,30 +82,45 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import parking.com.slash.parking.R;
 import parking.com.slash.parking.activities.BaseActivity;
+import parking.com.slash.parking.activities.MainActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
+import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
+import parking.com.slash.parking.model.ModelConfirmRequest.ModelConfirmRequest;
 import parking.com.slash.parking.model.ModelGetNearBy.Model;
 import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByRequest;
 import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByResponse;
+import parking.com.slash.parking.model.ModelLoginRequest.ModelLoginRequest;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
+import parking.com.slash.parking.utlities.SharedPrefHelper;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 import retrofit2.Call;
 
-public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallback, HandleRetrofitResp, GoogleMap.OnMarkerClickListener
+public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyCallback, HandleRetrofitResp, GoogleMap.OnMarkerClickListener
 {
 
     //region fields
+
     Disposable disposable_location;
     Dialog progressDialog;
     private GoogleMap mMap;
     private String selectedRequestId;
     List<Marker> markerList;
+    private String bookedID;
+    private String leaverMobile;
+
+    private int status = 1;// 1-> Now , 2->Later
+    private int priceFrom = 0;
+    private int priceTo = 1000;
+    private int time = 24;
+    private String raduisInMeter = "5000";
+    private String lat, lng;
     //endregion
 
     //region views
-    @BindView(R.id.rlSeekerMapsDetailsCard)
+    @BindView(R.id.layoutDetailsCard)
     RelativeLayout rlSeekerMapsDetailsCard;
-    @BindView(R.id.rlSeekerMapsDetailsCardBooked)
+    @BindView(R.id.layoutBookedCard)
     RelativeLayout rlSeekerMapsDetailsCardBooked;
 
     @BindView(R.id.tvSeekerMapsTime)
@@ -104,7 +131,56 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
     TextView tvSeekerMapsArea;
     @BindView(R.id.tvSeekerMapsPrice)
     TextView tvSeekerMapsPrice;
-
+    @BindView(R.id.tvSeekerMapsPriceBooked)
+    TextView tvSeekerMapsPriceBooked;
+    @BindView(R.id.tvSeekerMapsTimeBooked)
+    TextView tvSeekerMapsTimeBooked;
+    @BindView(R.id.tvSeekerMapsStreetBooked)
+    TextView tvSeekerMapsStreetBooked;
+    @BindView(R.id.tvSeekerMapsAreaBooked)
+    TextView tvSeekerMapsAreaBooked;
+    @BindView(R.id.tvSeekMapCarBrandBooked)
+    TextView tvSeekMapCarBrandBooked;
+    @BindView(R.id.imgCarBooked)
+    RoundedImageView imgCarBooked;
+    @BindView(R.id.tvSeekerMapCarPlateBooked)
+    TextView tvSeekerMapCarPlateBooked;
+    @BindView(R.id.tvSeekerMapNameBooked)
+    TextView tvSeekerMapNameBooked;
+    @BindView(R.id.btnSeekerMapsConfirmBooked)
+    Button btnSeekerMapsConfirmBooked;
+    @BindView(R.id.seekBarDialogSearchStatus)
+    IndicatorSeekBar seekBarDialogSearchStatus;
+    @BindView(R.id.seekBarDialogSearchRange)
+    IndicatorSeekBar seekBarDialogSearchRange;
+    @BindView(R.id.layoutStatus)
+    View layoutStatus;
+    @BindView(R.id.layoutRange)
+    View layoutRange;
+    @BindView(R.id.layoutPrice)
+    View layoutPrice;
+    @BindView(R.id.layoutSearchFilter)
+    View layoutSearchFilter;
+    @BindView(R.id.imgStatusDialogNow)
+    View imgStatusDialogNow;
+    @BindView(R.id.indicatorStatus)
+    View indicatorStatus;
+    @BindView(R.id.imgStatusDialogLater)
+    View imgStatusDialogLater;
+    @BindView(R.id.llSearchFilterStatus)
+    LinearLayout llSearchFilterStatus;
+    @BindView(R.id.llSearchFilterRange)
+    LinearLayout llSearchFilterRange;
+    @BindView(R.id.llSearchFilterPrice)
+    LinearLayout llSearchFilterPrice;
+    @BindView(R.id.layoutNoParkingLots)
+    View layoutNoParkingLots;
+    @BindView(R.id.llStatusDialogTitles)
+    View llStatusDialogTitles;
+    @BindView(R.id.tvSearchFilterStatus)
+    TextView tvSearchFilterStatus;
+    @BindView(R.id.tvSearchFilterRange)
+    TextView tvSearchFilterRange;
     //endregion
 
     //region life cycle
@@ -113,19 +189,27 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_maps);
-//        getActionBar().hide();
+        getSupportActionBar().hide();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        progressDialog = new ProgressDialog(this, IndicatorStyle.BallBeat).show();
 
-        ButterKnife.bind(this);
-        showLoading(true);
-//        progressDialog = new ProgressDialog(this, IndicatorStyle.BallBeat).show();
+     /*   showLoading(true);
 //        progressDialog.show();
 
-        hideToolBar();
+        hideToolBar();*/
+        ButterKnife.bind(this);
+
+
+        Window window = this.getWindow();
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorWhite));
         }
+
 
         markerList = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -133,6 +217,9 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
         mapFragment.getMapAsync(this);
 
         HandleCalls.getInstance(getParent()).setonRespnseSucess(this);
+
+        seekBarDialogSearchStatus.setIndicatorTextFormat(" ${PROGRESS} Hours ");
+        seekBarDialogSearchRange.setIndicatorTextFormat(" ${PROGRESS}K ");
 
 //        callGetNearby();
     }
@@ -160,10 +247,10 @@ public class SeekerMapsActivity extends BaseActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap)
     {
         mMap = googleMap;
-//        requestUserCurrentLocation();
+        requestUserCurrentLocation();
         googleMap.setOnMarkerClickListener(this);
 
-drawaRoutr();
+//drawaRoutr();
         // Add a marker in Sydney and move the camera
        /* LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney")
@@ -193,12 +280,12 @@ drawaRoutr();
             Rect bounds = new Rect();
 //            FontAdapter.getInstance(context.getApplicationContext()).applyAndalusFont(paint);
             paint.setTextAlign(Paint.Align.LEFT);
-            paint.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 15, getResources().getDisplayMetrics()));
+            paint.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
             paint.getTextBounds(mText, 0, mText.length(), bounds);
 
 //            paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY);
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, Math.abs(bounds.width()) + 70, Math.abs(bounds.height()) + 70, false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, Math.abs(bounds.width()) + 20, Math.abs(bounds.height()) + 70, false);
             android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
 
             // set default bitmap config if none
@@ -241,6 +328,7 @@ drawaRoutr();
         boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isNetworkEnabled && !isGpsEnabled)
         {
+            progressDialog.dismiss();
             showSettingsAlert();
             return;
         }
@@ -259,7 +347,8 @@ drawaRoutr();
                 public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception
                 {
                     LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
+                    lat = location.getLatitude() + "";
+                    lng = location.getLongitude() + "";
                     adjustMapLatLng(currentLatLng);
 
                     if (disposable_location != null)
@@ -286,7 +375,7 @@ drawaRoutr();
                             requestUserCurrentLocation();
                         } else if (report.isAnyPermissionPermanentlyDenied())
                         {
-                            showMessage(R.string.please_grant_permissions);
+//                            showMessage(R.string.please_grant_permissions);
                         }
                     }
 
@@ -301,7 +390,7 @@ drawaRoutr();
     }
 
     private void showPermissionRationaleMessage(final PermissionToken token)
-    {
+    {/*
         showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback()
         {
             @Override
@@ -318,7 +407,7 @@ drawaRoutr();
                 token.cancelPermissionRequest();
                 dialog.dismiss();
             }
-        });
+        });*/
     }
 
 
@@ -332,7 +421,7 @@ drawaRoutr();
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.master_card)));*/
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
             progressDialog.dismiss();
-            showLoading(false);
+//            showLoading(false);
             callGetNearby();
         }
     }
@@ -370,6 +459,10 @@ drawaRoutr();
     @Override
     public boolean onMarkerClick(Marker marker)
     {
+        layoutStatus.setVisibility(View.GONE);
+        layoutRange.setVisibility(View.GONE);
+        layoutPrice.setVisibility(View.GONE);
+
         LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
@@ -464,7 +557,7 @@ drawaRoutr();
             }
         } catch (Exception ex)
         {
-            Log.e(TAG, ex.getLocalizedMessage());
+            Log.e("TAG", ex.getLocalizedMessage());
         }
 
         //Draw the polyline
@@ -520,7 +613,10 @@ drawaRoutr();
 
     private void showSettingsAlert()
     {
-        getMaterialDialogBuilder().content("gps_network_not_enabled")
+        Intent locationSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(locationSettingsIntent);
+
+        /*MaterialDialog().content("gps_network_not_enabled")
                 .positiveText("open_location_settings")
                 .onPositive(new MaterialDialog.SingleButtonCallback()
                 {
@@ -539,14 +635,13 @@ drawaRoutr();
             {
                 dialog.dismiss();
             }
-        }).negativeText(this.getString(R.string.cancel)).show();
-
+        }).negativeText(this.getString(R.string.cancel)).show();*/
     }
 
     private void setDetailsCard(Model model)
     {
 
-        tvSeekerMapsTime.setText(model.getLeavercarbrand());
+        tvSeekerMapsTime.setText(model.getLeavingtime());
         tvSeekerMapsStreet.setText(model.getLeavername());
         tvSeekerMapsArea.setText(model.getAddress());
         tvSeekerMapsPrice.setText(model.getFees() + " \n EGP");
@@ -554,30 +649,81 @@ drawaRoutr();
 
         rlSeekerMapsDetailsCard.setVisibility(View.VISIBLE);
     }
+
+    private void setBookedCard(Model model)
+    {
+
+        tvSeekerMapsTimeBooked.setText(model.getLeavercarbrand());
+        tvSeekerMapsStreetBooked.setText(model.getLeavername());
+        tvSeekerMapsAreaBooked.setText(model.getAddress());
+        tvSeekerMapsPriceBooked.setText(model.getFees() + " \n EGP");
+//        selectedRequestId = model.getRequestid();
+        tvSeekMapCarBrandBooked.setText(model.getLeavercarmodel());
+        tvSeekerMapCarPlateBooked.setText(model.getLeavercarno());
+        tvSeekerMapNameBooked.setText(model.getLeavername());
+        leaverMobile = model.getLeavermobile();
+        Picasso.with(this)
+                .load(model.getLeavercarimage());
+        rlSeekerMapsDetailsCardBooked.setVisibility(View.VISIBLE);
+        rlSeekerMapsDetailsCard.setVisibility(View.GONE);
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
+                btnSeekerMapsConfirmBooked.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
+    }
     //endregion
 
     //region calls
 
     private void callGetNearby()
     {
-
+        layoutPrice.setVisibility(View.GONE);
+        layoutStatus.setVisibility(View.GONE);
+        layoutRange.setVisibility(View.GONE);
+        layoutNoParkingLots.setVisibility(View.GONE);
+        layoutSearchFilter.setVisibility(View.VISIBLE);
+        markerList.clear();
+        mMap.clear();
         ModelGetNearByRequest modelGetNearByRequest = new ModelGetNearByRequest();
-        modelGetNearByRequest.setLatitude("31.3786368");
-        modelGetNearByRequest.setLongitude("30.0556288");
-        modelGetNearByRequest.setPriceFrom(200);
-        modelGetNearByRequest.setPriceTo(300);
-        modelGetNearByRequest.setRadius("1000000");
-        modelGetNearByRequest.setType(2);
+        modelGetNearByRequest.setLatitude(lat);
+        modelGetNearByRequest.setLongitude(lng);
+        modelGetNearByRequest.setPriceFrom(priceFrom);
+        modelGetNearByRequest.setPriceTo(priceTo);
+        modelGetNearByRequest.setRadius(raduisInMeter);
+        modelGetNearByRequest.setType(status);
+        modelGetNearByRequest.setTime(time);
 
-        Call call = HandleCalls.restParki.getClientService().callGetNearby(modelGetNearByRequest);
+        Map<String, String> stringStringMap = new HashMap<>();
+        stringStringMap.put("Authorization", "bearer " + SharedPrefHelper.getInstance(this).getAccessToken());
+        stringStringMap.put("Content-Type", "application/json");
+        Call call = HandleCalls.restParki.getClientService().callGetNearby(modelGetNearByRequest, stringStringMap);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callGetNearby.name(), true);
     }
 
 
     private void callSeekerBook()
     {
-        Call call = HandleCalls.restParki.getClientService().callSeekerBook(selectedRequestId);
+        ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
+        modelCommonRequest.setRequestID(selectedRequestId);
+        Call call = HandleCalls.restParki.getClientService().callSeekerBook(modelCommonRequest);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callSeekerBook.name(), true);
+    }
+
+
+    private void callConfirmRequest()
+    {
+        ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
+        modelCommonRequest.setRequestID(bookedID);
+        modelCommonRequest.setSeeker(true);
+        modelCommonRequest.setPaymentMethod(0);
+        Call call = HandleCalls.restParki.getClientService().callConfirmRequest(modelCommonRequest);
+        HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callConfirmRequest.name(), true);
     }
 
     //endregion
@@ -588,21 +734,54 @@ drawaRoutr();
     {
         if (flag.equals(DataEnum.callGetNearby.name()))
         {
+            layoutSearchFilter.setVisibility(View.VISIBLE);
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             ModelGetNearByResponse modelGetNearByResponse = gson.fromJson(jsonObject, ModelGetNearByResponse.class);
-            setMarkers(modelGetNearByResponse.getModel());
+            if (modelGetNearByResponse.getModel().size() == 0)
+                layoutNoParkingLots.setVisibility(View.VISIBLE);
+            else
+                setMarkers(modelGetNearByResponse.getModel());
 
 
         } else if (flag.equals(DataEnum.callSeekerBook.name()))
         {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
-            String ds = jsonObject.get("model").getAsString();
-            Log.d("datagotten", ds);
-            rlSeekerMapsDetailsCardBooked.setVisibility(View.VISIBLE);
-            rlSeekerMapsDetailsCard.setVisibility(View.GONE);
+            bookedID = jsonObject.get("model").getAsString();
+
+
+            for (Marker marker : markerList)
+            {
+                Model model = (Model) marker.getTag();
+                if (!model.getRequestid().equals(selectedRequestId))
+                    marker.setVisible(false);
+                else
+                {
+                    setBookedCard(model);
+                }
+            }
+
+        } else if (flag.equals(DataEnum.callCancelRequest.name()))
+        {
+            mMap.clear();
+            markerList.clear();
+            rlSeekerMapsDetailsCardBooked.setVisibility(View.GONE);
+            callGetNearby();
+        } else if (flag.equals(DataEnum.callConfirmRequest.name()))
+        {
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
+            ModelConfirmRequest modelConfirmRequest = gson.fromJson(jsonObject, ModelConfirmRequest.class);
+
+            Intent intent = new Intent(SeekerMapsActivity.this, ConfirmRequestActivity.class);
+//            intent.putExtra(DataEnum.intentModelConfirmRequest.name(), modelConfirmRequest);
+            intent.putExtra(DataEnum.intentModel.name(), (Model) markerList.get(0).getTag());
+            startActivity(intent);
+            finish();
         }
+
+
     }
 
     @Override
@@ -625,8 +804,107 @@ drawaRoutr();
     @OnClick(R.id.btnSeekerMapsBook)
     void onClickbtnSeekerMapsBook(View view)
     {
+        layoutSearchFilter.setVisibility(View.GONE);
         callSeekerBook();
     }
 
+    @OnClick(R.id.imgSeekerCall)
+    void onClickimgSeekerCall(View view)
+    {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + leaverMobile));
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btnSeekerMapsConfirmBooked)
+    void onClickbtnSeekerMapsConfirmBooked(View view)
+    {
+        callConfirmRequest();
+    }
+
+    @OnClick(R.id.btnSeekerMapsCancelBooked)
+    void onClickbtnSeekerMapsCancelBooked(View view)
+    {
+        startActivity(new Intent(this, CancelRequestActivity.class)
+                .putExtra(DataEnum.intentRequestId.name(), bookedID));
+    }
+
+    @OnClick(R.id.llSearchFilterStatus)
+    void onClickllSearchFilterStatus(View view)
+    {
+        if (layoutStatus.getVisibility() == View.VISIBLE)
+            layoutStatus.setVisibility(View.GONE);
+        else
+            layoutStatus.setVisibility(View.VISIBLE);
+        layoutRange.setVisibility(View.GONE);
+        layoutPrice.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.llSearchFilterRange)
+    void onClickllSearchFilterRange(View view)
+    {
+        if (layoutRange.getVisibility() == View.VISIBLE)
+            layoutRange.setVisibility(View.GONE);
+        else
+            layoutRange.setVisibility(View.VISIBLE);
+        layoutStatus.setVisibility(View.GONE);
+        layoutPrice.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.llSearchFilterPrice)
+    void onClickllSearchFilterPrice(View view)
+    {
+        if (layoutPrice.getVisibility() == View.VISIBLE)
+            layoutPrice.setVisibility(View.GONE);
+        else
+            layoutPrice.setVisibility(View.VISIBLE);
+        layoutStatus.setVisibility(View.GONE);
+        layoutRange.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.btnStatus)
+    void onClickbtnStatus(View view)
+    {
+
+        if (imgStatusDialogNow.getVisibility() == View.VISIBLE)
+        {
+            status = 1;
+            llSearchFilterStatus.setBackground(getResources().getDrawable(R.drawable.background_txt_available));
+            tvSearchFilterStatus.setText(getString(R.string.available_now));
+        } else
+        {
+            status = 2;
+            time = seekBarDialogSearchStatus.getProgress();
+            llSearchFilterStatus.setBackground(getResources().getDrawable(R.drawable.background_txt_available_later));
+            tvSearchFilterStatus.setText(seekBarDialogSearchStatus.getProgress() + "hours Later");
+        }
+        callGetNearby();
+    }
+
+    @OnClick(R.id.tvStatusDialogNow)
+    void onClicktvStatusDialogNow(View view)
+    {
+        indicatorStatus.setVisibility(View.GONE);
+        imgStatusDialogNow.setVisibility(View.VISIBLE);
+        imgStatusDialogLater.setVisibility(View.GONE);
+        llStatusDialogTitles.setVisibility(View.INVISIBLE);
+    }
+
+    @OnClick(R.id.tvStatusDialogLater)
+    void onClicktvStatusDialogLater(View view)
+    {
+        indicatorStatus.setVisibility(View.VISIBLE);
+        imgStatusDialogNow.setVisibility(View.GONE);
+        imgStatusDialogLater.setVisibility(View.VISIBLE);
+        llStatusDialogTitles.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.btnRange)
+    void onClickbtnRange(View view)
+    {
+        raduisInMeter = seekBarDialogSearchRange.getProgress() + "000";
+        tvSearchFilterRange.setText(seekBarDialogSearchRange.getProgress() + "K Range");
+        callGetNearby();
+    }
     //endregion
 }

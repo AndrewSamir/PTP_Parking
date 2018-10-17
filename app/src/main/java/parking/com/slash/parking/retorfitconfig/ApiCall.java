@@ -1,5 +1,7 @@
 package parking.com.slash.parking.retorfitconfig;
 
+import java.util.Map;
+
 import parking.com.slash.parking.model.ModelCommenResponse.ModelCommenResponse;
 import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
 import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByRequest;
@@ -8,6 +10,7 @@ import parking.com.slash.parking.utlities.Constant;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -24,20 +27,26 @@ public interface ApiCall
     Call<ModelCommenResponse> callLogin(@Body ModelLoginRequest modelLoginRequest);
 
     @POST(Constant.baseUrl + "Requests/GetNearby")
-    Call<ModelCommenResponse> callGetNearby(@Body ModelGetNearByRequest modelGetNearByRequest);
+    Call<ModelCommenResponse> callGetNearby(@Body ModelGetNearByRequest modelGetNearByRequest, @HeaderMap Map<String, String> headers);
 
-    @GET(Constant.baseUrl + "Requests/SeekerBook")
-    Call<ModelCommenResponse> callSeekerBook(@Query("RequestID") String RequestID);
+    @POST(Constant.baseUrl + "Requests/SeekerBook")
+    Call<ModelCommenResponse> callSeekerBook(@Body ModelCommonRequest modelCommonRequest);
+
+    @POST(Constant.baseUrl + "Requests/CancelRequest")
+    Call<ModelCommenResponse> callCancelRequest(@Body ModelCommonRequest modelCommonRequest);
+
+    @POST(Constant.baseUrl + "Requests/ConfirmRequest")
+    Call<ModelCommenResponse> callConfirmRequest(@Body ModelCommonRequest modelCommonRequest);
 
     @POST(Constant.baseUrl + "Account/Register")
-    Call<ModelCommenResponse> callRegister(@Query("email") String email,
-                                           @Query("password") String password,
-                                           @Query("mobile") String mobile,
-                                           @Query("name") String name,
-                                           @Query("carNumber") String carNumber,
+    Call<ModelCommenResponse> callRegister(@Query("Email") String email,
+                                           @Query("Password") String password,
+                                           @Query("Mobile") String mobile,
+                                           @Query("Name") String name,
+                                           @Query("CarNumber") String carNumber,
                                            @Query("carModelID") String carModelID,
-                                           @Query("carColor") String carColor,
-                                           @Query("isPaymentVerified") String isPaymentVerified);
+                                           @Query("CarColor ") String carColor,
+                                           @Query("IsPaymentVerified") Boolean isPaymentVerified);
 
     @POST(Constant.baseUrl + "Account/CheckExist")
     Call<ModelCommenResponse> callCheckExist(@Body ModelCommonRequest modelCommonRequest);

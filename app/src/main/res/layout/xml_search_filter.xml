@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40sdp"
+    android:layout_marginEnd="@dimen/_20sdp"
+    android:layout_marginStart="@dimen/_20sdp"
+    android:background="@null"
+    android:layoutDirection="locale"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <LinearLayout
+        android:id="@+id/llSearchFilterStatus"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_weight="1"
+        android:background="@drawable/background_txt_available"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/_2sdp">
+
+        <TextView
+            android:id="@+id/tvSearchFilterStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/available_now"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/tap_to_change"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_8sdp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSearchFilterRange"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_weight="1"
+        android:background="@drawable/background_btn_blue"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/_2sdp">
+
+        <TextView
+            android:id="@+id/tvSearchFilterRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/_5k_range"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/tap_to_change"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_8sdp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSearchFilterPrice"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_weight="1"
+        android:background="@drawable/background_btn_white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/_2sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/price"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/tap_to_change"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_8sdp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

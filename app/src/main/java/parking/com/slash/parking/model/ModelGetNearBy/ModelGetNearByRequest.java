@@ -17,6 +17,9 @@ public class ModelGetNearByRequest
     @SerializedName("Type")
     private int type;
     @Expose
+    @SerializedName("Time")
+    private int Time;
+    @Expose
     @SerializedName("Radius")
     private String radius;
     @Expose
@@ -85,5 +88,15 @@ public class ModelGetNearByRequest
     public void setLongitude(String longitude)
     {
         this.longitude = longitude;
+    }
+
+    public int getTime()
+    {
+        return Time;
+    }
+
+    public void setTime(int time)
+    {
+        Time = time;
     }
 }

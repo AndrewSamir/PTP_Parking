@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/background_btn_white"
+    android:drawableStart="@drawable/icon_info"
+    android:drawablePadding="@dimen/_15sdp"
+    android:padding="@dimen/_20sdp"
+    android:layout_margin="@dimen/_15sdp"
+    android:text="@string/unfortunately_there_is_no_parking_lots_available_in_this_area_right_now"
+    android:visibility="visible">
+
+</TextView>

@@ -1,6 +1,7 @@
 package parking.com.slash.parking.activities.Account;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,6 +10,7 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
@@ -25,7 +27,8 @@ import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
 import retrofit2.Call;
 
-public class SignUpAccountDetailsActivity extends Activity implements Validator.ValidationListener, HandleRetrofitResp {
+public class SignUpAccountDetailsActivity extends Activity implements Validator.ValidationListener, HandleRetrofitResp
+{
 
     //region fields
     Validator validator;
@@ -36,7 +39,7 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
     @BindView(R.id.edtRegisterName)
     EditText edtRegisterName;
 
-    @NotEmpty
+    @Length(min = 11, max = 11)
     @BindView(R.id.edtRegisterPhone)
     EditText edtRegisterPhone;
 
@@ -56,7 +59,8 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
 
     //region lifecycle
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_account_details);
 
@@ -72,7 +76,8 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
     //region clicks
 
     @OnClick(R.id.btnRegisterNext)
-    public void onClickbtnRegisterNext() {
+    public void onClickbtnRegisterNext()
+    {
         validator.validate();
     }
 
@@ -80,20 +85,25 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
 
     //region validation
     @Override
-    public void onValidationSucceeded() {
+    public void onValidationSucceeded()
+    {
         callCheckExist();
     }
 
     @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        for (ValidationError error : errors) {
+    public void onValidationFailed(List<ValidationError> errors)
+    {
+        for (ValidationError error : errors)
+        {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
 
             // Display error messages ;)
-            if (view instanceof EditText) {
+            if (view instanceof EditText)
+            {
                 ((EditText) view).setError(message);
-            } else {
+            } else
+            {
 //                showMessage(message);
             }
         }
@@ -103,25 +113,39 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
+    public void onResponseSuccess(String flag, Object o)
+    {
+        startActivity(new Intent(this, SignUpCarDetailsActivity.class)
+                .putExtra(DataEnum.regName.name(), edtRegisterName.getText())
+                .putExtra(DataEnum.regMobile.name(), edtRegisterPhone.getText().toString())
+                .putExtra(DataEnum.regMail.name(), edtRegisterMail.getText().toString())
+                .putExtra(DataEnum.regPassword.name(), edtRegisterPassword.getText().toString())
+        );
+    }
+
+    @Override
+    public void onNoContent(String flag, int code)
+    {
+        startActivity(new Intent(this, SignUpCarDetailsActivity.class)
+                .putExtra(DataEnum.regName.name(), edtRegisterName.getText().toString())
+                .putExtra(DataEnum.regMobile.name(), edtRegisterPhone.getText().toString())
+                .putExtra(DataEnum.regMail.name(), edtRegisterMail.getText().toString())
+                .putExtra(DataEnum.regPassword.name(), edtRegisterPassword.getText().toString())
+        );
 
     }
 
     @Override
-    public void onNoContent(String flag, int code) {
-
-    }
-
-    @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
     //endregion
 
     //region calls
-    private void callCheckExist() {
-
+    private void callCheckExist()
+    {
         ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
         modelCommonRequest.setEmail(edtRegisterMail.getText().toString());
         modelCommonRequest.setMobile(edtRegisterPhone.getText().toString());

@@ -13,7 +13,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -563,4 +565,27 @@ public class HelpMe
                 .into(v);
     }
 
+    public static void darkenStatusBar(Activity activity, int color) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            activity.getWindow().setStatusBarColor(
+                    darkenColor(
+                            ContextCompat.getColor(activity, color)));
+        }
+
+    }
+
+
+    // Code to darken the color supplied (mostly color of toolbar)
+    private static int darkenColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.8f;
+        return Color.HSVToColor(hsv);
+    }
+
+
 }
+
+

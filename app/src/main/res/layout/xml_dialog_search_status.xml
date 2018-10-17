@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@null">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_filter_big"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/_5sdp"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingTop="@dimen/_20sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_9sdp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_9sdp">
+
+                <TextView
+                    android:id="@+id/tvStatusDialogNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_9sdp"
+                    android:background="@drawable/background_txt_available"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:paddingEnd="@dimen/_14sdp"
+                    android:paddingStart="@dimen/_7sdp"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:text="@string/available_now"
+                    android:textColor="@color/colorWhite" />
+
+                <ImageView
+                    android:id="@+id/imgStatusDialogNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:elevation="25dp"
+                    android:src="@drawable/icon_selected" />
+
+            </android.support.design.widget.CoordinatorLayout>
+
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_9sdp">
+
+                <TextView
+                    android:id="@+id/tvStatusDialogLater"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_9sdp"
+                    android:background="@drawable/background_txt_available_later"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:paddingEnd="@dimen/_14sdp"
+                    android:paddingStart="@dimen/_7sdp"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:text="@string/available_later"
+                    android:textColor="@color/colorWhite" />
+
+                <ImageView
+                    android:id="@+id/imgStatusDialogLater"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|end"
+                    android:elevation="25dp"
+                    android:src="@drawable/icon_selected"
+                    android:visibility="gone" />
+
+            </android.support.design.widget.CoordinatorLayout>
+
+
+        </LinearLayout>
+
+        <com.warkiz.widget.IndicatorStayLayout
+            android:id="@+id/indicatorStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <com.warkiz.widget.IndicatorSeekBar
+                android:id="@+id/seekBarDialogSearchStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isb_indicator_color="@color/colorAccent"
+                app:isb_indicator_text_color="@color/colorWhite"
+                app:isb_indicator_text_size="@dimen/_7sdp"
+                app:isb_max="24"
+                app:isb_min="1"
+                app:isb_only_thumb_draggable="true"
+                app:isb_progress="3"
+                app:isb_seek_smoothly="true"
+                app:isb_show_indicator="rounded_rectangle"
+                app:isb_show_thumb_text="false"
+                app:isb_thumb_color="@color/colorAccent"
+                app:isb_thumb_size="@dimen/_15sdp"
+                app:isb_thumb_text_color="@color/colorAccent"
+                app:isb_tick_marks_size="13dp"
+                app:isb_track_background_color="@color/colorSeekBar"
+                app:isb_track_background_size="2dp"
+                app:isb_track_progress_color="@color/colorAccent"
+                app:isb_track_progress_size="2dp" />
+
+        </com.warkiz.widget.IndicatorStayLayout>
+
+        <LinearLayout
+            android:id="@+id/llStatusDialogTitles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="@string/_1_hour"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/_1_day"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/background_edt_login_border"
+            android:text="@string/apply"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</RelativeLayout>
