@@ -71,11 +71,25 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.Leaver.LeaverMapsActivity"
+            android:label="@string/title_activity_seeker_maps"
+            android:theme="@style/SeekerMap"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activities.Seeker.ConfirmRequestActivity"
             android:label="@string/title_activity_confirm_request" />
         <activity
             android:name=".activities.Seeker.CancelRequestActivity"
-            android:label="@string/title_activity_cancel_request"></activity>
+            android:label="@string/title_activity_cancel_request" />
+        <activity
+            android:name=".activities.Leaver.WaitingSeekerActivity"
+            android:label="@string/title_activity_waiting_seeker"/>
     </application>
 
 </manifest>

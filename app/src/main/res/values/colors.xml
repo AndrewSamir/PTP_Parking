@@ -16,6 +16,7 @@
     <color name="colorCarCardDetails">#0A0A0A</color>
     <color name="colorSeekBar">#CCCCCC</color>
     <color name="colorSecondTextColor">#515151</color>
+    <color name="colorThirdTextColor">#202020</color>
     <color name="colorCancelTextColor">#FC5F6B</color>
 
 

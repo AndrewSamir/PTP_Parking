@@ -4,7 +4,9 @@ import java.util.Map;
 
 import parking.com.slash.parking.model.ModelCommenResponse.ModelCommenResponse;
 import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
+import parking.com.slash.parking.model.ModelGetAddressFromMap.ModelGetAddressFromMap;
 import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByRequest;
+import parking.com.slash.parking.model.ModelLeaverBookRequest.ModelLeaverBookRequest;
 import parking.com.slash.parking.model.ModelLoginRequest.ModelLoginRequest;
 import parking.com.slash.parking.utlities.Constant;
 import retrofit2.Call;
@@ -14,8 +16,7 @@ import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public interface ApiCall
-{
+public interface ApiCall {
 
     @GET(Constant.baseUrl + "Account/GetModelsList")
     Call<ModelCommenResponse> callGetModelsList(@Query("BrandID") String brandId);
@@ -51,6 +52,11 @@ public interface ApiCall
     @POST(Constant.baseUrl + "Account/CheckExist")
     Call<ModelCommenResponse> callCheckExist(@Body ModelCommonRequest modelCommonRequest);
 
+    @POST(Constant.baseUrl + "Requests/LeaverBook")
+    Call<ModelCommenResponse> callLeaverBook(@Body ModelLeaverBookRequest modelLeaverBookRequest,@HeaderMap Map<String, String> headers);
+
+    @GET("https://maps.googleapis.com/maps/api/geocode/json")
+    Call<ModelGetAddressFromMap> callGetAddressFromMap(@Query("latlng") String latlng, @Query("key") String key, @Query("language") String language);
 
 }
 

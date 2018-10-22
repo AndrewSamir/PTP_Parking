@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mapLeaver"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_25sdp"
+        tools:context=".activities.Seeker.SeekerMapsActivity" />
+
+
+    <include
+        android:id="@+id/layoutLeaverMapLeaveOptions"
+        layout="@layout/xml_leave_options"
+        android:visibility="visible" />
+
+    <include
+        android:id="@+id/layoutLeaverMapStartLeave"
+        layout="@layout/xml_start_leave"
+        android:visibility="gone" />
+
+
+</FrameLayout>

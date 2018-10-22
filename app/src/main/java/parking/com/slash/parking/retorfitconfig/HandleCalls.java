@@ -15,6 +15,7 @@ import parking.com.slash.parking.activities.BaseActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
 import parking.com.slash.parking.interfaces.HandleRetrofitRespAdapter;
 import parking.com.slash.parking.model.ModelCommenResponse.ModelCommenResponse;
+import parking.com.slash.parking.utlities.HelpMe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,10 +49,10 @@ public class HandleCalls {
     }
 
     Dialog progressDialog;
+
     public <T> void callRetrofit(Call<ModelCommenResponse> call, final String flag, final Boolean showLoading) {
-        if (showLoading)
-        {
-            progressDialog = new ProgressDialog( context, IndicatorStyle.BallBeat).show();
+        if (showLoading) {
+            progressDialog = new ProgressDialog(context, IndicatorStyle.BallBeat).show();
             progressDialog.show();
         }
         call.enqueue(new Callback<ModelCommenResponse>() {
@@ -63,7 +64,7 @@ public class HandleCalls {
                 if (response.code() == 200) {
 
                     ModelCommenResponse modelCommenResponse = response.body();
-                    if (modelCommenResponse.getResponseMessage() != null);
+                    if (modelCommenResponse.getResponseMessage() != null) ;
 //                        ((BaseActivity) context).showMessage(modelCommenResponse.getResponseMessage());
                     if (modelCommenResponse.getData() != null && modelCommenResponse.getStatus().equals(context.getString(R.string.success)))
                         onRespnse.onResponseSuccess(flag, modelCommenResponse.getData());
@@ -108,5 +109,32 @@ public class HandleCalls {
         });
 
     }
+
+    public <ModelGetAddressFromMap> void callRetrofitGoogleAPi(Call<ModelGetAddressFromMap> call, final String flag, final Boolean showLoading) {
+        progressDialog = new ProgressDialog(context, IndicatorStyle.BallBeat).show();
+
+
+        call.enqueue(new Callback<ModelGetAddressFromMap>() {
+            @Override
+            public void onResponse(Call<ModelGetAddressFromMap> call, Response<ModelGetAddressFromMap> response) {
+                progressDialog.dismiss();
+
+                if (response.code() == 200) {
+                    ModelGetAddressFromMap modelCommenResponse = response.body();
+                    onRespnse.onResponseSuccess(flag, modelCommenResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ModelGetAddressFromMap> call, Throwable t) {
+                progressDialog.dismiss();
+
+                onRespnse.onNoContent(flag, 0);
+                HelpMe.getInstance(context).retrofironFailure(t);
+            }
+        });
+
+    }
+
 
 }

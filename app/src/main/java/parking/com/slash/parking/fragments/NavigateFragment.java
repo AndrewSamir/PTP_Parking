@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import parking.com.slash.parking.R;
+import parking.com.slash.parking.activities.Leaver.LeaverMapsActivity;
 import parking.com.slash.parking.activities.Seeker.SeekerMapsActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
@@ -124,6 +125,7 @@ public class NavigateFragment extends BaseFragment implements HandleRetrofitResp
     @OnClick(R.id.rlNavigationLeave)
     void onClickrlNavigationLeave(View view)
     {
+        getBaseActivity().startActivity(new Intent(getBaseActivity(), LeaverMapsActivity.class));
 
     }
     //endregion

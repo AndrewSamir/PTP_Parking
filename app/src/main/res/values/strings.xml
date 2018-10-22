@@ -18,7 +18,6 @@
     <string name="car_details">Car Details</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="CarBrand">Car Brand</string>
-    <string name="car_model">Car Model</string>
     <string name="if_you_don_t_have_account">If you don\'t have account !</string>
     <string name="sign_up">Signup</string>
     <string name="login">Login</string>
@@ -90,4 +89,15 @@
     <string name="you_re_about_to_cancel">You\'re about to cancel, \n once you confirm you will not be able to \n continue same parking lot?</string>
     <string name="back_to_parking">Back to Parking</string>
     <string name="confirm_cancel">Confirm Cancel</string>
+    <string name="car_model">Car Model</string>
+    <string name="leave_now">Leave Now</string>
+    <string name="later">Later</string>
+    <string name="your_location">Your Location</string>
+    <string name="set_your_price">Set Your Price</string>
+    <string name="parking_exchange_fee">Parking Exchange Fee</string>
+    <string name="start_leaving">Start Leaving</string>
+    <string name="leaving_time">Leaving Time</string>
+    <string name="title_activity_waiting_seeker">WaitingSeekerActivity</string>
+    <string name="waiting_a_parking_seeker">Waiting a Parking Seeker !</string>
+    <string name="required">this field is reqired</string>
 </resources>

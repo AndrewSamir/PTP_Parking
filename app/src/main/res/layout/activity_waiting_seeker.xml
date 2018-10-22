@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".activities.Leaver.WaitingSeekerActivity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/waiting_a_parking_seeker"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_14sdp" />
+
+    <FrameLayout
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_250sdp"
+        android:layout_gravity="center">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mvWaitingSeeker"
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="@dimen/_170sdp"
+            android:layout_gravity="center"
+            android:padding="@dimen/_35sdp"
+            app:liteMode="true"
+            app:mapType="normal" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_map"
+            tools:ignore="ContentDescription" />
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/circleProgressWaitingSeeker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_35sdp"
+            android:visibility="visible"
+            app:cpb_background_progressbar_color="@color/colorAccent"
+            app:cpb_background_progressbar_width="7dp"
+            app:cpb_progressbar_color="@color/colorAccent"
+            app:cpb_progressbar_width="@dimen/_10sdp" />
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/tvWaitingSeekerTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/colorSecondTextColor"
+        android:textSize="@dimen/_13sdp"
+        tools:text="00:09:26" />
+
+    <Button
+        android:id="@+id/btnWaitingCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_35sdp"
+        android:background="@drawable/background_btn_cancel"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/cancel"
+        android:textColor="@color/colorCancelTextColor" />
+</LinearLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@null"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/banner_background"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/your_location"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/tvLeaverMapsStartLeavingStreet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp"
+            tools:text="Taqseem Reaaset Al Gomhoreya" />
+
+        <TextView
+            android:id="@+id/tvLeaverMapsStartLeavingAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.56"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10sdp"
+            tools:text="AZ Zaytoun Al Qebleyah, Al Qubaa Sawah، Cairo Governorate" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:text="@string/set_your_price"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/parking_exchange_fee"
+            android:textColor="@color/colorThirdTextColor"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edtLeaverMapsStartLeavingPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:hint="@string/parking_exchange_fee"
+            android:inputType="number"
+            android:textColor="@color/colorThirdTextColor"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/tvLeaverMapsStartLeavingTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:hint="@string/leaving_time"
+            android:textColor="@color/colorThirdTextColor"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnLeaverMapsStartLeaving"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:background="@drawable/background_btn_blue"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/start_leaving"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/btnLeaverMapsCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:background="@drawable/background_btn_cancel"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/cancel"
+            android:textColor="@color/colorCancelTextColor" />
+    </LinearLayout>
+
+</RelativeLayout>
