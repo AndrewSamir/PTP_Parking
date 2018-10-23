@@ -13,10 +13,20 @@ public class ModelLeaverBookRequest {
     private String latitude;
     @SerializedName("Address")
     private String address;
+    @SerializedName("Area")
+    private String Area;
     @SerializedName("LeavingTime")
     private String leavingtime;
     @SerializedName("Type")
     private int type;
+
+    public void setArea(String area) {
+        Area = area;
+    }
+
+    public String getArea() {
+        return Area;
+    }
 
     public int getFees() {
         return fees;

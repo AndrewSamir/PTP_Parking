@@ -302,6 +302,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
         modelLeaverBookRequest.setLongitude(currentLatLng.longitude + "");
         modelLeaverBookRequest.setLeavingtime(tvLeaverMapsStartLeavingTime.getText().toString());
         modelLeaverBookRequest.setType(status);
+        modelLeaverBookRequest.setArea("strinmg");
 
         Map<String, String> stringStringMap = new HashMap<>();
         stringStringMap.put("Authorization", "bearer " + SharedPrefHelper.getInstance(this).getAccessToken());

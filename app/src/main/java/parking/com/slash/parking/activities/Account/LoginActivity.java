@@ -3,6 +3,8 @@ package parking.com.slash.parking.activities.Account;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
+import android.util.Config;
 import android.view.View;
 import android.widget.EditText;
 
@@ -32,8 +34,7 @@ import parking.com.slash.parking.utlities.DataEnum;
 import parking.com.slash.parking.utlities.SharedPrefHelper;
 import retrofit2.Call;
 
-public class LoginActivity extends Activity implements Validator.ValidationListener, HandleRetrofitResp
-{
+public class LoginActivity extends Activity implements Validator.ValidationListener, HandleRetrofitResp {
 
 
     //region fields
@@ -55,15 +56,17 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
     //region lifecycle
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         ButterKnife.bind(this);
         validator = new Validator(this);
         validator.setValidationListener(this);
-
+        if (Config.DEBUG) {
+            edtLoginEmail.setText("s@s.com");
+            edtLoginPassword.setText("123456");
+        }
         HandleCalls.getInstance(this).setonRespnseSucess(this);
     }
 
@@ -71,25 +74,20 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
 
     //region validation
     @Override
-    public void onValidationSucceeded()
-    {
+    public void onValidationSucceeded() {
         callLogin();
     }
 
     @Override
-    public void onValidationFailed(List<ValidationError> errors)
-    {
-        for (ValidationError error : errors)
-        {
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
 
             // Display error messages ;)
-            if (view instanceof EditText)
-            {
+            if (view instanceof EditText) {
                 ((EditText) view).setError(message);
-            } else
-            {
+            } else {
 //                showMessage(message);
             }
         }
@@ -100,14 +98,12 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
     //region clicks
 
     @OnClick(R.id.btnLoginLogin)
-    public void onClickbtnLoginLogin()
-    {
+    public void onClickbtnLoginLogin() {
         validator.validate();
     }
 
     @OnClick(R.id.btnLoginSignUp)
-    public void onClickbtnLoginSignUp()
-    {
+    public void onClickbtnLoginSignUp() {
         startActivity(new Intent(this, SignUpAccountDetailsActivity.class));
         finish();
     }
@@ -116,10 +112,8 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o)
-    {
-        if (flag.equals(DataEnum.callLogin.name()))
-        {
+    public void onResponseSuccess(String flag, Object o) {
+        if (flag.equals(DataEnum.callLogin.name())) {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             ModelLoginResponse modelGetNearByResponse = gson.fromJson(jsonObject, ModelLoginResponse.class);
@@ -132,22 +126,19 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
     }
 
     @Override
-    public void onNoContent(String flag, int code)
-    {
+    public void onNoContent(String flag, int code) {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position)
-    {
+    public void onResponseSuccess(String flag, Object o, int position) {
 
     }
 
     //endregion
 
     //region calls
-    private void callLogin()
-    {
+    private void callLogin() {
 
         ModelLoginRequest modelLoginRequest = new ModelLoginRequest();
         modelLoginRequest.setUsername(edtLoginEmail.getText().toString());
