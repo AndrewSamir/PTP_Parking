@@ -33,6 +33,9 @@ public interface ApiCall {
     @GET(Constant.baseUrl + "User/GetUserHistory")
     Call<ModelCommenResponse> callGetUserHistory(@HeaderMap Map<String, String> headers);
 
+    @GET(Constant.baseUrl + "User/GetUserDetails")
+    Call<ModelCommenResponse> callGetUserDetails(@HeaderMap Map<String, String> headers);
+
     @POST(Constant.baseUrl + "Account/login")
     Call<ModelCommenResponse> callLogin(@Body ModelLoginRequest modelLoginRequest);
 
