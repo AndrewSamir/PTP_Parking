@@ -4,27 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_270sdp"
-    android:background="@color/colorWhite"
+    android:layout_margin="@dimen/_10sdp"
     app:cardCornerRadius="@dimen/_10sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWhite"
         android:orientation="vertical">
+
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_200sdp"
             android:visibility="visible">
 
-            <com.google.android.gms.maps.MapView
+            <com.google.android.gms.maps.MapView xmlns:map="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/mvRvItemHistory"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_160sdp"
-                android:layout_gravity="center"
-                android:padding="@dimen/_35sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_gravity="top"
                 app:liteMode="true"
-                app:mapType="normal" />
+
+                app:mapType="normal"
+                map:uiMapToolbar="false" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,6 +58,7 @@
                         android:id="@+id/tvRvItemHistoryTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_11sdp"
                         tools:text="sdkjdsfjkdfssdfmnfdsnmdfsbsdmbsd" />
 
@@ -62,7 +66,8 @@
                         android:id="@+id/tvRvItemHistoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_13sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp"
                         tools:text="Hani Adel" />
                 </LinearLayout>
             </LinearLayout>
@@ -87,7 +92,9 @@
                     android:id="@+id/tvRvItemHistoryStreet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_16sdp"
+                    android:lines="1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14sdp"
                     tools:text="El-Said EL merghany" />
 
                 <TextView
@@ -95,7 +102,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_7sdp"
-                    android:textSize="@dimen/_14sdp"
+                    android:lines="1"
+                    android:textColor="@color/black"
+                    android:alpha="0.7"
+                    android:textSize="@dimen/_12sdp"
                     tools:text="manshyt el bakty " />
             </LinearLayout>
 
@@ -110,7 +120,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="@dimen/_18sdp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_20sdp"
                     tools:text="20LE" />
 
                 <TextView
@@ -119,7 +130,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
-                    android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/black"
+                    android:alpha="0.8"
+                    android:textSize="@dimen/_12sdp"
                     tools:text="completed" />
             </LinearLayout>
 

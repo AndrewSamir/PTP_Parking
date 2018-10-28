@@ -94,6 +94,20 @@
         <activity
             android:name=".activities.Leaver.WaitingSeekerActivity"
             android:label="@string/title_activity_waiting_seeker" />
+
+        <service android:name=".firebase.CustomFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".firebase.CustomFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>

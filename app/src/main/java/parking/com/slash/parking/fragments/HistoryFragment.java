@@ -2,22 +2,39 @@ package parking.com.slash.parking.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import parking.com.slash.parking.R;
+import parking.com.slash.parking.adapters.AdapterHistory;
 import parking.com.slash.parking.customViews.CustomSegment;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
+import parking.com.slash.parking.model.ModelHistory.Model;
+import parking.com.slash.parking.model.ModelHistory.ModelHistory;
+import parking.com.slash.parking.model.ModelLoginResponse.ModelLoginResponse;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
+import parking.com.slash.parking.utlities.DataEnum;
+import parking.com.slash.parking.utlities.SharedPrefHelper;
+import retrofit2.Call;
 
 public class HistoryFragment extends BaseFragment implements CustomSegment.OnSegmentChangedListener, HandleRetrofitResp {
 
     //region fields
-
+    AdapterHistory adapterHistory;
+    List<Model> modelList;
     //endregion
 
     //region views
@@ -40,6 +57,12 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
         unbinder = ButterKnife.bind(this, view);
         scvHistory.setOnSegmentChangedListener(this);
+        modelList = new ArrayList<>();
+        adapterHistory = new AdapterHistory(modelList, getBaseActivity());
+        rvHistoryLeaving.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
+        rvHistoryLeaving.setAdapter(adapterHistory);
+
+        callGetUserHistory();
         return view;
     }
 
@@ -89,6 +112,10 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
     @Override
     public void onResponseSuccess(String flag, Object o) {
 
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
+        ModelHistory modelHistory = gson.fromJson(jsonObject, ModelHistory.class);
+        adapterHistory.addAll(modelHistory.getModel());
     }
 
     @Override
@@ -110,6 +137,13 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
     //region calls
 
+    private void callGetUserHistory() {
+
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "bearer " + SharedPrefHelper.getInstance(getBaseActivity()).getAccessToken());
+        Call call = HandleCalls.restParki.getClientService().callGetUserHistory(headerMap);
+        HandleCalls.getInstance(getBaseActivity()).callRetrofit(call, DataEnum.GetUserHistory.name(), true);
+    }
     //endregion
 
     //region functions

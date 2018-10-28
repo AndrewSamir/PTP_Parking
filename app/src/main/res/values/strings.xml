@@ -102,4 +102,5 @@
     <string name="required">this field is reqired</string>
     <string name="seeking">seeking</string>
     <string name="leaving">leaving</string>
+    <string name="gps_network_not_enabled">gps network not enabled</string>
 </resources>

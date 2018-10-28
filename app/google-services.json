@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "906652759121-snctc2shor3164m4fn1d40negapj6u95.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "parking.com.slash.parking",
+            "certificate_hash": "f0b33f4178f95ce709b043bcf576aca41b8c419b"
+          }
+        },
+        {
           "client_id": "906652759121-d66i4ncjoouvgnu61i9tsu7riu21hrih.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -42,6 +50,14 @@
             {
               "client_id": "906652759121-d66i4ncjoouvgnu61i9tsu7riu21hrih.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "906652759121-nh9qifbte71bi8nlrdk57d165avh2e1n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Slash.Parki",
+                "app_store_id": "1439925973"
+              }
             }
           ]
         },

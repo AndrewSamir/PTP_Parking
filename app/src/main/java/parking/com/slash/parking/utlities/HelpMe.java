@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
@@ -547,7 +549,7 @@ public class HelpMe {
         if (activity != null && !activity.isFinishing()) {
             MaterialDialog.Builder builder = getMaterialDialogBuilder().content(message).positiveText(R.string.agree)
                     .onPositive(positiveClick)
-                    .positiveColor(activity.getResources()
+                    .positiveColor(context.getResources()
                             .getColor(R.color.colorPrimary))
                     .titleGravity(GravityEnum.CENTER)
                     .contentGravity(GravityEnum.CENTER);
@@ -565,6 +567,30 @@ public class HelpMe {
 //        builder.typeface("TheSansArabic-Bold.otf", "TheSansArabic-Plain.otf");
 
         return builder;
+    }
+
+    public static void showMessage(@Nullable String title, @NonNull String message) {
+            MaterialDialog.Builder builder = getMaterialDialogBuilder();
+            builder.content(message);
+            if (title != null) {
+                builder.title(title);
+            }
+
+            builder.content(message).positiveText(R.string.agree).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                }
+            }).autoDismiss(true).titleGravity(GravityEnum.CENTER).contentGravity(GravityEnum.CENTER).show();
+
+    }
+
+    public static void showMessage(@StringRes int stringResourceId) {
+        showMessage(null, context.getString(stringResourceId));
+    }
+
+    public void showMessage(String message) {
+        showMessage(null, message);
     }
 }
 

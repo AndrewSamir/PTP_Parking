@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,8 +35,13 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -295,12 +301,23 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
 
     private void callLeaverBook() {
+
+        Calendar dateCalendar = Calendar.getInstance();
+        long t = dateCalendar.getTimeInMillis();
+        Date date = new Date(t + (10 * 60000 * 15));
+        DateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        DateFormat formatterTime = new SimpleDateFormat("kk:mm:ss.SSS", Locale.ENGLISH);
+//        Date date = new Date();
+        String dateSt = formatterDate.format(date) + "T" + formatterTime.format(date);
+
+        Log.d("timeToSend", dateSt);
+
         ModelLeaverBookRequest modelLeaverBookRequest = new ModelLeaverBookRequest();
         modelLeaverBookRequest.setFees(Integer.parseInt(edtLeaverMapsStartLeavingPrice.getText().toString()));
         modelLeaverBookRequest.setAddress(address);
         modelLeaverBookRequest.setLatitude(currentLatLng.latitude + "");
         modelLeaverBookRequest.setLongitude(currentLatLng.longitude + "");
-        modelLeaverBookRequest.setLeavingtime(tvLeaverMapsStartLeavingTime.getText().toString());
+        modelLeaverBookRequest.setLeavingtime(dateSt);
         modelLeaverBookRequest.setType(status);
         modelLeaverBookRequest.setArea("strinmg");
 

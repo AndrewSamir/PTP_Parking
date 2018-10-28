@@ -4,6 +4,7 @@ package parking.com.slash.parking.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.AnimRes;
 import android.support.annotation.NonNull;
@@ -12,9 +13,11 @@ import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import parking.com.slash.parking.R;
@@ -31,6 +34,14 @@ import parking.com.slash.parking.utlities.SharedPrefHelper;
  * It has a header and a BottomNavigationView, and can easily be shown from the functions required from each Fragment.
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener, HandleRetrofitResp {
+
+    @BindView(R.id.navHistory)
+    TextView navHistory;
+    @BindView(R.id.navNavigation)
+    TextView navNavigation;
+    @BindView(R.id.navUser)
+    TextView navUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,16 +148,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @OnClick(R.id.navHistory)
     public void onClicknavHistory() {
+        Drawable topH = getResources().getDrawable(R.drawable.btnav_history_active);
+        navHistory.setCompoundDrawablesWithIntrinsicBounds(null, topH, null, null);
+        Drawable topN = getResources().getDrawable(R.drawable.btnav_navigate);
+        navNavigation.setCompoundDrawablesWithIntrinsicBounds(null, topN, null, null);
+        Drawable topU = getResources().getDrawable(R.drawable.btnav_user);
+        navUser.setCompoundDrawablesWithIntrinsicBounds(null, topU, null, null);
+
+
         addContentFragment(new HistoryFragment(), false);
     }
 
     @OnClick(R.id.navNavigation)
     public void onClicknavNavigation() {
+
+        Drawable topH = getResources().getDrawable(R.drawable.btnav_history);
+        navHistory.setCompoundDrawablesWithIntrinsicBounds(null, topH, null, null);
+        Drawable topN = getResources().getDrawable(R.drawable.btnav_navigate_active);
+        navNavigation.setCompoundDrawablesWithIntrinsicBounds(null, topN, null, null);
+        Drawable topU = getResources().getDrawable(R.drawable.btnav_user);
+        navUser.setCompoundDrawablesWithIntrinsicBounds(null, topU, null, null);
         addContentFragment(new NavigateFragment(), false);
     }
 
     @OnClick(R.id.navUser)
     public void onClicknavUser() {
+
+
+        Drawable topH = getResources().getDrawable(R.drawable.btnav_history);
+        navHistory.setCompoundDrawablesWithIntrinsicBounds(null, topH, null, null);
+        Drawable topN = getResources().getDrawable(R.drawable.btnav_navigate);
+        navNavigation.setCompoundDrawablesWithIntrinsicBounds(null, topN, null, null);
+        Drawable topU = getResources().getDrawable(R.drawable.btnav_user_active);
+        navUser.setCompoundDrawablesWithIntrinsicBounds(null, topU, null, null);
         addContentFragment(new UserFragment(), false);
     }
 

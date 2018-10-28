@@ -92,9 +92,12 @@ import parking.com.slash.parking.model.ModelGetNearBy.ModelGetNearByResponse;
 import parking.com.slash.parking.model.ModelLoginRequest.ModelLoginRequest;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
+import parking.com.slash.parking.utlities.HelpMe;
 import parking.com.slash.parking.utlities.SharedPrefHelper;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 import retrofit2.Call;
+
+import static parking.com.slash.parking.utlities.HelpMe.showMessage;
 
 public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyCallback, HandleRetrofitResp, GoogleMap.OnMarkerClickListener {
 
@@ -226,6 +229,17 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         super.onResume();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            switch (requestCode) {
+                case 1:
+                    requestUserCurrentLocation();
+                    break;
+            }
+        }
+    }
     //endregion
 
     //region map
@@ -353,37 +367,31 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
                         if (report.areAllPermissionsGranted()) {
                             requestUserCurrentLocation();
                         } else if (report.isAnyPermissionPermanentlyDenied()) {
-//                            showMessage(R.string.please_grant_permissions);
+                            HelpMe.getInstance(SeekerMapsActivity.this).showMessage(R.string.please_grant_permissions);
                         }
                     }
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
                         showPermissionRationaleMessage(token);
-
                     }
-
                 }).check();
     }
 
-    private void showPermissionRationaleMessage(final PermissionToken token) {/*
-        showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback()
-        {
+    private void showPermissionRationaleMessage(final PermissionToken token) {
+        showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-            {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 token.continuePermissionRequest();
                 dialog.dismiss();
             }
-        }, new MaterialDialog.SingleButtonCallback()
-        {
+        }, new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-            {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 token.cancelPermissionRequest();
                 dialog.dismiss();
             }
-        });*/
+        });
     }
 
 
@@ -560,29 +568,20 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
 
     private void showSettingsAlert() {
-        Intent locationSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(locationSettingsIntent);
 
-        /*MaterialDialog().content("gps_network_not_enabled")
-                .positiveText("open_location_settings")
-                .onPositive(new MaterialDialog.SingleButtonCallback()
-                {
-                    @Override
-                    public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support
-                            .annotation.NonNull DialogAction which)
-                    {
-                        Intent locationSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(locationSettingsIntent);
-                    }
-                }).onNegative(new MaterialDialog.SingleButtonCallback()
-        {
+
+        HelpMe.getInstance(this).showMessage(SeekerMapsActivity.this, getResources().getString(R.string.gps_network_not_enabled), new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onClick(@android.support.annotation.NonNull MaterialDialog dialog, @android.support.annotation.NonNull
-                    DialogAction which)
-            {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                Intent locationSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(locationSettingsIntent, 1);
+            }
+        }, new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
             }
-        }).negativeText(this.getString(R.string.cancel)).show();*/
+        });
     }
 
     private void setDetailsCard(Model model) {
@@ -625,6 +624,7 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     //region calls
 
     private void callGetNearby() {
+        progressDialog.dismiss();
         layoutPrice.setVisibility(View.GONE);
         layoutStatus.setVisibility(View.GONE);
         layoutRange.setVisibility(View.GONE);
