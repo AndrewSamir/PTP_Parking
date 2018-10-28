@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_10sdp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent">
+
+        <parking.com.slash.parking.customViews.CustomSegment
+            android:id="@+id/scvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginBottom="@dimen/_1sdp"
+            android:layout_marginTop="5dp"
+            android:layoutDirection="rtl"
+            android:padding="3dp"
+            android:visibility="visible"
+            app:scv_BackgroundNormalColor="@color/colorAccent"
+            app:scv_BackgroundSelectedColor="@color/colorWhite"
+            app:scv_FrameColor="@color/colorWhite"
+            app:scv_FrameCornerRadius="7dp"
+            app:scv_FrameWidth="2dp"
+            app:scv_Gradient="true"
+            app:scv_SegmentPaddingVertical="2dp"
+            app:scv_SelectedIndex="0"
+            app:scv_TextArray="@array/scv_history"
+            app:scv_TextNormalColor="@color/colorWhite"
+            app:scv_TextSelectedColor="@color/colorAccent"
+            app:scv_TextSize="@dimen/_12sdp" />
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvHistorySeeking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvHistoryLeaving"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

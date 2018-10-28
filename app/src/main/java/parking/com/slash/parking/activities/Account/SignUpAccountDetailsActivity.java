@@ -69,6 +69,9 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
         validator.setValidationListener(this);
 
         HandleCalls.getInstance(this).setonRespnseSucess(this);
+
+
+
     }
 
     //endregion

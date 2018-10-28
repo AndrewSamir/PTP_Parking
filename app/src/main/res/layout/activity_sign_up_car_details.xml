@@ -12,7 +12,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/_30sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,8 +62,8 @@
                 android:textStyle="bold" />
 
 
-            <TextView
-                android:id="@+id/tvSignUpCarBrand"
+            <AutoCompleteTextView
+                android:id="@+id/autovSignUpCarBrand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_12sdp"
@@ -83,7 +84,7 @@
                 android:textStyle="bold" />
 
 
-            <TextView
+            <AutoCompleteTextView
                 android:id="@+id/tvSignUpCarModel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,7 +128,7 @@
                 android:textStyle="bold" />
 
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/edtSignUpCarColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -167,7 +168,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/_13sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:padding="@dimen/_12sdp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="@dimen/_2sdp"
                     android:src="@drawable/image_container" />
 
 
@@ -230,11 +234,11 @@
             android:background="@drawable/background_paypal"
             android:drawablePadding="@dimen/_12sdp"
             android:drawableStart="@drawable/icon_paypal"
+            android:gravity="center_vertical"
             android:padding="@dimen/_7sdp"
             android:text="@string/no_account_assigned_yet"
-            android:textSize="@dimen/_13sdp"
-            android:gravity="center_vertical"
             android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_13sdp"
             android:textStyle="normal" />
 
         <LinearLayout
@@ -246,8 +250,8 @@
             <CheckBox
                 android:id="@+id/chSignUpAcceptTerms"
                 android:layout_width="wrap_content"
-                android:layout_marginEnd="@dimen/_2sdp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_2sdp"
                 android:text="@string/accept_all_the" />
 
 
@@ -264,7 +268,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
+            android:alpha="0.2"
             android:background="@drawable/background_btn_blue"
+            android:enabled="false"
             android:gravity="center"
             android:padding="@dimen/_12sdp"
             android:text="@string/sign_up"

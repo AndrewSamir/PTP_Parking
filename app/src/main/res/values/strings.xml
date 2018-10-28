@@ -100,4 +100,6 @@
     <string name="title_activity_waiting_seeker">WaitingSeekerActivity</string>
     <string name="waiting_a_parking_seeker">Waiting a Parking Seeker !</string>
     <string name="required">this field is reqired</string>
+    <string name="seeking">seeking</string>
+    <string name="leaving">leaving</string>
 </resources>

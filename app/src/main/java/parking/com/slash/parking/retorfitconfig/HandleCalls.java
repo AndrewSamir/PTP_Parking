@@ -66,9 +66,9 @@ public class HandleCalls {
                     ModelCommenResponse modelCommenResponse = response.body();
                     if (modelCommenResponse.getResponseMessage() != null) ;
 //                        ((BaseActivity) context).showMessage(modelCommenResponse.getResponseMessage());
-                    if (modelCommenResponse.getData() != null && modelCommenResponse.getStatus().equals(context.getString(R.string.success)))
+                    if (modelCommenResponse.getData() != null && modelCommenResponse.getStatus() ==1)
                         onRespnse.onResponseSuccess(flag, modelCommenResponse.getData());
-                    else if (modelCommenResponse.getStatus().equals(context.getString(R.string.success)))
+                    else if (modelCommenResponse.getStatus() == 1)
                         onRespnse.onNoContent(flag, response.code());
 
 
@@ -85,7 +85,7 @@ public class HandleCalls {
                 } else if (response.code() == 500) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        ((BaseActivity) context).showMessage(jObjError.getString("message"));
+//                        ((BaseActivity) context).showMessage(jObjError.getString("message"));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -9,6 +9,9 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".application.ParkiApplication"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".activities.SplashScreenActivity"
@@ -89,7 +93,7 @@
             android:label="@string/title_activity_cancel_request" />
         <activity
             android:name=".activities.Leaver.WaitingSeekerActivity"
-            android:label="@string/title_activity_waiting_seeker"/>
+            android:label="@string/title_activity_waiting_seeker" />
     </application>
 
 </manifest>

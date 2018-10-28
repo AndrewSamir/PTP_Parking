@@ -6,44 +6,37 @@ import com.google.gson.annotations.SerializedName;
  * Created by andre on 21-Jan-18.
  */
 
-public class ModelCommenResponse
-{
+public class ModelCommenResponse {
 
     @SerializedName("status")
-    private String Status;
+    private int Status;
     @SerializedName("message")
     private String ResponseMessage;
 
     @SerializedName("responseObj")
     private Object Data;
 
-    public String getStatus()
-    {
+    public int getStatus() {
         return Status;
     }
 
-    public void setStatus(String Status)
-    {
+    public void setStatus(int Status) {
         this.Status = Status;
     }
 
-    public String getResponseMessage()
-    {
+    public String getResponseMessage() {
         return ResponseMessage;
     }
 
-    public void setResponseMessage(String ResponseMessage)
-    {
+    public void setResponseMessage(String ResponseMessage) {
         this.ResponseMessage = ResponseMessage;
     }
 
-    public Object getData()
-    {
+    public Object getData() {
         return Data;
     }
 
-    public void setData(Object data)
-    {
+    public void setData(Object data) {
         Data = data;
     }
 }
