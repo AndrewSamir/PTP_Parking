@@ -99,7 +99,8 @@ import retrofit2.Call;
 
 import static parking.com.slash.parking.utlities.HelpMe.showMessage;
 
-public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyCallback, HandleRetrofitResp, GoogleMap.OnMarkerClickListener {
+public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyCallback, HandleRetrofitResp, GoogleMap.OnMarkerClickListener
+{
 
     //region fields
 
@@ -110,7 +111,7 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     List<Marker> markerList;
     private String bookedID;
     private String leaverMobile;
-
+    LatLng currentLatLng;
     private int status = 1;// 1-> Now , 2->Later
     private int priceFrom = 0;
     private int priceTo = 1000;
@@ -187,7 +188,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     //region life cycle
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_maps);
         getSupportActionBar().hide();
@@ -206,7 +208,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorWhite));
         }
 
@@ -225,15 +228,19 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 1) {
-            switch (requestCode) {
+        if (resultCode == 1)
+        {
+            switch (requestCode)
+            {
                 case 1:
                     requestUserCurrentLocation();
                     break;
@@ -254,7 +261,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
         requestUserCurrentLocation();
         googleMap.setOnMarkerClickListener(this);
@@ -267,16 +275,20 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
     }
 
-    private Bitmap getBitmapMarker(String mText, boolean isSelected) {
-        try {
+    private Bitmap getBitmapMarker(String mText, boolean isSelected)
+    {
+        try
+        {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
             Resources resources = getResources();
             float scale = resources.getDisplayMetrics().density;
             Bitmap bitmap = null;
-            if (!isSelected) {
+            if (!isSelected)
+            {
                 paint.setColor(Color.WHITE);
                 bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin_avaliable_selected); // pin_with_price
-            } else {
+            } else
+            {
                 paint.setColor(Color.BLACK);
                 bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin_now);
             }
@@ -308,18 +320,21 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
             canvas.drawText(mText, x, y - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), paint);
             return bitmap;
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return null;
         }
     }
 
 
-    private void requestUserCurrentLocation() {
+    private void requestUserCurrentLocation()
+    {
         if (ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED) {
+                .PERMISSION_GRANTED)
+        {
             requestLocationPermission();
             return;
         }
@@ -328,28 +343,33 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isNetworkEnabled && !isGpsEnabled) {
+        if (!isNetworkEnabled && !isGpsEnabled)
+        {
             progressDialog.dismiss();
             showSettingsAlert();
             return;
         }
 
 
-        if (mMap != null) {
+        if (mMap != null)
+        {
             LocationRequest request = LocationRequest.create() //standard GMS LocationRequest
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setNumUpdates(1)
                     .setInterval(100);
 
             ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
-            disposable_location = locationProvider.getUpdatedLocation(request).subscribe(new Consumer<Location>() {
+            disposable_location = locationProvider.getUpdatedLocation(request).subscribe(new Consumer<Location>()
+            {
                 @Override
-                public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
-                    LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception
+                {
+                    currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     lat = location.getLatitude() + "";
                     lng = location.getLongitude() + "";
                     adjustMapLatLng(currentLatLng);
 
-                    if (disposable_location != null) {
+                    if (disposable_location != null)
+                    {
                         disposable_location.dispose();
                     }
                 }
@@ -358,36 +378,47 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-    private void requestLocationPermission() {
+    private void requestLocationPermission()
+    {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new MultiplePermissionsListener() {
+                .withListener(new MultiplePermissionsListener()
+                {
                     @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
+                    public void onPermissionsChecked(MultiplePermissionsReport report)
+                    {
+                        if (report.areAllPermissionsGranted())
+                        {
                             requestUserCurrentLocation();
-                        } else if (report.isAnyPermissionPermanentlyDenied()) {
+                        } else if (report.isAnyPermissionPermanentlyDenied())
+                        {
                             HelpMe.getInstance(SeekerMapsActivity.this).showMessage(R.string.please_grant_permissions);
                         }
                     }
 
                     @Override
-                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
+                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token)
+                    {
                         showPermissionRationaleMessage(token);
                     }
                 }).check();
     }
 
-    private void showPermissionRationaleMessage(final PermissionToken token) {
-        showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback() {
+    private void showPermissionRationaleMessage(final PermissionToken token)
+    {
+        showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback()
+        {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
                 token.continuePermissionRequest();
                 dialog.dismiss();
             }
-        }, new MaterialDialog.SingleButtonCallback() {
+        }, new MaterialDialog.SingleButtonCallback()
+        {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
                 token.cancelPermissionRequest();
                 dialog.dismiss();
             }
@@ -395,8 +426,10 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng) {
-        if (mMap != null) {
+    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng)
+    {
+        if (mMap != null)
+        {
             mMap.clear();
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             /*mMap.addMarker(new MarkerOptions().position(latLng)
@@ -408,13 +441,16 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void setMarkers(List<Model> modelList) {
-        if (mMap != null) {
+    private void setMarkers(List<Model> modelList)
+    {
+        if (mMap != null)
+        {
 
             mMap.clear();
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-            for (Model model : modelList) {
+            for (Model model : modelList)
+            {
                 LatLng latLng = new LatLng(model.getLatitude(), model.getLongitude());
 
                 Marker marker = mMap.addMarker(new MarkerOptions()
@@ -436,7 +472,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public boolean onMarkerClick(Marker marker)
+    {
         layoutStatus.setVisibility(View.GONE);
         layoutRange.setVisibility(View.GONE);
         layoutPrice.setVisibility(View.GONE);
@@ -444,20 +481,23 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-        for (Marker mMarker : markerList) {
+        for (Marker mMarker : markerList)
+        {
 
             Model model = (Model) mMarker.getTag();
-            if (marker.getSnippet().equals(mMarker.getSnippet())) {
+            if (marker.getSnippet().equals(mMarker.getSnippet()))
+            {
                 marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", true)));
                 setDetailsCard(model);
-            } else {
+            } else
+            {
                 mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(getBitmapMarker(model.getFees() + "", false)));
             }
         }
         return true;
     }
 
-    private void drawaRoutr() {
+  /*  private void drawaRoutr() {
 
         LatLng barcelona = new LatLng(41.385064, 2.173403);
         mMap.addMarker(new MarkerOptions().position(barcelona).title("Marker in Barcelona"));
@@ -560,31 +600,37 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         LatLngBounds latLngBounds = boundsBuilder.build();
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
-    }
+    }*/
 
     //endregion
 
     //region functions
 
 
-    private void showSettingsAlert() {
+    private void showSettingsAlert()
+    {
 
 
-        HelpMe.getInstance(this).showMessage(SeekerMapsActivity.this, getResources().getString(R.string.gps_network_not_enabled), new MaterialDialog.SingleButtonCallback() {
+        HelpMe.getInstance(this).showMessage(SeekerMapsActivity.this, getResources().getString(R.string.gps_network_not_enabled), new MaterialDialog.SingleButtonCallback()
+        {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
                 Intent locationSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(locationSettingsIntent, 1);
             }
-        }, new MaterialDialog.SingleButtonCallback() {
+        }, new MaterialDialog.SingleButtonCallback()
+        {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
                 dialog.dismiss();
             }
         });
     }
 
-    private void setDetailsCard(Model model) {
+    private void setDetailsCard(Model model)
+    {
 
         tvSeekerMapsTime.setText(model.getLeavingtime());
         tvSeekerMapsStreet.setText(model.getLeavername());
@@ -595,7 +641,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         rlSeekerMapsDetailsCard.setVisibility(View.VISIBLE);
     }
 
-    private void setBookedCard(Model model) {
+    private void setBookedCard(Model model)
+    {
 
         tvSeekerMapsTimeBooked.setText(model.getLeavercarbrand());
         tvSeekerMapsStreetBooked.setText(model.getLeavername());
@@ -613,17 +660,54 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         Handler handler = new Handler();
 
-        handler.postDelayed(new Runnable() {
-            public void run() {
+        handler.postDelayed(new Runnable()
+        {
+            public void run()
+            {
                 btnSeekerMapsConfirmBooked.setVisibility(View.VISIBLE);
             }
         }, 2000);
+    }
+
+    private void drawRoute(LatLng latLng)
+    {
+
+        List<LatLng> latLngs = new ArrayList<>();
+        PolylineOptions lineOptions = new PolylineOptions();
+        latLngs.add(currentLatLng);
+        latLngs.add(latLng);
+        // Adding all the points in the route to LineOptions
+        lineOptions.addAll(latLngs);
+        lineOptions.width(12);
+        lineOptions.color(Color.rgb(79, 174, 175));
+
+        // Drawing polyline in the Google Map for the i-th route
+        mMap.addPolyline(lineOptions);
+
+        zoomRoute(mMap, latLngs);
+
+    }
+
+    public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute)
+    {
+
+        if (googleMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : lstLatLngRoute)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 70;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
     }
     //endregion
 
     //region calls
 
-    private void callGetNearby() {
+    private void callGetNearby()
+    {
         progressDialog.dismiss();
         layoutPrice.setVisibility(View.GONE);
         layoutStatus.setVisibility(View.GONE);
@@ -649,7 +733,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-    private void callSeekerBook() {
+    private void callSeekerBook()
+    {
         ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
         modelCommonRequest.setRequestID(selectedRequestId);
         modelCommonRequest.setLatitude(lat);
@@ -659,7 +744,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-    private void callConfirmRequest() {
+    private void callConfirmRequest()
+    {
         ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
         modelCommonRequest.setRequestID(bookedID);
         modelCommonRequest.setSeeker(true);
@@ -672,8 +758,10 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
-        if (flag.equals(DataEnum.callGetNearby.name())) {
+    public void onResponseSuccess(String flag, Object o)
+    {
+        if (flag.equals(DataEnum.callGetNearby.name()))
+        {
             layoutSearchFilter.setVisibility(View.VISIBLE);
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
@@ -684,27 +772,34 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
                 setMarkers(modelGetNearByResponse.getModel());
 
 
-        } else if (flag.equals(DataEnum.callSeekerBook.name())) {
+        } else if (flag.equals(DataEnum.callSeekerBook.name()))
+        {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             bookedID = jsonObject.get("model").getAsString();
 
 
-            for (Marker marker : markerList) {
+            for (Marker marker : markerList)
+            {
                 Model model = (Model) marker.getTag();
                 if (!model.getRequestid().equals(selectedRequestId))
                     marker.setVisible(false);
-                else {
+                else
+                {
                     setBookedCard(model);
+                    LatLng latLng = new LatLng(model.getLatitude(), model.getLongitude());
+                    drawRoute(latLng);
                 }
             }
 
-        } else if (flag.equals(DataEnum.callCancelRequest.name())) {
+        } else if (flag.equals(DataEnum.callCancelRequest.name()))
+        {
             mMap.clear();
             markerList.clear();
             rlSeekerMapsDetailsCardBooked.setVisibility(View.GONE);
             callGetNearby();
-        } else if (flag.equals(DataEnum.callConfirmRequest.name())) {
+        } else if (flag.equals(DataEnum.callConfirmRequest.name()))
+        {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             ModelConfirmRequest modelConfirmRequest = gson.fromJson(jsonObject, ModelConfirmRequest.class);
@@ -720,12 +815,14 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onNoContent(String flag, int code) {
+    public void onNoContent(String flag, int code)
+    {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
@@ -735,31 +832,36 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     //region clicks
 
     @OnClick(R.id.btnSeekerMapsBook)
-    void onClickbtnSeekerMapsBook(View view) {
+    void onClickbtnSeekerMapsBook(View view)
+    {
         layoutSearchFilter.setVisibility(View.GONE);
         callSeekerBook();
     }
 
     @OnClick(R.id.imgSeekerCall)
-    void onClickimgSeekerCall(View view) {
+    void onClickimgSeekerCall(View view)
+    {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + leaverMobile));
         startActivity(intent);
     }
 
     @OnClick(R.id.btnSeekerMapsConfirmBooked)
-    void onClickbtnSeekerMapsConfirmBooked(View view) {
+    void onClickbtnSeekerMapsConfirmBooked(View view)
+    {
         callConfirmRequest();
     }
 
     @OnClick(R.id.btnSeekerMapsCancelBooked)
-    void onClickbtnSeekerMapsCancelBooked(View view) {
+    void onClickbtnSeekerMapsCancelBooked(View view)
+    {
         startActivity(new Intent(this, CancelRequestActivity.class)
                 .putExtra(DataEnum.intentRequestId.name(), bookedID));
     }
 
     @OnClick(R.id.llSearchFilterStatus)
-    void onClickllSearchFilterStatus(View view) {
+    void onClickllSearchFilterStatus(View view)
+    {
         if (layoutStatus.getVisibility() == View.VISIBLE)
             layoutStatus.setVisibility(View.GONE);
         else
@@ -769,7 +871,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @OnClick(R.id.llSearchFilterRange)
-    void onClickllSearchFilterRange(View view) {
+    void onClickllSearchFilterRange(View view)
+    {
         if (layoutRange.getVisibility() == View.VISIBLE)
             layoutRange.setVisibility(View.GONE);
         else
@@ -779,7 +882,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @OnClick(R.id.llSearchFilterPrice)
-    void onClickllSearchFilterPrice(View view) {
+    void onClickllSearchFilterPrice(View view)
+    {
         if (layoutPrice.getVisibility() == View.VISIBLE)
             layoutPrice.setVisibility(View.GONE);
         else
@@ -789,13 +893,16 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @OnClick(R.id.btnStatus)
-    void onClickbtnStatus(View view) {
+    void onClickbtnStatus(View view)
+    {
 
-        if (imgStatusDialogNow.getVisibility() == View.VISIBLE) {
+        if (imgStatusDialogNow.getVisibility() == View.VISIBLE)
+        {
             status = 1;
             llSearchFilterStatus.setBackground(getResources().getDrawable(R.drawable.background_txt_available));
             tvSearchFilterStatus.setText(getString(R.string.available_now));
-        } else {
+        } else
+        {
             status = 2;
             time = seekBarDialogSearchStatus.getProgress();
             llSearchFilterStatus.setBackground(getResources().getDrawable(R.drawable.background_txt_available_later));
@@ -805,7 +912,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @OnClick(R.id.tvStatusDialogNow)
-    void onClicktvStatusDialogNow(View view) {
+    void onClicktvStatusDialogNow(View view)
+    {
         indicatorStatus.setVisibility(View.GONE);
         imgStatusDialogNow.setVisibility(View.VISIBLE);
         imgStatusDialogLater.setVisibility(View.GONE);
@@ -813,7 +921,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @OnClick(R.id.tvStatusDialogLater)
-    void onClicktvStatusDialogLater(View view) {
+    void onClicktvStatusDialogLater(View view)
+    {
         indicatorStatus.setVisibility(View.VISIBLE);
         imgStatusDialogNow.setVisibility(View.GONE);
         imgStatusDialogLater.setVisibility(View.VISIBLE);
@@ -821,7 +930,8 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @OnClick(R.id.btnRange)
-    void onClickbtnRange(View view) {
+    void onClickbtnRange(View view)
+    {
         raduisInMeter = seekBarDialogSearchRange.getProgress() + "000";
         tvSearchFilterRange.setText(seekBarDialogSearchRange.getProgress() + "K Range");
         callGetNearby();
