@@ -103,4 +103,5 @@
     <string name="seeking">seeking</string>
     <string name="leaving">leaving</string>
     <string name="gps_network_not_enabled">gps network not enabled</string>
+    <string name="get_start">Get Start</string>
 </resources>

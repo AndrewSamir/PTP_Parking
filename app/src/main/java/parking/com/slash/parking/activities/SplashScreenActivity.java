@@ -16,7 +16,7 @@ public class SplashScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("deviceToken", FirebaseInstanceId.getInstance().getId());
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, IntroActivity.class));
         finish();
     }
 }

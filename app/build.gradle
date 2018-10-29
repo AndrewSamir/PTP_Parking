@@ -111,6 +111,9 @@ dependencies {
     //select image
     implementation 'gun0912.ted:tedbottompicker:1.0.1'
 
+    //pager indicator
+    implementation 'com.bikomobile:circleindicatorpager:1.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
