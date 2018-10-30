@@ -16,8 +16,7 @@ import parking.com.slash.parking.activities.Account.SignUpAccountDetailsActivity
 import parking.com.slash.parking.adapters.IntroPagerAdapter;
 import parking.com.slash.parking.interfaces.IntroInterface;
 
-public class IntroActivity extends Activity implements IntroInterface, ViewPager.OnPageChangeListener
-{
+public class IntroActivity extends Activity implements IntroInterface, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.introFragment_viewPager)
     ViewPager viewPager;
@@ -39,26 +38,22 @@ public class IntroActivity extends Activity implements IntroInterface, ViewPager
     }
 
     @Override
-    public void onViewClicked(int position)
-    {
+    public void onViewClicked(int position) {
 
     }
 
     @Override
-    public void onPageScrolled(int i, float v, int i1)
-    {
+    public void onPageScrolled(int i, float v, int i1) {
 
     }
 
     @Override
-    public void onPageSelected(int i)
-    {
+    public void onPageSelected(int i) {
 
     }
 
     @Override
-    public void onPageScrollStateChanged(int i)
-    {
+    public void onPageScrollStateChanged(int i) {
 
     }
 
@@ -70,12 +65,12 @@ public class IntroActivity extends Activity implements IntroInterface, ViewPager
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-
-    @OnClick(R.id.btnIntroSignup)
+*/
+    @OnClick(R.id.tvIntroSignIn)
     public void onClickbtnIntroSignUp() {
-        startActivity(new Intent(this, SignUpAccountDetailsActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
-    }*/
+    }
 
     //endregion
 

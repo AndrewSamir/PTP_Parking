@@ -7,62 +7,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="10">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:background="@color/colorWhite" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:background="@color/colorWhite"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="6">
-
-            <com.bikomobile.circleindicatorpager.CircleIndicatorPager
-                android:id="@+id/introFragment_circleIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutDirection="ltr"
-                app:ci_drawable="@drawable/circle_shape_dot_active"
-                app:ci_drawable_unselected="@drawable/circle_shape_dot_not_active"
-                app:ci_height="10dp"
-                app:ci_width="10dp" />
-
-
-
-            <Button
-                android:id="@+id/tvIntroSignIn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/_50sdp"
-                android:layout_marginStart="@dimen/_50sdp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/background_btn_white"
-                android:text="@string/get_start"
-                android:textColor="@color/colorText" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/introFragment_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </android.support.v4.view.ViewPager>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+
+        <com.bikomobile.circleindicatorpager.CircleIndicatorPager
+            android:id="@+id/introFragment_circleIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            app:ci_drawable="@drawable/circle_shape_dot_active"
+            app:ci_drawable_unselected="@drawable/circle_shape_dot_not_active"
+            app:ci_height="10dp"
+            app:ci_width="10dp" />
+
+
+        <Button
+            android:id="@+id/tvIntroSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_40sdp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/background_btn_white"
+            android:text="@string/get_start"
+            android:textColor="@color/colorText" />
+
+    </LinearLayout>
+
+
 </FrameLayout>

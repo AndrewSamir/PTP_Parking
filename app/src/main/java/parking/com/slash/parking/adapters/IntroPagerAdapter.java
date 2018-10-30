@@ -51,7 +51,7 @@ public class IntroPagerAdapter extends PagerAdapter
     @Override
     public int getCount()
     {
-        return 4;
+        return 3;
     }
 
     @Override
