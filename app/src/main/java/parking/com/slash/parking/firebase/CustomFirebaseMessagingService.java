@@ -45,10 +45,10 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
         Log.d("notification", remoteMessage.getNotification().toString());
         if (remoteMessage.getData().size() > 0)
         {
-            reservationID = remoteMessage.getData().get("ReservationID");
+          /*  reservationID = remoteMessage.getData().get("ReservationID");
             playgroundID = remoteMessage.getData().get("PlayGroundIDHashed");
             playGroundName = remoteMessage.getData().get("PlayGroundName");
-
+*/
             NotificationData notificationData = new NotificationData(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), "default", playgroundID, reservationID, playGroundName);
             sendNotification(notificationData);
 
