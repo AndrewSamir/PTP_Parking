@@ -51,7 +51,7 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
     @BindView(R.id.edtLoginEmail)
     EditText edtLoginEmail;
 
-    @Password
+//    @Password
     @BindView(R.id.edtLoginPassword)
     EditText edtLoginPassword;
 

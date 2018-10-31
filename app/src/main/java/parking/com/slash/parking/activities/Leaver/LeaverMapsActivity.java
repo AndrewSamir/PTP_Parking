@@ -304,7 +304,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         Calendar dateCalendar = Calendar.getInstance();
         long t = dateCalendar.getTimeInMillis();
-        Date date = new Date(t + (10 * 60000 * 15));
+        Date date = new Date(t + (900000));
         DateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         DateFormat formatterTime = new SimpleDateFormat("kk:mm:ss.SSS", Locale.ENGLISH);
 //        Date date = new Date();

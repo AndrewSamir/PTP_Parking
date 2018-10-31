@@ -13,6 +13,7 @@ import parking.com.slash.parking.utlities.Constant;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -32,6 +33,9 @@ public interface ApiCall {
 
     @GET(Constant.baseUrl + "User/GetUserHistory")
     Call<ModelCommenResponse> callGetUserHistory(@HeaderMap Map<String, String> headers);
+
+    @GET(Constant.baseUrl + "User/GetUserNotifications")
+    Call<ModelCommenResponse> callGetUserNotifications(@Header("Authorization") String Authorization);
 
     @GET(Constant.baseUrl + "User/GetUserDetails")
     Call<ModelCommenResponse> callGetUserDetails(@HeaderMap Map<String, String> headers);

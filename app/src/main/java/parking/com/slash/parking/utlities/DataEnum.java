@@ -10,5 +10,5 @@ public enum DataEnum
     callGetNearby, callSeekerBook, callLogin, shUserID, shAccessToken, shUserName, shMobile, callGetBrandsList, callGetModelsList, brand, carModel, callCancelRequest, callConfirmRequest,
     intentModelConfirmRequest, regName, regMobile, regMail, regPassword, callCheckExist
     , intentModel, intentRequestId, callGetAddressFromMap, callRegister,
-    intentLeaveTime, intentLeaveLocationLat, intentLeaveLocationLng, callGetColorsList, GetUserHistory, callGetUserDetails, callLeaverBook
+    intentLeaveTime, intentLeaveLocationLat, intentLeaveLocationLng, callGetColorsList, GetUserHistory, callGetUserDetails, callGetUserNotifications, callLeaverBook
 }

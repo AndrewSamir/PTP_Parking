@@ -102,7 +102,7 @@ public class HandleCalls {
                 if (showLoading)
                     progressDialog.dismiss();
 
-                ((BaseActivity) context).showMessage(((BaseActivity) context).getString(R.string.internet_connection));
+//                ((BaseActivity) context).showMessage(((BaseActivity) context).getString(R.string.internet_connection));
 
 //                HelpMe.getInstance(context).retrofironFailure(t);
             }

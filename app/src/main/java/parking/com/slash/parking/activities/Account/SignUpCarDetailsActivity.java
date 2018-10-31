@@ -193,7 +193,7 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
 
         Call call = HandleCalls.restParki.getClientService().callRegister(
-                CarImage,
+                null,
                 intent.getStringExtra(DataEnum.regMail.name()),
                 intent.getStringExtra(DataEnum.regPassword.name()),
                 intent.getStringExtra(DataEnum.regMobile.name()),

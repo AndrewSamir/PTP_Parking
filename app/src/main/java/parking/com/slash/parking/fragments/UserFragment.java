@@ -142,7 +142,7 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     @OnClick(R.id.tvProfileNotifications)
     public void onClicktvProfileNotifications() {
-        // TODO submit data to server...
+        addFragment(NotificationsFragment.init(), true);
     }
 
     @OnClick(R.id.tvProfileWalletAndPayment)
