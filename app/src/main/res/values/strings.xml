@@ -104,4 +104,7 @@
     <string name="leaving">leaving</string>
     <string name="gps_network_not_enabled">gps network not enabled</string>
     <string name="get_start">Get Start</string>
+    <string name="payed_with">Payed with</string>
+    <string name="full_receipt_was_sent_to_your_registered_email">Full Receipt was sent to your registered email</string>
+    <string name="payment_method">Payment Method</string>
 </resources>

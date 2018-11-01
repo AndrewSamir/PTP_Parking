@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mvParkingDetails"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_150sdp"
+        app:liteMode="true"
+        app:mapType="normal" />
+
+
+    <TextView
+        android:id="@+id/tvParkingDetailsDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="normal"
+        tools:text="Tuesday, 4 October 2018 - 05:41 PM" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="locale"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:weightSum="4"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            tools:ignore="NestedWeights">
+
+            <TextView
+                android:id="@+id/tvParkingDetailsStreet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                tools:text="El-Khalifa El-Maemoun" />
+
+            <TextView
+                android:id="@+id/tvParkingDetailsArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.56"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp"
+                tools:text="Mansheya El-Bakry, Heliopolis" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvParkingDetailsPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_18sdp"
+                android:textStyle="bold"
+                tools:text="20 EGP" />
+
+            <TextView
+                android:id="@+id/tvParkingDetailsState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp"
+                tools:text="completed" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/payed_with"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp" />
+
+    <TextView
+        android:id="@+id/tvParkingDetailsPayPalAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/background_paypal"
+        android:drawablePadding="@dimen/_12sdp"
+        android:drawableStart="@drawable/icon_paypal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/_7sdp"
+        android:text="@string/no_account_assigned_yet"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_13sdp"
+        android:textStyle="normal" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/full_receipt_was_sent_to_your_registered_email"
+        android:textColor="@color/colorSecondTextColor"
+        android:textSize="@dimen/_10sdp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layoutDirection="locale"
+        android:orientation="horizontal">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imgParkingDetailsCar"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car"
+                    android:alpha="0.56"
+                    android:textColor="@color/colorCarCardDetails"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/tvParkingDetailsCarBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/colorCarCardDetails"
+                    tools:text="Renault Logan - Silver" />
+
+                <TextView
+                    android:id="@+id/tvParkingDetailsCarPlate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/colorCarCardDetails"
+                    android:textSize="@dimen/_10sdp"
+                    tools:text="هـ د ب 941" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name"
+                        android:alpha="0.56"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:textColor="@color/black"
+                        android:id="@+id/tvParkingDetailsCarOwnerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_10sdp"
+                        tools:text="Renault Logan - Silver" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

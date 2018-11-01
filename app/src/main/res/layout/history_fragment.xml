@@ -7,9 +7,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/_10sdp"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
+        android:background="@color/colorAccent"
+        android:padding="@dimen/_10sdp">
 
         <parking.com.slash.parking.customViews.CustomSegment
             android:id="@+id/scvHistory"
@@ -42,5 +42,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvHistoryLeaving"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 </LinearLayout>

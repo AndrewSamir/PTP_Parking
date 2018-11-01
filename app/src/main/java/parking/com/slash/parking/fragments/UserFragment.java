@@ -29,7 +29,8 @@ import parking.com.slash.parking.utlities.DataEnum;
 import parking.com.slash.parking.utlities.SharedPrefHelper;
 import retrofit2.Call;
 
-public class UserFragment extends BaseFragment implements HandleRetrofitResp {
+public class UserFragment extends BaseFragment implements HandleRetrofitResp
+{
 
     //region fields
 
@@ -52,7 +53,8 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.profile_fragment, container, false);
 
@@ -62,13 +64,15 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         HandleCalls.getInstance(getBaseActivity()).setonRespnseSucess(this);
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
 //        appHeader.setRight(0, 0, 0);
     }
@@ -77,27 +81,32 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region parent methods
     @Override
-    protected boolean canShowAppHeader() {
+    protected boolean canShowAppHeader()
+    {
         return false;
     }
 
     @Override
-    protected boolean canShowBottomBar() {
+    protected boolean canShowBottomBar()
+    {
         return false;
     }
 
     @Override
-    protected boolean canShowBackArrow() {
+    protected boolean canShowBackArrow()
+    {
         return false;
     }
 
     @Override
-    protected String getTitle() {
+    protected String getTitle()
+    {
         return null;
     }
 
     @Override
-    public int getSelectedMenuId() {
+    public int getSelectedMenuId()
+    {
         return 0;
     }
 
@@ -105,7 +114,8 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
+    public void onResponseSuccess(String flag, Object o)
+    {
 
         Gson gson = new Gson();
         JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
@@ -117,12 +127,14 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
 
     @Override
-    public void onNoContent(String flag, int code) {
+    public void onNoContent(String flag, int code)
+    {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
@@ -131,42 +143,50 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
     //region clicks
 
     @OnClick(R.id.tvProfileEditProfileDetails)
-    public void onClicktvProfileEditProfileDetails() {
+    public void onClicktvProfileEditProfileDetails()
+    {
         // TODO submit data to server...
     }
 
     @OnClick(R.id.tvProfileChangePassword)
-    public void onClicktvProfileChangePassword() {
+    public void onClicktvProfileChangePassword()
+    {
         // TODO submit data to server...
     }
 
     @OnClick(R.id.tvProfileNotifications)
-    public void onClicktvProfileNotifications() {
+    public void onClicktvProfileNotifications()
+    {
         addFragment(NotificationsFragment.init(), true);
     }
 
     @OnClick(R.id.tvProfileWalletAndPayment)
-    public void onClicktvProfileWalletAndPayment() {
+    public void onClicktvProfileWalletAndPayment()
+    {
         // TODO submit data to server...
     }
 
     @OnClick(R.id.tvProfileInviteFriends)
-    public void onClicktvProfileInviteFriends() {
-        // TODO submit data to server...
+    public void onClicktvProfileInviteFriends()
+    {
+        share("https://parki.page.link/Tbeh");
     }
 
     @OnClick(R.id.tvProfileHelpAndSupport)
-    public void onClicktvProfileHelpAndSupport() {
+    public void onClicktvProfileHelpAndSupport()
+    {
         // TODO submit data to server...
     }
 
     @OnClick(R.id.tvProfileYourFeedback)
-    public void onClicktvProfileYourFeedback() {
+    public void onClicktvProfileYourFeedback()
+    {
         // TODO submit data to server...
     }
 
     @OnClick(R.id.tvProfileSignOut)
-    public void onClicktvProfileSignOut() {
+    public void onClicktvProfileSignOut()
+    {
         // TODO submit data to server...
     }
 
@@ -175,7 +195,8 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
     //region calls
 
 
-    private void callGetUserDetails() {
+    private void callGetUserDetails()
+    {
 
         Map<String, String> headerMap = new HashMap<>();
         headerMap.put("Authorization", "bearer " + SharedPrefHelper.getInstance(getBaseActivity()).getAccessToken());
@@ -186,11 +207,13 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region functions
 
-    public static UserFragment init() {
+    public static UserFragment init()
+    {
         return new UserFragment();
     }
 
-    private void adjustView(ModelUserProfile modelUserProfile) {
+    private void adjustView(ModelUserProfile modelUserProfile)
+    {
 
         if (modelUserProfile.getModel().getCarimage() != null)
             Picasso.with(getBaseActivity())

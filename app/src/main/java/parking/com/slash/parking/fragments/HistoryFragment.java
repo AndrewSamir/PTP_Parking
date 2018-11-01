@@ -30,11 +30,14 @@ import parking.com.slash.parking.utlities.DataEnum;
 import parking.com.slash.parking.utlities.SharedPrefHelper;
 import retrofit2.Call;
 
-public class HistoryFragment extends BaseFragment implements CustomSegment.OnSegmentChangedListener, HandleRetrofitResp {
+public class HistoryFragment extends BaseFragment implements CustomSegment.OnSegmentChangedListener, HandleRetrofitResp
+{
 
     //region fields
     AdapterHistory adapterHistory;
     List<Model> modelList;
+    AdapterHistory adapterHistoryLeaving;
+    List<Model> modelListLEaving;
     //endregion
 
     //region views
@@ -51,7 +54,8 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.history_fragment, container, false);
 
@@ -59,21 +63,28 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
         scvHistory.setOnSegmentChangedListener(this);
         modelList = new ArrayList<>();
         adapterHistory = new AdapterHistory(modelList, getBaseActivity());
+        rvHistorySeeking.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
+        rvHistorySeeking.setAdapter(adapterHistory);
+
+        modelListLEaving = new ArrayList<>();
+        adapterHistoryLeaving = new AdapterHistory(modelListLEaving, getBaseActivity());
         rvHistoryLeaving.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
-        rvHistoryLeaving.setAdapter(adapterHistory);
+        rvHistoryLeaving.setAdapter(adapterHistoryLeaving);
 
         callGetUserHistory();
         return view;
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
         HandleCalls.getInstance(getBaseActivity()).setonRespnseSucess(this);
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
 //        appHeader.setRight(0, 0, 0);
     }
@@ -82,27 +93,32 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
     //region parent methods
     @Override
-    protected boolean canShowAppHeader() {
+    protected boolean canShowAppHeader()
+    {
         return false;
     }
 
     @Override
-    protected boolean canShowBottomBar() {
+    protected boolean canShowBottomBar()
+    {
         return false;
     }
 
     @Override
-    protected boolean canShowBackArrow() {
+    protected boolean canShowBackArrow()
+    {
         return false;
     }
 
     @Override
-    protected String getTitle() {
+    protected String getTitle()
+    {
         return null;
     }
 
     @Override
-    public int getSelectedMenuId() {
+    public int getSelectedMenuId()
+    {
         return 0;
     }
 
@@ -110,21 +126,32 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
+    public void onResponseSuccess(String flag, Object o)
+    {
 
         Gson gson = new Gson();
         JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
         ModelHistory modelHistory = gson.fromJson(jsonObject, ModelHistory.class);
-        adapterHistory.addAll(modelHistory.getModel());
+
+        for (Model model : modelHistory.getModel())
+        {
+            if (model.getType() == 1)
+                adapterHistoryLeaving.addItem(model);
+            else
+                adapterHistory.addItem(model);
+        }
+//        adapterHistory.addAll(modelHistory.getModel());
     }
 
     @Override
-    public void onNoContent(String flag, int code) {
+    public void onNoContent(String flag, int code)
+    {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
@@ -137,7 +164,8 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
     //region calls
 
-    private void callGetUserHistory() {
+    private void callGetUserHistory()
+    {
 
         Map<String, String> headerMap = new HashMap<>();
         headerMap.put("Authorization", "bearer " + SharedPrefHelper.getInstance(getBaseActivity()).getAccessToken());
@@ -148,17 +176,21 @@ public class HistoryFragment extends BaseFragment implements CustomSegment.OnSeg
 
     //region functions
 
-    public static HistoryFragment init() {
+    public static HistoryFragment init()
+    {
         return new HistoryFragment();
     }
 
     @Override
-    public void onSegmentChanged(int newSelectedIndex) {
+    public void onSegmentChanged(int newSelectedIndex)
+    {
 
-        if (newSelectedIndex == 0) {
+        if (newSelectedIndex == 0)
+        {
             rvHistorySeeking.setVisibility(View.VISIBLE);
             rvHistoryLeaving.setVisibility(View.GONE);
-        } else {
+        } else
+        {
             rvHistorySeeking.setVisibility(View.GONE);
             rvHistoryLeaving.setVisibility(View.VISIBLE);
         }

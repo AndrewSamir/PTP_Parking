@@ -60,6 +60,7 @@
         android:layout_margin="@dimen/_10sdp"
         android:layoutDirection="locale"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="2">
 
         <TextView
@@ -123,7 +124,6 @@
         tools:ignore="RtlSymmetry" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tvProfileSavedPlaces"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -134,6 +134,7 @@
         android:text="@string/saved_places"
         android:textColor="@color/colorTextBrown"
         android:textSize="@dimen/_15sdp"
+        android:visibility="gone"
         tools:ignore="RtlSymmetry" />
 
     <TextView
@@ -147,6 +148,7 @@
         android:text="@string/help_and_support"
         android:textColor="@color/colorTextBrown"
         android:textSize="@dimen/_15sdp"
+        android:visibility="gone"
         tools:ignore="RtlSymmetry" />
 
     <TextView
@@ -160,6 +162,7 @@
         android:text="@string/your_feedback"
         android:textColor="@color/colorTextBrown"
         android:textSize="@dimen/_15sdp"
+        android:visibility="gone"
         tools:ignore="RtlSymmetry" />
 
     <TextView

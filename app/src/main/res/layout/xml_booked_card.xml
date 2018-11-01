@@ -53,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_10sdp"
+                    android:alpha="0.56"
                     tools:text="Mansheya El-Bakry, Heliopolis" />
             </LinearLayout>
 
