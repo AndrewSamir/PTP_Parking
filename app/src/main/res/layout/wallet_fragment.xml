@@ -2,18 +2,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/_15sdp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/payment_method"
-        android:textSize="@dimen/_16sdp"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_16sdp" />
+
+    <TextView
+        android:id="@+id/tvSignUpConnectPaypal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/background_paypal"
+        android:drawablePadding="@dimen/_12sdp"
+        android:drawableStart="@drawable/icon_paypal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/_7sdp"
+        android:text="@string/no_account_assigned_yet"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_13sdp"
+        android:textStyle="normal" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/credit"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textSize="@dimen/_18sdp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="E£ 0"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/_22sdp" />
 
     <LinearLayout
+        android:layout_marginTop="@dimen/_10sdp"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:layoutDirection="locale"
-        android:layout_height="wrap_content"></LinearLayout>
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/use_credit_first"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_13sdp" />
+
+        <Switch
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:gravity="end" />
+    </LinearLayout>
 </LinearLayout>
