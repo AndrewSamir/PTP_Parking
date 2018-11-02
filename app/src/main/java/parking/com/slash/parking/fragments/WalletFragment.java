@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import parking.com.slash.parking.R;
+import parking.com.slash.parking.interfaces.HandleRetrofitResp;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 
-public class WalletFragment extends BaseFragment
-{
+public class WalletFragment extends BaseFragment implements HandleRetrofitResp {
     //region fields
 
     //endregion
@@ -45,7 +45,7 @@ public class WalletFragment extends BaseFragment
     public void onStop()
     {
         super.onStop();
-        appHeader.setRight(0, 0, 0);
+//        appHeader.setRight(0, 0, 0);
     }
 
     //endregion

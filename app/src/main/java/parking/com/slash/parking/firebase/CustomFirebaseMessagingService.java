@@ -37,21 +37,23 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
     {
 
 
-        String reservationID = null;
-        String playgroundID = null;
-        String playGroundName = null;
+        String id = null;
+        String type = null;
+//        String playGroundName = null;
 
 
-        Log.d("notification", remoteMessage.getNotification().toString());
+        Log.d("notification01", remoteMessage.getData().get("title"));
+//        Log.d("notification", remoteMessage.getNotification());
+        Log.d("notification", remoteMessage.getData().toString());
+//        Log.d("notification", remoteMessage.getData().toString());
+//        Log.d("notification", remoteMessage.getData().toString());
         if (remoteMessage.getData().size() > 0)
         {
-          /*  reservationID = remoteMessage.getData().get("ReservationID");
-            playgroundID = remoteMessage.getData().get("PlayGroundIDHashed");
-            playGroundName = remoteMessage.getData().get("PlayGroundName");
-*/
-            NotificationData notificationData = new NotificationData(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), "default", playgroundID, reservationID, playGroundName);
+            id = remoteMessage.getData().get("id");
+            type = remoteMessage.getData().get("type");
+//            playGroundName = remoteMessage.getData().get("PlayGroundName");
+            NotificationData notificationData = new NotificationData(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), "default", id, type);
             sendNotification(notificationData);
-
         }
 
         //=======================================================================//
@@ -110,7 +112,7 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
 //        intent.putExtra(DataEnum.extraPlaygroundID.name(), notificationData.getPlaygroundID());
 //        SingletonMalaaby.getInstance().setMalaabyId(notificationData.getPlaygroundID());
 //        SingletonMalaaby.getInstance().setMalaabyName(notificationData.getPlayGroundName());
-        Log.d("notification", notificationData.getPlaygroundID());
+//        Log.d("notification", notificationData.getPlaygroundID());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 
