@@ -19,8 +19,7 @@ import parking.com.slash.parking.activities.MainActivity;
 import parking.com.slash.parking.utlities.DataEnum;
 
 
-public class CustomFirebaseMessagingService extends FirebaseMessagingService
-{
+public class CustomFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = CustomFirebaseMessagingService.class.getSimpleName();
     //private String endpageLink = "adverts/";
@@ -33,8 +32,7 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
 
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage)
-    {
+    public void onMessageReceived(RemoteMessage remoteMessage) {
 
 
         String id = null;
@@ -43,15 +41,15 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
 
 
         Log.d("notification01", remoteMessage.getData().get("title"));
-//        Log.d("notification", remoteMessage.getNotification());
-        Log.d("notification", remoteMessage.getData().toString());
-//        Log.d("notification", remoteMessage.getData().toString());
-//        Log.d("notification", remoteMessage.getData().toString());
-        if (remoteMessage.getData().size() > 0)
-        {
+        Log.d("notificationReceived", remoteMessage.getData().toString());
+        if (remoteMessage.getData().size() > 0) {
             id = remoteMessage.getData().get("id");
             type = remoteMessage.getData().get("type");
-//            playGroundName = remoteMessage.getData().get("PlayGroundName");
+
+            if (type.equals("1")) {
+                Intent intent = new Intent("KEY");
+                sendBroadcast(intent);
+            }
             NotificationData notificationData = new NotificationData(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), "default", id, type);
             sendNotification(notificationData);
         }
@@ -67,16 +65,14 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
 //            this.sendNotification(new NotificationData(title, body, sound, notification_type_id, item_uuid));
 
 
-    private void sendNotification(NotificationData notificationData)
-    {
+    private void sendNotification(NotificationData notificationData) {
 
         PendingIntent pendingIntent;
         pendingIntent = intentPending(notificationData);
 
 
         NotificationCompat.Builder notificationBuilder = null;
-        try
-        {
+        try {
 
             notificationBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.mipmap.ic_launcher)
@@ -86,24 +82,20 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                     .setContentIntent(pendingIntent);
 
-        } catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        if (notificationBuilder != null)
-        {
+        if (notificationBuilder != null) {
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(0, notificationBuilder.build());
-        } else
-        {
+        } else {
             Log.d(TAG, "Não foi possível criar objeto notificationBuilder");
         }
     }
 
-    private PendingIntent intentPending(NotificationData notificationData)
-    {
+    private PendingIntent intentPending(NotificationData notificationData) {
         Intent intent = null;
 
 

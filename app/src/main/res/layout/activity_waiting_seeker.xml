@@ -44,10 +44,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_35sdp"
             android:visibility="visible"
-            app:cpb_background_progressbar_color="@color/colorAccent"
-            app:cpb_background_progressbar_width="7dp"
+            app:cpb_background_progressbar_color="@color/black"
+            app:cpb_background_progressbar_width="@dimen/_3sdp"
             app:cpb_progressbar_color="@color/colorAccent"
-            app:cpb_progressbar_width="@dimen/_10sdp" />
+            app:cpb_progressbar_width="@dimen/_5sdp" />
     </FrameLayout>
 
 

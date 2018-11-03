@@ -76,6 +76,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     private int status = 1;// 1-> Now , 2->Later
     private String lat, lng;
     LatLng currentLatLng;
+    Long leaveTime;
     //endregion
 
     //region views
@@ -310,7 +311,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 //        Date date = new Date();
         String dateSt = formatterDate.format(date) + "T" + formatterTime.format(date);
 
-        Log.d("timeToSend", dateSt);
+        leaveTime = date.getTime();
 
         ModelLeaverBookRequest modelLeaverBookRequest = new ModelLeaverBookRequest();
         modelLeaverBookRequest.setFees(Integer.parseInt(edtLeaverMapsStartLeavingPrice.getText().toString()));
@@ -355,11 +356,12 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
             Intent intent = new Intent(LeaverMapsActivity.this, WaitingSeekerActivity.class);
             String time = "600";
-            intent.putExtra(DataEnum.intentLeaveTime.name(), time);
+            intent.putExtra(DataEnum.intentLeaveTime.name(), leaveTime);
             intent.putExtra(DataEnum.intentLeaveLocationLat.name(), lat);
             intent.putExtra(DataEnum.intentLeaveLocationLng.name(), lng);
             startActivity(intent);
             finish();
+
 
         } else if (flag.equals(DataEnum.callGetAddressFromMap.name())) {
             ModelGetAddressFromMap modelGetAddressFromMap = (ModelGetAddressFromMap) o;
