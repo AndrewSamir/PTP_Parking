@@ -147,7 +147,8 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
 
     private void setCountDownTimer() {
         Calendar dateCalendar = Calendar.getInstance();
-        int animationDuration = (int) (dateCalendar.getTimeInMillis() - leaveTime);
+        int animationDuration = (int) (leaveTime - dateCalendar.getTimeInMillis());
+        Log.d("timerDuration", animationDuration + "");
         if (dateCalendar.getTimeInMillis() >= leaveTime) {
 //            callCloseConversations();
         } else {
@@ -155,7 +156,7 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
 
             countDownTimer = new CountDownTimer((animationDuration), 1000) {
                 public void onTick(long millisUntilFinished) {
-                    SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
+                    SimpleDateFormat format = new SimpleDateFormat("mm:ss", Locale.ENGLISH);
                     String d = format.format(new Date(millisUntilFinished));
                     tvWaitingSeekerTimer.setText(d);
                 }
