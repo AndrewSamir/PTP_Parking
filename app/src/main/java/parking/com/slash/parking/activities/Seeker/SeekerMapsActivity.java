@@ -3,8 +3,10 @@ package parking.com.slash.parking.activities.Seeker;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -68,9 +70,14 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 import com.warkiz.widget.IndicatorSeekBar;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -118,6 +125,9 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     private int time = 24;
     private String raduisInMeter = "5000";
     private String lat, lng;
+    private Double selectedLat, selectedLng;
+    private boolean fromLeaver = false;
+    Model model;
     //endregion
 
     //region views
@@ -184,6 +194,7 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     TextView tvSearchFilterStatus;
     @BindView(R.id.tvSearchFilterRange)
     TextView tvSearchFilterRange;
+
     //endregion
 
     //region life cycle
@@ -214,6 +225,12 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         }
 
 
+        Intent intent = getIntent();
+        if (intent.hasExtra("fromLeaver"))
+        {
+            fromLeaver = true;
+            model = (Model) intent.getSerializableExtra("model");
+        }
         markerList = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -231,6 +248,16 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
     public void onResume()
     {
         super.onResume();
+        registerReceiver(mNotificationReceiver, new IntentFilter("KEY"));
+
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        unregisterReceiver(mNotificationReceiver);
+//        countDownTimer.cancel();
     }
 
     @Override
@@ -432,12 +459,14 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         {
             mMap.clear();
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            /*mMap.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.master_card)));*/
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
             progressDialog.dismiss();
 //            showLoading(false);
-            callGetNearby();
+
+            if (!fromLeaver)
+                callGetNearby();
+            else
+                setBookedCard(model);
         }
     }
 
@@ -497,110 +526,6 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
         return true;
     }
 
-  /*  private void drawaRoutr() {
-
-        LatLng barcelona = new LatLng(41.385064, 2.173403);
-        mMap.addMarker(new MarkerOptions().position(barcelona).title("Marker in Barcelona"));
-
-        LatLng madrid = new LatLng(40.416775, -3.70379);
-        mMap.addMarker(new MarkerOptions().position(madrid).title("Marker in Madrid"));
-
-        LatLng zaragoza = new LatLng(41.648823, -0.889085);
-
-        //Define list to get all latlng for the route
-        List<LatLng> path = new ArrayList();
-
-
-        //Execute Directions API request
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("YOUR_API_KEY")
-                .build();
-        DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
-        try {
-            DirectionsResult res = req.await();
-
-            //Loop through legs and steps to get encoded polylines of each step
-            if (res.routes != null && res.routes.length > 0) {
-                DirectionsRoute route = res.routes[0];
-
-                if (route.legs != null) {
-                    for (int i = 0; i < route.legs.length; i++) {
-                        DirectionsLeg leg = route.legs[i];
-                        if (leg.steps != null) {
-                            for (int j = 0; j < leg.steps.length; j++) {
-                                DirectionsStep step = leg.steps[j];
-                                if (step.steps != null && step.steps.length > 0) {
-                                    for (int k = 0; k < step.steps.length; k++) {
-                                        DirectionsStep step1 = step.steps[k];
-                                        EncodedPolyline points1 = step1.polyline;
-                                        if (points1 != null) {
-                                            //Decode polyline and add points to list of route coordinates
-                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
-                                            for (com.google.maps.model.LatLng coord1 : coords1) {
-                                                path.add(new LatLng(coord1.lat, coord1.lng));
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    EncodedPolyline points = step.polyline;
-                                    if (points != null) {
-                                        //Decode polyline and add points to list of route coordinates
-                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
-                                        for (com.google.maps.model.LatLng coord : coords) {
-                                            path.add(new LatLng(coord.lat, coord.lng));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            Log.e("TAG", ex.getLocalizedMessage());
-        }
-
-        //Draw the polyline
-        if (path.size() > 0) {
-            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
-            mMap.addPolyline(opts);
-        }
-
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 6));
-    }
-
-
-    private void drawRoute(List<LatLng> routeDirection) {
-        if (routeDirection != null) {
-            PolylineOptions lineOptions = new PolylineOptions();
-
-            // Adding all the points in the route to LineOptions
-            lineOptions.addAll(routeDirection);
-            lineOptions.width(12);
-            lineOptions.color(Color.rgb(79, 174, 175));
-
-            // Drawing polyline in the Google Map for the i-th route
-            mMap.addPolyline(lineOptions);
-
-            zoomRoute(mMap, routeDirection);
-        }
-    }
-
-    public void zoomRoute(GoogleMap googleMap, List<LatLng> lstLatLngRoute) {
-
-        if (googleMap == null || lstLatLngRoute == null || lstLatLngRoute.isEmpty()) return;
-
-        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-        for (LatLng latLngPoint : lstLatLngRoute)
-            boundsBuilder.include(latLngPoint);
-
-        int routePadding = 70;
-        LatLngBounds latLngBounds = boundsBuilder.build();
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
-    }*/
 
     //endregion
 
@@ -631,13 +556,13 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     private void setDetailsCard(Model model)
     {
-
         tvSeekerMapsTime.setText(model.getLeavingtime());
         tvSeekerMapsStreet.setText(model.getLeavername());
         tvSeekerMapsArea.setText(model.getAddress());
         tvSeekerMapsPrice.setText(model.getFees() + " \n EGP");
         selectedRequestId = model.getRequestid();
-
+        selectedLat = model.getLatitude();
+        selectedLng = model.getLongitude();
         rlSeekerMapsDetailsCard.setVisibility(View.VISIBLE);
     }
 
@@ -660,13 +585,39 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         Handler handler = new Handler();
 
+        Date newDate = new Date(), newTime = new Date();
+        String[] arrTimeSt = model.getLeavingtime().split("T");
+        DateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        try
+        {
+            newDate = format.parse(arrTimeSt[0]);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        DateFormat format_ = new java.text.SimpleDateFormat("kk:mm:ss.SSS", Locale.ENGLISH);
+        try
+        {
+            newTime = format_.parse(arrTimeSt[1]);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        Calendar leavingTime = Calendar.getInstance();
+        leavingTime.set(newDate.getYear(), newDate.getMonth(), newDate.getDay(), newTime.getHours(), newTime.getMinutes(), newTime.getSeconds());
+
+
+        Calendar dateCalendar = Calendar.getInstance();
+        int animationDuration = (int) (leavingTime.getTimeInMillis() - dateCalendar.getTimeInMillis());
+        Log.d("leavingTime", animationDuration + "");
         handler.postDelayed(new Runnable()
         {
             public void run()
             {
                 btnSeekerMapsConfirmBooked.setVisibility(View.VISIBLE);
             }
-        }, 2000);
+        }, animationDuration);
     }
 
     private void drawRoute(LatLng latLng)
@@ -702,6 +653,40 @@ public class SeekerMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding));
     }
+
+
+    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Log.d("notificationBroadCast", "received");
+            switch (intent.getIntExtra("extra", 0))
+            {
+                case 3:
+                    startActivity(new Intent(SeekerMapsActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    break;
+
+                case 5:
+
+                    requestUserCurrentLocation();
+                    Location loc1 = new Location("");
+                    loc1.setLatitude(Double.parseDouble(lat));
+                    loc1.setLongitude(Double.parseDouble(lng));
+
+                    Location loc2 = new Location("");
+                    loc2.setLatitude(selectedLat);
+                    loc2.setLongitude(selectedLng);
+                    float distanceInMeters = loc1.distanceTo(loc2);
+
+                    if (distanceInMeters < 200)
+                    {
+                        callConfirmRequest();
+                    }
+                    break;
+            }
+        }
+    };
     //endregion
 
     //region calls

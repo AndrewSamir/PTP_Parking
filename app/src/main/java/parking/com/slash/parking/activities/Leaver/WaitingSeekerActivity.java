@@ -29,15 +29,24 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import parking.com.slash.parking.R;
+import parking.com.slash.parking.activities.MainActivity;
+import parking.com.slash.parking.activities.Seeker.SeekerMapsActivity;
+import parking.com.slash.parking.interfaces.HandleRetrofitResp;
+import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
+import parking.com.slash.parking.model.ModelGetNearBy.Model;
+import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
+import retrofit2.Call;
 
-public class WaitingSeekerActivity extends Activity implements OnMapReadyCallback {
+public class WaitingSeekerActivity extends Activity implements OnMapReadyCallback, HandleRetrofitResp
+{
 
     //region fields
     private GoogleMap googleMap;
     Double lat, lng;
     Long leaveTime;
     CountDownTimer countDownTimer;
+    Model model;
     //endregion
 
     //region views
@@ -53,7 +62,8 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
 
     //region life cycle
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_seeker);
         ButterKnife.bind(this);
@@ -62,22 +72,24 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
         lat = Double.parseDouble(intent.getStringExtra(DataEnum.intentLeaveLocationLat.name()));
         lng = Double.parseDouble(intent.getStringExtra(DataEnum.intentLeaveLocationLng.name()));
         leaveTime = intent.getLongExtra(DataEnum.intentLeaveTime.name(), 900000);
-
+        model = (Model) intent.getSerializableExtra("model");
 //        int animationDuration = 900000; // 2500ms = 2,5s
-
+        HandleCalls.getInstance(this).setonRespnseSucess(this);
         initMap(savedInstanceState);
     }
 
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         registerReceiver(mNotificationReceiver, new IntentFilter("KEY"));
         setCountDownTimer();
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
         unregisterReceiver(mNotificationReceiver);
         countDownTimer.cancel();
@@ -85,13 +97,17 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
 
 
     //endregion
+
     //region map
-    protected void initMap(Bundle savedInstanceState) {
+    protected void initMap(Bundle savedInstanceState)
+    {
         mvWaitingSeeker.onCreate(savedInstanceState);
 
-        try {
+        try
+        {
             MapsInitializer.initialize(this.getApplicationContext());
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             Log.e("mapError", e.getMessage());
         }
 
@@ -99,7 +115,8 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
+    public void onMapReady(GoogleMap map)
+    {
         this.googleMap = map;
 
         LatLng latLng = new LatLng(lat, lng);
@@ -107,8 +124,10 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     }
 
 
-    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng) {
-        if (googleMap != null) {
+    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng)
+    {
+        if (googleMap != null)
+        {
             googleMap.clear();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             googleMap.addMarker(new MarkerOptions().position(latLng)
@@ -122,53 +141,91 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     //region functions
 
 
-    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver()
+    {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent)
+        {
             Log.d("notificationBroadCast", "received");
 
-//                      Log.d("testBroadCast", intent.getStringExtra("KEY"));
-
-          /*  Long currentTomeToStart = System.currentTimeMillis();
-            final Long closeTimeStamp = Long.parseLong(modelConversationsDetails.getCloseTime());
-            if (!callClose || currentTomeToStart > closeTimeStamp)
+            switch (intent.getIntExtra("extra", 0))
             {
-                String message;
-                if (isWriter)
-                    message = getString(R.string.another_writer_close_the_conversation);
-                else
-                    message = getString(R.string.one_writer_close_the_conversation);
+                case 1:
 
-                showMessage(message);
+                    Intent intent1 = new Intent(WaitingSeekerActivity.this, SeekerMapsActivity.class);
+                    intent1.putExtra("fromLeaver", true);
+                    intent1.putExtra("model", model);
+                    startActivity(intent);
+                    break;
             }
-            getBaseActivity().onBackPressed();*/
         }
     };
 
-    private void setCountDownTimer() {
+    private void setCountDownTimer()
+    {
         Calendar dateCalendar = Calendar.getInstance();
         int animationDuration = (int) (leaveTime - dateCalendar.getTimeInMillis());
         Log.d("timerDuration", animationDuration + "");
-        if (dateCalendar.getTimeInMillis() >= leaveTime) {
+        if (dateCalendar.getTimeInMillis() >= leaveTime)
+        {
 //            callCloseConversations();
-        } else {
+        } else
+        {
             circleProgressWaitingSeeker.setProgressWithAnimation(100, animationDuration); // Default duration = 1500ms
 
-            countDownTimer = new CountDownTimer((animationDuration), 1000) {
-                public void onTick(long millisUntilFinished) {
+            countDownTimer = new CountDownTimer((animationDuration), 1000)
+            {
+                public void onTick(long millisUntilFinished)
+                {
                     SimpleDateFormat format = new SimpleDateFormat("mm:ss", Locale.ENGLISH);
                     String d = format.format(new Date(millisUntilFinished));
                     tvWaitingSeekerTimer.setText(d);
                 }
 
-                public void onFinish() {
+                public void onFinish()
+                {
 //                    callClose = true;
                     tvWaitingSeekerTimer.setText("finished");
 //                    callCloseConversations();
+                    callCancelRequest();
                 }
             }.start();
         }
     }
+    //endregion
+
+    //region calls
+
+
+    private void callCancelRequest()
+    {
+        ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
+        modelCommonRequest.setRequestID(model.getRequestid());
+        modelCommonRequest.setSeeker(true);
+        Call call = HandleCalls.restParki.getClientService().callCancelRequest(modelCommonRequest);
+        HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callCancelRequest.name(), true);
+    }
+
+    @Override
+    public void onResponseSuccess(String flag, Object o)
+    {
+        startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
+    }
+
+    @Override
+    public void onNoContent(String flag, int code)
+    {
+        startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
+    }
+
+    @Override
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
+
+    }
+
     //endregion
 }
 //https://github.com/lopspower/CircularProgressBar

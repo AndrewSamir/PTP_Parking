@@ -35,6 +35,7 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,6 +58,7 @@ import parking.com.slash.parking.interfaces.HandleRetrofitResp;
 import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
 import parking.com.slash.parking.model.ModelConfirmRequest.ModelConfirmRequest;
 import parking.com.slash.parking.model.ModelGetAddressFromMap.ModelGetAddressFromMap;
+import parking.com.slash.parking.model.ModelGetNearBy.Model;
 import parking.com.slash.parking.model.ModelLeaverBookRequest.ModelLeaverBookRequest;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
@@ -64,7 +66,8 @@ import parking.com.slash.parking.utlities.SharedPrefHelper;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 import retrofit2.Call;
 
-public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyCallback, HandleRetrofitResp {
+public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyCallback, HandleRetrofitResp
+{
 
     //region fields
 
@@ -77,6 +80,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     private String lat, lng;
     LatLng currentLatLng;
     Long leaveTime;
+    Model model;
     //endregion
 
     //region views
@@ -102,7 +106,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     //region life cycle
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaver_maps);
         getSupportActionBar().hide();
@@ -116,7 +121,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorWhite));
         }
 
@@ -131,7 +137,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onResume() {
+    public void onResume()
+    {
         super.onResume();
     }
 
@@ -149,17 +156,20 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
         requestUserCurrentLocation();
     }
 
-    private void requestUserCurrentLocation() {
+    private void requestUserCurrentLocation()
+    {
         if (ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED) {
+                .PERMISSION_GRANTED)
+        {
             requestLocationPermission();
             return;
         }
@@ -168,28 +178,33 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isNetworkEnabled && !isGpsEnabled) {
+        if (!isNetworkEnabled && !isGpsEnabled)
+        {
             progressDialog.dismiss();
             showSettingsAlert();
             return;
         }
 
 
-        if (mMap != null) {
+        if (mMap != null)
+        {
             LocationRequest request = LocationRequest.create() //standard GMS LocationRequest
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY).setNumUpdates(1)
                     .setInterval(100);
 
             ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
-            disposable_location = locationProvider.getUpdatedLocation(request).subscribe(new Consumer<Location>() {
+            disposable_location = locationProvider.getUpdatedLocation(request).subscribe(new Consumer<Location>()
+            {
                 @Override
-                public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception {
+                public void accept(@io.reactivex.annotations.NonNull Location location) throws Exception
+                {
                     currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     lat = location.getLatitude() + "";
                     lng = location.getLongitude() + "";
                     adjustMapLatLng(currentLatLng);
 
-                    if (disposable_location != null) {
+                    if (disposable_location != null)
+                    {
                         disposable_location.dispose();
                     }
                 }
@@ -198,21 +213,27 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-    private void requestLocationPermission() {
+    private void requestLocationPermission()
+    {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new MultiplePermissionsListener() {
+                .withListener(new MultiplePermissionsListener()
+                {
                     @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
+                    public void onPermissionsChecked(MultiplePermissionsReport report)
+                    {
+                        if (report.areAllPermissionsGranted())
+                        {
                             requestUserCurrentLocation();
-                        } else if (report.isAnyPermissionPermanentlyDenied()) {
+                        } else if (report.isAnyPermissionPermanentlyDenied())
+                        {
 //                            showMessage(R.string.please_grant_permissions);
                         }
                     }
 
                     @Override
-                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
+                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token)
+                    {
                         showPermissionRationaleMessage(token);
 
                     }
@@ -220,7 +241,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
                 }).check();
     }
 
-    private void showPermissionRationaleMessage(final PermissionToken token) {/*
+    private void showPermissionRationaleMessage(final PermissionToken token)
+    {/*
         showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback()
         {
             @Override
@@ -241,8 +263,10 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-    private void adjustMapLatLng(@NonNull LatLng latLng) {
-        if (mMap != null) {
+    private void adjustMapLatLng(@NonNull LatLng latLng)
+    {
+        if (mMap != null)
+        {
             mMap.clear();
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             mMap.addMarker(new MarkerOptions().position(latLng)
@@ -259,7 +283,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     //region functions
 
-    private void showSettingsAlert() {
+    private void showSettingsAlert()
+    {
         Intent locationSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(locationSettingsIntent);
 
@@ -285,7 +310,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
         }).negativeText(this.getString(R.string.cancel)).show();*/
     }
 
-    private void showBookDetailsDialog(boolean showTime) {
+    private void showBookDetailsDialog(boolean showTime)
+    {
         layoutLeaverMapLeaveOptions.setVisibility(View.GONE);
         layoutLeaverMapStartLeave.setVisibility(View.VISIBLE);
         tvLeaverMapsStartLeavingStreet.setText("");
@@ -301,7 +327,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     //region calls
 
 
-    private void callLeaverBook() {
+    private void callLeaverBook()
+    {
 
         Calendar dateCalendar = Calendar.getInstance();
         long t = dateCalendar.getTimeInMillis();
@@ -322,6 +349,14 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
         modelLeaverBookRequest.setType(status);
         modelLeaverBookRequest.setArea("strinmg");
 
+
+        model = new Model();
+        model.setFees(Integer.parseInt(edtLeaverMapsStartLeavingPrice.getText().toString()));
+        model.setAddress(address);
+        model.setLatitude(currentLatLng.latitude);
+        model.setLongitude(currentLatLng.longitude);
+        model.setLeavingtime(dateSt);
+
         Map<String, String> stringStringMap = new HashMap<>();
         stringStringMap.put("Authorization", "bearer " + SharedPrefHelper.getInstance(this).getAccessToken());
         stringStringMap.put("Content-Type", "application/json");
@@ -329,7 +364,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callLeaverBook.name(), true);
     }
 
-    private void callGetAddressFromMap() {
+    private void callGetAddressFromMap()
+    {
 
         String toSend = currentLatLng.latitude + "," + currentLatLng.longitude;
         Call call = HandleCalls.restParki.getClientService().callGetAddressFromMap(toSend,
@@ -338,7 +374,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
 
-    private void callConfirmRequest() {
+    private void callConfirmRequest()
+    {
         ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
 //        modelCommonRequest.setRequestID(bookedID);
         modelCommonRequest.setSeeker(true);
@@ -351,19 +388,23 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
-        if (flag.equals(DataEnum.callLeaverBook.name())) {
+    public void onResponseSuccess(String flag, Object o)
+    {
+        if (flag.equals(DataEnum.callLeaverBook.name()))
+        {
 
             Intent intent = new Intent(LeaverMapsActivity.this, WaitingSeekerActivity.class);
             String time = "600";
             intent.putExtra(DataEnum.intentLeaveTime.name(), leaveTime);
             intent.putExtra(DataEnum.intentLeaveLocationLat.name(), lat);
             intent.putExtra(DataEnum.intentLeaveLocationLng.name(), lng);
+            intent.putExtra("model", (Serializable)  model);
             startActivity(intent);
             finish();
 
 
-        } else if (flag.equals(DataEnum.callGetAddressFromMap.name())) {
+        } else if (flag.equals(DataEnum.callGetAddressFromMap.name()))
+        {
             ModelGetAddressFromMap modelGetAddressFromMap = (ModelGetAddressFromMap) o;
 
             address = modelGetAddressFromMap.getResults().get(0).getFormatted_address();
@@ -374,12 +415,14 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    public void onNoContent(String flag, int code) {
+    public void onNoContent(String flag, int code)
+    {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
@@ -389,41 +432,50 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     //region clicks
 
     @OnClick(R.id.btnLeaverMapLeaveNow)
-    public void onClickbtnLeaverMapLeaveNow() {
+    public void onClickbtnLeaverMapLeaveNow()
+    {
         status = 1;
         showBookDetailsDialog(false);
     }
 
     @OnClick(R.id.btnLeaverMapLater)
-    public void onClickbtnLeaverMapLater() {
+    public void onClickbtnLeaverMapLater()
+    {
         status = 2;
         showBookDetailsDialog(true);
     }
 
     @OnClick(R.id.btnLeaverMapsStartLeaving)
-    public void onClickbtnLeaverMapsStartLeaving() {
-        if (edtLeaverMapsStartLeavingPrice.getText().toString().length() > 0) {
+    public void onClickbtnLeaverMapsStartLeaving()
+    {
+        if (edtLeaverMapsStartLeavingPrice.getText().toString().length() > 0)
+        {
             if (status == 1)
                 callLeaverBook();
-            else if (tvLeaverMapsStartLeavingTime.getText().toString().length() > 0) {
+            else if (tvLeaverMapsStartLeavingTime.getText().toString().length() > 0)
+            {
                 callLeaverBook();
-            } else {
+            } else
+            {
                 tvLeaverMapsStartLeavingTime.setError(getString(R.string.required));
             }
-        } else {
+        } else
+        {
             edtLeaverMapsStartLeavingPrice.setError(getString(R.string.required));
         }
     }
 
     @OnClick(R.id.btnLeaverMapsCancel)
-    public void onClickbtnLeaverMapsCancel() {
+    public void onClickbtnLeaverMapsCancel()
+    {
 
         layoutLeaverMapLeaveOptions.setVisibility(View.VISIBLE);
         layoutLeaverMapStartLeave.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.tvLeaverMapsStartLeavingTime)
-    public void onClicktvLeaverMapsStartLeavingTime() {
+    public void onClicktvLeaverMapsStartLeavingTime()
+    {
         // TODO submit data to server...
     }
     //endregion
