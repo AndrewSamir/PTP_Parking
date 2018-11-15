@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import parking.com.slash.parking.R;
 import parking.com.slash.parking.activities.MainActivity;
 import parking.com.slash.parking.activities.Seeker.SeekerMapsActivity;
@@ -42,8 +43,7 @@ import parking.com.slash.parking.utlities.DataEnum;
 import parking.com.slash.parking.utlities.HelpMe;
 import retrofit2.Call;
 
-public class WaitingSeekerActivity extends Activity implements OnMapReadyCallback, HandleRetrofitResp
-{
+public class WaitingSeekerActivity extends Activity implements OnMapReadyCallback, HandleRetrofitResp {
 
     //region fields
     private GoogleMap googleMap;
@@ -66,8 +66,7 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
 
     //region life cycle
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_seeker);
         ButterKnife.bind(this);
@@ -82,40 +81,33 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
         initMap(savedInstanceState);
     }
 
-
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         registerReceiver(mNotificationReceiver, new IntentFilter("KEY"));
         setCountDownTimer();
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         unregisterReceiver(mNotificationReceiver);
         countDownTimer.cancel();
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
 //        super.onBackPressed();
         HelpMe.getInstance(this);
-        HelpMe.showMessage(this, getString(R.string.are_you_sure_to_cancel), new MaterialDialog.SingleButtonCallback()
-        {
+        HelpMe.showMessage(this, getString(R.string.are_you_sure_to_cancel), new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-            {
-                startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                callCancelRequest();
+//                startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
-        }, new MaterialDialog.SingleButtonCallback()
-        {
+        }, new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
-            {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
             }
         });
@@ -124,15 +116,12 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
 //endregion
 
     //region map
-    protected void initMap(Bundle savedInstanceState)
-    {
+    protected void initMap(Bundle savedInstanceState) {
         mvWaitingSeeker.onCreate(savedInstanceState);
 
-        try
-        {
+        try {
             MapsInitializer.initialize(this.getApplicationContext());
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("mapError", e.getMessage());
         }
 
@@ -140,8 +129,7 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap map)
-    {
+    public void onMapReady(GoogleMap map) {
         this.googleMap = map;
 
         LatLng latLng = new LatLng(lat, lng);
@@ -149,10 +137,8 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     }
 
 
-    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng)
-    {
-        if (googleMap != null)
-        {
+    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng) {
+        if (googleMap != null) {
             googleMap.clear();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             googleMap.addMarker(new MarkerOptions().position(latLng)
@@ -166,15 +152,12 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     //region functions
 
 
-    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver()
-    {
+    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent)
-        {
+        public void onReceive(Context context, Intent intent) {
             Log.d("notificationBroadCast", "received");
 
-            switch (intent.getIntExtra("extra", 0))
-            {
+            switch (intent.getIntExtra("extra", 0)) {
                 case 1:
 
                     Intent intent1 = new Intent(WaitingSeekerActivity.this, SeekerMapsActivity.class);
@@ -186,29 +169,23 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
         }
     };
 
-    private void setCountDownTimer()
-    {
+    private void setCountDownTimer() {
         Calendar dateCalendar = Calendar.getInstance();
         int animationDuration = (int) (leaveTime - dateCalendar.getTimeInMillis());
         Log.d("timerDuration", animationDuration + "");
-        if (dateCalendar.getTimeInMillis() >= leaveTime)
-        {
-//            callCloseConversations();
-        } else
-        {
+        if (dateCalendar.getTimeInMillis() >= leaveTime) {
+            startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+        } else {
             circleProgressWaitingSeeker.setProgressWithAnimation(100, animationDuration); // Default duration = 1500ms
 
-            countDownTimer = new CountDownTimer((animationDuration), 1000)
-            {
-                public void onTick(long millisUntilFinished)
-                {
+            countDownTimer = new CountDownTimer((animationDuration), 1000) {
+                public void onTick(long millisUntilFinished) {
                     SimpleDateFormat format = new SimpleDateFormat("mm:ss", Locale.ENGLISH);
                     String d = format.format(new Date(millisUntilFinished));
                     tvWaitingSeekerTimer.setText(d);
                 }
 
-                public void onFinish()
-                {
+                public void onFinish() {
 //                    callClose = true;
                     tvWaitingSeekerTimer.setText("finished");
 //                    callCloseConversations();
@@ -222,33 +199,50 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
     //region calls
 
 
-    private void callCancelRequest()
-    {
+    private void callCancelRequest() {
         ModelCommonRequest modelCommonRequest = new ModelCommonRequest();
         modelCommonRequest.setRequestID(model.getRequestid());
-        modelCommonRequest.setSeeker(true);
+        modelCommonRequest.setSeeker(false);
         Call call = HandleCalls.restParki.getClientService().callCancelRequest(modelCommonRequest);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callCancelRequest.name(), true);
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o)
-    {
+    public void onResponseSuccess(String flag, Object o) {
         startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
     }
 
     @Override
-    public void onNoContent(String flag, int code)
-    {
+    public void onNoContent(String flag, int code) {
         startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position)
-    {
+    public void onResponseSuccess(String flag, Object o, int position) {
 
+    }
+
+    //endregion
+
+    //region clicks
+
+    @OnClick(R.id.btnWaitingCancel)
+    public void onClickbtnWaitingCancel() {
+        HelpMe.getInstance(this);
+        HelpMe.showMessage(this, getString(R.string.are_you_sure_to_cancel), new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                callCancelRequest();
+//                startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        }, new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        });
     }
 
     //endregion

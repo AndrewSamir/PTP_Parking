@@ -115,6 +115,10 @@ dependencies {
     //pager indicator
     implementation 'com.bikomobile:circleindicatorpager:1.0.0'
 
+    //time picker
+    implementation 'com.code-troopers.betterpickers:library:3.1.0'
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'

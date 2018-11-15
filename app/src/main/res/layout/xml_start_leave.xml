@@ -75,7 +75,7 @@
             android:layout_marginTop="@dimen/_7sdp"
             android:hint="@string/leaving_time"
             android:textColor="@color/colorThirdTextColor"
-            android:textSize="@dimen/_10sdp"
+            android:textSize="@dimen/_14sdp"
             android:visibility="gone" />
 
         <Button

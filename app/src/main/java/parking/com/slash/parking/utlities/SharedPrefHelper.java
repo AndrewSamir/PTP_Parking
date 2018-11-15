@@ -29,8 +29,7 @@ public class SharedPrefHelper {
     }
 
 
-    public void setUser(Model modelLoginResponse)
-    {
+    public void setUser(Model modelLoginResponse) {
         editor = context.getSharedPreferences("MY_PREFS_NAME", MODE_PRIVATE).edit();
         editor.putString(DataEnum.shUserID.name(), modelLoginResponse.getUserid());
         editor.putString(DataEnum.shAccessToken.name(), modelLoginResponse.getAccesstoken());
@@ -50,10 +49,17 @@ public class SharedPrefHelper {
         editor.apply();
     }
 
-    public String getAccessToken()
-    {
+    public String getAccessToken() {
         return prefs.getString(DataEnum.shAccessToken.name(), null);
     }
 
 
+    public void shSignOut() {
+        editor = context.getSharedPreferences("MY_PREFS_NAME", MODE_PRIVATE).edit();
+        editor.remove(DataEnum.shUserID.name());
+        editor.remove(DataEnum.shAccessToken.name());
+        editor.remove(DataEnum.shUserName.name());
+        editor.remove(DataEnum.shMobile.name());
+        editor.apply();
+    }
 }

@@ -2,6 +2,12 @@ package parking.com.slash.parking.retorfitconfig;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +25,8 @@ import parking.com.slash.parking.utlities.HelpMe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static parking.com.slash.parking.utlities.HelpMe.getMaterialDialogBuilder;
 
 
 public class HandleCalls {
@@ -64,9 +72,9 @@ public class HandleCalls {
                 if (response.code() == 200) {
 
                     ModelCommenResponse modelCommenResponse = response.body();
-                    if (modelCommenResponse.getResponseMessage() != null) ;
-//                        ((BaseActivity) context).showMessage(modelCommenResponse.getResponseMessage());
-                    if (modelCommenResponse.getData() != null && modelCommenResponse.getStatus() ==1)
+                    if (modelCommenResponse.getResponseMessage() != null)
+                        showMessage(null, modelCommenResponse.getResponseMessage());
+                    if (modelCommenResponse.getData() != null && modelCommenResponse.getStatus() == 1)
                         onRespnse.onResponseSuccess(flag, modelCommenResponse.getData());
                     else if (modelCommenResponse.getStatus() == 1)
                         onRespnse.onNoContent(flag, response.code());
@@ -102,12 +110,36 @@ public class HandleCalls {
                 if (showLoading)
                     progressDialog.dismiss();
 
-//                ((BaseActivity) context).showMessage(((BaseActivity) context).getString(R.string.internet_connection));
+                showMessage(null, context.getString(R.string.internet_connection));
 
 //                HelpMe.getInstance(context).retrofironFailure(t);
             }
         });
 
+    }
+
+    public void showMessage(@Nullable String title, @NonNull String message) {
+
+        MaterialDialog.Builder builder = getMaterialDialogBuilder();
+        builder.content(message);
+        if (title != null) {
+            builder.title(title);
+        }
+
+        builder.content(message).positiveText(R.string.agree).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).autoDismiss(true).titleGravity(GravityEnum.CENTER).contentGravity(GravityEnum.CENTER).show();
+
+    }
+
+    public static MaterialDialog.Builder getMaterialDialogBuilder() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
+//        builder.typeface("TheSansArabic-Bold.otf", "TheSansArabic-Plain.otf");
+
+        return builder;
     }
 
     public <ModelGetAddressFromMap> void callRetrofitGoogleAPi(Call<ModelGetAddressFromMap> call, final String flag, final Boolean showLoading) {

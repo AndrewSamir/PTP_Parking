@@ -12,13 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
@@ -66,7 +59,7 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
     @BindView(R.id.edtLoginEmail)
     EditText edtLoginEmail;
 
-//    @Password
+    //    @Password
     @BindView(R.id.edtLoginPassword)
     EditText edtLoginPassword;
 
@@ -194,7 +187,8 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
         startActivityForResult(dropInRequest.getIntent(this), REQUEST_CODE);
     }
 
-    Map<String ,String> paramHash;
+    Map<String, String> paramHash;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
@@ -210,24 +204,24 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
                 Log.d("mylog", "Result: " + stringNonce);
                 // Send payment price with the nonce
                 // use the result to update your UI and send the payment method nonce to your server
-                    amount = "300";
-                    paramHash = new HashMap<>();
-                    paramHash.put("amount", amount);
-                    paramHash.put("nonce", stringNonce);
-                    sendPaymentDetails();
-                } else
-                    Toast.makeText(LoginActivity.this, "Please enter a valid amount.", Toast.LENGTH_SHORT).show();
+                amount = "300";
+                paramHash = new HashMap<>();
+                paramHash.put("amount", amount);
+                paramHash.put("nonce", stringNonce);
+//                    sendPaymentDetails();
+            } else
+                Toast.makeText(LoginActivity.this, "Please enter a valid amount.", Toast.LENGTH_SHORT).show();
 
 
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // the user canceled
-            } else {
-                // handle errors here, an exception may be available in
-                Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
-            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            // the user canceled
+        } else {
+            // handle errors here, an exception may be available in
+            Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
         }
+    }
 
-
+/*
 
     private void sendPaymentDetails() {
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
@@ -271,58 +265,57 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
             }
         };
         queue.add(stringRequest);
-    }
+    }*/
 
-private class HttpRequest extends AsyncTask
-{
-    ProgressDialog progress;
+    private class HttpRequest extends AsyncTask {
+        ProgressDialog progress;
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        progress = new ProgressDialog(LoginActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
-        progress.setCancelable(false);
-        progress.setMessage("We are contacting our servers for token, Please wait");
-        progress.setTitle("Getting token");
-        progress.show();
-    }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = new ProgressDialog(LoginActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+            progress.setCancelable(false);
+            progress.setMessage("We are contacting our servers for token, Please wait");
+            progress.setTitle("Getting token");
+            progress.show();
+        }
 
-    @Override
-    protected Object doInBackground(Object[] objects) {
-        HttpClient client = new HttpClient();
-        client.get(get_token, new HttpResponseCallback() {
-            @Override
-            public void success(String responseBody) {
-                Log.d("mylog", responseBody);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LoginActivity.this, "Successfully got token", Toast.LENGTH_SHORT).show();
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            HttpClient client = new HttpClient();
+            client.get(get_token, new HttpResponseCallback() {
+                @Override
+                public void success(String responseBody) {
+                    Log.d("mylog", responseBody);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, "Successfully got token", Toast.LENGTH_SHORT).show();
 //                        llHolder.setVisibility(View.VISIBLE);
-                    }
-                });
-                token = responseBody;
-            }
+                        }
+                    });
+                    token = responseBody;
+                }
 
-            @Override
-            public void failure(Exception exception) {
-                final Exception ex = exception;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LoginActivity.this, "Failed to get token: " + ex.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-        return null;
-    }
+                @Override
+                public void failure(Exception exception) {
+                    final Exception ex = exception;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, "Failed to get token: " + ex.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+            return null;
+        }
 
-    @Override
-    protected void onPostExecute(Object o) {
-        super.onPostExecute(o);
-        progress.dismiss();
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            progress.dismiss();
+        }
     }
-}
     //endregion
 }
