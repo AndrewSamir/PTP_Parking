@@ -1,17 +1,30 @@
 package parking.com.slash.parking.activities.Account;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Config;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.interfaces.HttpResponseCallback;
+import com.braintreepayments.api.internal.HttpClient;
+import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -20,7 +33,9 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +87,8 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
             edtLoginPassword.setText("123456");
         }
         HandleCalls.getInstance(this).setonRespnseSucess(this);
+//        new HttpRequest().execute();
+
     }
 
     //endregion
@@ -162,6 +179,10 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
     View tvPayPalTest;
     private int REQUEST_CODE = 305;
 
+    final String get_token = "MIIBCgKCAQEAo6i4Blc8lIYrov8vNcBSRT0KvIBRP/hx7G7J4ZqaofBi0VpJV6bJxuI/IxAZOuGprZ6phsnb2nWuXHvb2kKkYs7ZBNKvgAOe09RxsUl8+hnSXqSe5WlihT0Dj85uv2WiWOtSkd2BKKZw4VcoFymqhI0LDlHZWFptc0ztQIAkfgGICeb7zRJ0nTMovb/m/YyQl2ywTvbeE0DrP3LKw7Ia24sFsGNgnRIzO5zmZqcPX8KvLa0qeau6sfTJ7354DtdeKM6ezASAojcUZ9KeLdNi+Kso4Eoz/AFyUILEOeYX5CxcGySl8K8w9IAhVHD/KC1RLms4JW0tPOUeRcoigKH81QIDAQAB";
+    final String send_payment_details = "YOUR-API-FOR-PAYMENTS";
+    String token, amount;
+
     @OnClick(R.id.tvPayPalTest)
     public void onClicktvPayPalTest() {
         onBraintreeSubmit(tvPayPalTest);
@@ -173,13 +194,31 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
         startActivityForResult(dropInRequest.getIntent(this), REQUEST_CODE);
     }
 
+    Map<String ,String> paramHash;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
-                Log.d("paypal", result.getDeviceData());
+//                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                Log.d("paypal", "getdata");
                 // use the result to update your UI and send the payment method nonce to your server
+
+
+                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                PaymentMethodNonce nonce = result.getPaymentMethodNonce();
+                String stringNonce = nonce.getNonce();
+                Log.d("mylog", "Result: " + stringNonce);
+                // Send payment price with the nonce
+                // use the result to update your UI and send the payment method nonce to your server
+                    amount = "300";
+                    paramHash = new HashMap<>();
+                    paramHash.put("amount", amount);
+                    paramHash.put("nonce", stringNonce);
+                    sendPaymentDetails();
+                } else
+                    Toast.makeText(LoginActivity.this, "Please enter a valid amount.", Toast.LENGTH_SHORT).show();
+
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
             } else {
@@ -187,6 +226,103 @@ public class LoginActivity extends Activity implements Validator.ValidationListe
                 Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
             }
         }
+
+
+
+    private void sendPaymentDetails() {
+        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, send_payment_details,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.contains("Successful"))
+                        {
+                            Toast.makeText(LoginActivity.this, "Transaction successful", Toast.LENGTH_LONG).show();
+                        }
+                        else Toast.makeText(LoginActivity.this, "Transaction failed", Toast.LENGTH_LONG).show();
+                        Log.d("mylog", "Final Response: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("mylog", "Volley error : " + error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                if (paramHash == null)
+                    return null;
+                Map<String, String> params = new HashMap<>();
+                for (String key : paramHash.keySet()) {
+                    params.put(key, paramHash.get(key));
+                    Log.d("mylog", "Key : " + key + " Value : " + paramHash.get(key));
+                }
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        queue.add(stringRequest);
     }
+
+private class HttpRequest extends AsyncTask
+{
+    ProgressDialog progress;
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progress = new ProgressDialog(LoginActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+        progress.setCancelable(false);
+        progress.setMessage("We are contacting our servers for token, Please wait");
+        progress.setTitle("Getting token");
+        progress.show();
+    }
+
+    @Override
+    protected Object doInBackground(Object[] objects) {
+        HttpClient client = new HttpClient();
+        client.get(get_token, new HttpResponseCallback() {
+            @Override
+            public void success(String responseBody) {
+                Log.d("mylog", responseBody);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, "Successfully got token", Toast.LENGTH_SHORT).show();
+//                        llHolder.setVisibility(View.VISIBLE);
+                    }
+                });
+                token = responseBody;
+            }
+
+            @Override
+            public void failure(Exception exception) {
+                final Exception ex = exception;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, "Failed to get token: " + ex.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
+        progress.dismiss();
+    }
+}
     //endregion
 }

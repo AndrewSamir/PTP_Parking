@@ -77,7 +77,8 @@ import parking.com.slash.parking.utlities.SharedPrefHelper;
 import retrofit2.Call;
 
 
-public class SignUpCarDetailsActivity extends FragmentActivity implements HandleRetrofitResp, CompoundButton.OnCheckedChangeListener {
+public class SignUpCarDetailsActivity extends FragmentActivity implements HandleRetrofitResp, CompoundButton.OnCheckedChangeListener
+{
     //region fields
     String brandId, modelId, colorId;
     Intent intent;
@@ -116,7 +117,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
     //region life cycle
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_car_details);
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -133,13 +135,15 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
     //region clicks
 
     @OnClick(R.id.tvSignUpCarModel)
-    void onClicktvSignUpCarModel(View view) {
+    void onClicktvSignUpCarModel(View view)
+    {
         if (brandId != null)
             callGetModelsList(brandId);
     }
 
     @OnClick(R.id.tvSignUpSelectImage)
-    void onClicktvSignUpSelectImage(View view) {
+    void onClicktvSignUpSelectImage(View view)
+    {
 
         if (ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager
@@ -147,7 +151,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 .checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager
                 .PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager
-                .PERMISSION_GRANTED) {
+                .PERMISSION_GRANTED)
+        {
             requestStorageAndCameraPermission();
             return;
         }
@@ -155,17 +160,20 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
     }
 
     @OnClick(R.id.tvSignUpConnectPaypal)
-    void onClicktvSignUpConnectPaypal(View view) {
+    void onClicktvSignUpConnectPaypal(View view)
+    {
 
     }
 
     @OnClick(R.id.tvSignUpTerms)
-    void onClicktvSignUpTerms(View view) {
+    void onClicktvSignUpTerms(View view)
+    {
 
     }
 
     @OnClick(R.id.btnSignUp)
-    void onClickbtnSignUp(View view) {
+    void onClickbtnSignUp(View view)
+    {
         callRegister();
     }
 
@@ -174,26 +182,27 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
     //region calls
 
-    private void callGetBrandsList() {
+    private void callGetBrandsList()
+    {
         Call call = HandleCalls.restParki.getClientService().callGetBrandsList();
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callGetBrandsList.name(), true);
     }
 
-    private void callGetColorsList() {
+    private void callGetColorsList()
+    {
         Call call = HandleCalls.restParki.getClientService().callGetColorsList();
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callGetColorsList.name(), true);
     }
 
-    private void callGetModelsList(String brandId) {
+    private void callGetModelsList(String brandId)
+    {
         Call call = HandleCalls.restParki.getClientService().callGetModelsList(brandId);
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callGetModelsList.name(), true);
     }
 
-    private void callRegister() {
-
-
+    private void callRegister()
+    {
         Call call = HandleCalls.restParki.getClientService().callRegister(
-                null,
                 intent.getStringExtra(DataEnum.regMail.name()),
                 intent.getStringExtra(DataEnum.regPassword.name()),
                 intent.getStringExtra(DataEnum.regMobile.name()),
@@ -206,7 +215,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
         HandleCalls.getInstance(this).callRetrofit(call, DataEnum.callRegister.name(), true);
     }
 
-    private void callLogin() {
+    private void callLogin()
+    {
 
         ModelLoginRequest modelLoginRequest = new ModelLoginRequest();
         modelLoginRequest.setUsername(intent.getStringExtra(DataEnum.regMail.name()));
@@ -220,10 +230,12 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
     //region call response
     @Override
-    public void onResponseSuccess(String flag, Object o) {
+    public void onResponseSuccess(String flag, Object o)
+    {
 
 
-        if (flag.equals(DataEnum.callGetBrandsList.name())) {
+        if (flag.equals(DataEnum.callGetBrandsList.name()))
+        {
             callGetColorsList();
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
@@ -232,7 +244,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
             arrName = new ArrayList<>();
             arrIds = new ArrayList<>();
-            for (int i = 0; i < modelCarBrand.getModel().size(); i++) {
+            for (int i = 0; i < modelCarBrand.getModel().size(); i++)
+            {
 
                 arrName.add(modelCarBrand.getModel().get(i).getName());
                 arrIds.add(modelCarBrand.getModel().get(i).getId());
@@ -243,9 +256,11 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
             autovSignUpCarBrand.setAdapter(adapter);
 
 
-            autovSignUpCarBrand.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            autovSignUpCarBrand.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
                     my_var = adapter.getItem(position).toString();
                     selectedPosition = position;
                     brandId = getID(my_var, modelCarBrand);
@@ -253,32 +268,38 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 }
             });
 
-            autovSignUpCarBrand.addTextChangedListener(new TextWatcher() {
+            autovSignUpCarBrand.addTextChangedListener(new TextWatcher()
+            {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                {
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                public void onTextChanged(CharSequence s, int start, int before, int count)
+                {
                     my_var = null;
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(Editable s)
+                {
                 }
             });
 
 
 //            showListDialog(brandNames, brandIds, DataEnum.brand.name());
 
-        } else if (flag.equals(DataEnum.callGetModelsList.name())) {
+        } else if (flag.equals(DataEnum.callGetModelsList.name()))
+        {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             modelCarBrandModels = gson.fromJson(jsonObject, ModelCarBrand.class);
 
             arrNameModels = new ArrayList<>();
             arrIdsModeles = new ArrayList<>();
-            for (int i = 0; i < modelCarBrandModels.getModel().size(); i++) {
+            for (int i = 0; i < modelCarBrandModels.getModel().size(); i++)
+            {
 
                 arrNameModels.add(modelCarBrandModels.getModel().get(i).getName());
                 arrIdsModeles.add(modelCarBrandModels.getModel().get(i).getId());
@@ -289,9 +310,11 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
             tvSignUpCarModel.setAdapter(adapter);
 
 
-            tvSignUpCarModel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            tvSignUpCarModel.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
                     my_var = adapter.getItem(position).toString();
                     selectedPosition = position;
                     modelId = getID(my_var, modelCarBrandModels);
@@ -299,30 +322,36 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 }
             });
 
-            tvSignUpCarModel.addTextChangedListener(new TextWatcher() {
+            tvSignUpCarModel.addTextChangedListener(new TextWatcher()
+            {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                {
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                public void onTextChanged(CharSequence s, int start, int before, int count)
+                {
                     my_var = null;
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(Editable s)
+                {
                 }
             });
 
 
-        } else if (flag.equals(DataEnum.callGetColorsList.name())) {
+        } else if (flag.equals(DataEnum.callGetColorsList.name()))
+        {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             modelGetColors = gson.fromJson(jsonObject, ModelGetColors.class);
 
             arrNameColor = new ArrayList<>();
             arrIdsColor = new ArrayList<>();
-            for (int i = 0; i < modelGetColors.getModel().size(); i++) {
+            for (int i = 0; i < modelGetColors.getModel().size(); i++)
+            {
 
                 arrNameColor.add(modelGetColors.getModel().get(i).getColorname());
                 arrIdsColor.add(modelGetColors.getModel().get(i).getCarcolorid());
@@ -333,9 +362,11 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
             edtSignUpCarColor.setAdapter(adapter);
 
 
-            edtSignUpCarColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            edtSignUpCarColor.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
                     my_var = adapter.getItem(position).toString();
                     selectedPosition = position;
                     colorId = getID(my_var, modelGetColors);
@@ -343,23 +374,28 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 }
             });
 
-            edtSignUpCarColor.addTextChangedListener(new TextWatcher() {
+            edtSignUpCarColor.addTextChangedListener(new TextWatcher()
+            {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                {
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                public void onTextChanged(CharSequence s, int start, int before, int count)
+                {
                     my_var = null;
                 }
 
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(Editable s)
+                {
                 }
             });
 
 
-        } else if (flag.equals(DataEnum.callRegister.name())) {
+        } else if (flag.equals(DataEnum.callRegister.name()))
+        {
             Gson gson = new Gson();
             JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
             ModelLoginResponse modelGetNearByResponse = gson.fromJson(jsonObject, ModelLoginResponse.class);
@@ -383,12 +419,14 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
     }
 
     @Override
-    public void onNoContent(String flag, int code) {
+    public void onNoContent(String flag, int code)
+    {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position) {
+    public void onResponseSuccess(String flag, Object o, int position)
+    {
 
     }
 
@@ -426,9 +464,11 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
           tvSignUpCarBrand.setText("dcghjkls");
       }
   */
-    private String getID(String name, ModelCarBrand modelCarBrand) {
+    private String getID(String name, ModelCarBrand modelCarBrand)
+    {
 
-        for (Model modelCarBrand1 : modelCarBrand.getModel()) {
+        for (Model modelCarBrand1 : modelCarBrand.getModel())
+        {
             if (name.equals(modelCarBrand1.getName()))
                 return modelCarBrand1.getId();
         }
@@ -436,9 +476,11 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
         return null;
     }
 
-    private String getID(String name, ModelGetColors modelGetColors) {
+    private String getID(String name, ModelGetColors modelGetColors)
+    {
 
-        for (parking.com.slash.parking.model.ModelGetColors.Model model : modelGetColors.getModel()) {
+        for (parking.com.slash.parking.model.ModelGetColors.Model model : modelGetColors.getModel())
+        {
             if (name.equals(model.getColorname()))
                 return model.getCarcolorid();
         }
@@ -447,12 +489,15 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b)
+    {
 
-        if (b) {
+        if (b)
+        {
             btnSignUp.setAlpha(1f);
             btnSignUp.setEnabled(true);
-        } else {
+        } else
+        {
             btnSignUp.setAlpha(0.2f);
             btnSignUp.setEnabled(false);
         }
@@ -461,22 +506,28 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
     //region images
 
-    private void requestStorageAndCameraPermission() {
+    private void requestStorageAndCameraPermission()
+    {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
+                .withListener(new MultiplePermissionsListener()
+                {
                     @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
+                    public void onPermissionsChecked(MultiplePermissionsReport report)
+                    {
+                        if (report.areAllPermissionsGranted())
+                        {
                             selectImage();
-                        } else if (report.isAnyPermissionPermanentlyDenied()) {
+                        } else if (report.isAnyPermissionPermanentlyDenied())
+                        {
 //                            showMessage(R.string.please_grant_permissions);
                             Log.d("permissions", "permissions grant");
                         }
                     }
 
                     @Override
-                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token) {
+                    public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> permissions, PermissionToken token)
+                    {
                         showPermissionRationaleMessage(token);
 
                     }
@@ -484,29 +535,37 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 }).check();
     }
 
-    private void showPermissionRationaleMessage(final PermissionToken token) {
+    private void showPermissionRationaleMessage(final PermissionToken token)
+    {
 
-        HelpMe.showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback() {
+        HelpMe.showMessage(this, getResources().getString(R.string.permissions_needed), new MaterialDialog.SingleButtonCallback()
+        {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
                 token.continuePermissionRequest();
                 dialog.dismiss();
             }
-        }, new MaterialDialog.SingleButtonCallback() {
+        }, new MaterialDialog.SingleButtonCallback()
+        {
             @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
                 token.cancelPermissionRequest();
                 dialog.dismiss();
             }
         });
     }
 
-    private void selectImage() {
+    private void selectImage()
+    {
 
         TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(this)
-                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener()
+                {
                     @Override
-                    public void onImageSelected(Uri uri) {
+                    public void onImageSelected(Uri uri)
+                    {
                         CarImage = prepareFilePart("CarImage", uri);
                         Picasso.with(SignUpCarDetailsActivity.this)
                                 .load(uri)
@@ -521,7 +580,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
 
     }
 
-    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri)
+    {
 
         File file = new File(getRealPathFromUri(fileUri));
         // create RequestBody instance from file
@@ -530,21 +590,26 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
 
-    private String getRealPathFromUri(final Uri uri) {
+    private String getRealPathFromUri(final Uri uri)
+    {
         // DocumentProvider
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(this, uri)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(this, uri))
+        {
             // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
+            if (isExternalStorageDocument(uri))
+            {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
+                if ("primary".equalsIgnoreCase(type))
+                {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
             }
             // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+            else if (isDownloadsDocument(uri))
+            {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
@@ -553,17 +618,21 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 return getDataColumn(this, contentUri, null, null);
             }
             // MediaProvider
-            else if (isMediaDocument(uri)) {
+            else if (isMediaDocument(uri))
+            {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
                 Uri contentUri = null;
-                if ("image".equals(type)) {
+                if ("image".equals(type))
+                {
                     contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
+                } else if ("video".equals(type))
+                {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
+                } else if ("audio".equals(type))
+                {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
 
@@ -576,7 +645,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
             }
         }
         // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        else if ("content".equalsIgnoreCase(uri.getScheme()))
+        {
 
             // Return the remote address
             if (isGooglePhotosUri(uri))
@@ -585,7 +655,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
             return getDataColumn(this, uri, null, null);
         }
         // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        else if ("file".equalsIgnoreCase(uri.getScheme()))
+        {
             return uri.getPath();
         }
 
@@ -593,7 +664,8 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
     }
 
     private String getDataColumn(Context context, Uri uri, String selection,
-                                 String[] selectionArgs) {
+                                 String[] selectionArgs)
+    {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -601,14 +673,17 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
                 column
         };
 
-        try {
+        try
+        {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
                     null);
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst())
+            {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
-        } finally {
+        } finally
+        {
             if (cursor != null)
                 cursor.close();
         }
@@ -616,19 +691,23 @@ public class SignUpCarDetailsActivity extends FragmentActivity implements Handle
     }
 
 
-    private boolean isExternalStorageDocument(Uri uri) {
+    private boolean isExternalStorageDocument(Uri uri)
+    {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-    private boolean isDownloadsDocument(Uri uri) {
+    private boolean isDownloadsDocument(Uri uri)
+    {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
-    private boolean isMediaDocument(Uri uri) {
+    private boolean isMediaDocument(Uri uri)
+    {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    private boolean isGooglePhotosUri(Uri uri) {
+    private boolean isGooglePhotosUri(Uri uri)
+    {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 

@@ -7,10 +7,13 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,6 +39,7 @@ import parking.com.slash.parking.model.ModelCommonRequest.ModelCommonRequest;
 import parking.com.slash.parking.model.ModelGetNearBy.Model;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
 import parking.com.slash.parking.utlities.DataEnum;
+import parking.com.slash.parking.utlities.HelpMe;
 import retrofit2.Call;
 
 public class WaitingSeekerActivity extends Activity implements OnMapReadyCallback, HandleRetrofitResp
@@ -95,8 +99,29 @@ public class WaitingSeekerActivity extends Activity implements OnMapReadyCallbac
         countDownTimer.cancel();
     }
 
+    @Override
+    public void onBackPressed()
+    {
+//        super.onBackPressed();
+        HelpMe.getInstance(this);
+        HelpMe.showMessage(this, getString(R.string.are_you_sure_to_cancel), new MaterialDialog.SingleButtonCallback()
+        {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
+                startActivity(new Intent(WaitingSeekerActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        }, new MaterialDialog.SingleButtonCallback()
+        {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+            {
+                dialog.dismiss();
+            }
+        });
+    }
 
-    //endregion
+//endregion
 
     //region map
     protected void initMap(Bundle savedInstanceState)

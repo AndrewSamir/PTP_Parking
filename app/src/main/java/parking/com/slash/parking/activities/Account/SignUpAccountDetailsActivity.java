@@ -67,10 +67,13 @@ public class SignUpAccountDetailsActivity extends Activity implements Validator.
         ButterKnife.bind(this);
         validator = new Validator(this);
         validator.setValidationListener(this);
+    }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
         HandleCalls.getInstance(this).setonRespnseSucess(this);
-
-
 
     }
 

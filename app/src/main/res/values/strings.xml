@@ -109,4 +109,5 @@
     <string name="payment_method">Payment Method</string>
     <string name="credit">Credit</string>
     <string name="use_credit_first">Use credit first</string>
+    <string name="are_you_sure_to_cancel">Are You Sure Cancel This Parking</string>
 </resources>

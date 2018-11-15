@@ -33,6 +33,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_16sdp"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tvPayPalTest"
             android:layout_width="match_parent"
@@ -42,7 +43,8 @@
             android:text="paypal"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_25sdp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
 
         <TextView
@@ -106,13 +108,13 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatCheckBox
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_25sdp"
                 android:buttonTint="@color/colorWhite"
                 android:text="@string/remember_me"
                 android:textColor="@color/colorWhite"
+                android:visibility="gone"
                 tools:ignore="UnusedAttribute" />
 
             <TextView

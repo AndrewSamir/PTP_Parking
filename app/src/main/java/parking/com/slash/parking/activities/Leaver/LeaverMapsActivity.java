@@ -74,7 +74,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     Disposable disposable_location;
     Dialog progressDialog;
     private GoogleMap mMap;
-    private String street;
+    private String area;
     private String address;
     private int status = 1;// 1-> Now , 2->Later
     private String lat, lng;
@@ -271,7 +271,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             mMap.addMarker(new MarkerOptions().position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_avaliable_selected)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 8));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 15));
             progressDialog.dismiss();
             callGetAddressFromMap();
 //            showLoading(false);
@@ -314,8 +314,8 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
     {
         layoutLeaverMapLeaveOptions.setVisibility(View.GONE);
         layoutLeaverMapStartLeave.setVisibility(View.VISIBLE);
-        tvLeaverMapsStartLeavingStreet.setText("");
-        tvLeaverMapsStartLeavingAddress.setText("");
+        tvLeaverMapsStartLeavingStreet.setText(address);
+        tvLeaverMapsStartLeavingAddress.setText(area);
 
         if (showTime)
             tvLeaverMapsStartLeavingTime.setVisibility(View.VISIBLE);
@@ -398,7 +398,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
             intent.putExtra(DataEnum.intentLeaveTime.name(), leaveTime);
             intent.putExtra(DataEnum.intentLeaveLocationLat.name(), lat);
             intent.putExtra(DataEnum.intentLeaveLocationLng.name(), lng);
-            intent.putExtra("model", (Serializable)  model);
+            intent.putExtra("model", (Serializable) model);
             startActivity(intent);
             finish();
 
@@ -407,7 +407,9 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
         {
             ModelGetAddressFromMap modelGetAddressFromMap = (ModelGetAddressFromMap) o;
 
-            address = modelGetAddressFromMap.getResults().get(0).getFormatted_address();
+            String[] arrAddress = modelGetAddressFromMap.getResults().get(0).getFormatted_address().split(",");
+            address = arrAddress[0] /*+ "," + arrAddress[1]*/;
+            area = arrAddress[1];
 
         }
 

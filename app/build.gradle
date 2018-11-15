@@ -107,6 +107,7 @@ dependencies {
 
     //brain tree and paypal
     implementation 'com.braintreepayments.api:drop-in:3.+'
+    implementation 'com.android.volley:volley:1.0.0'
 
     //select image
     implementation 'gun0912.ted:tedbottompicker:1.0.1'

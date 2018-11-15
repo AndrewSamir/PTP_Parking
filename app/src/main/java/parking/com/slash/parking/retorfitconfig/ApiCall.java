@@ -55,9 +55,9 @@ public interface ApiCall {
     @POST(Constant.baseUrl + "Requests/ConfirmRequest")
     Call<ModelCommenResponse> callConfirmRequest(@Body ModelCommonRequest modelCommonRequest);
 
-    @Multipart
+//    @Multipart
     @POST(Constant.baseUrl + "Account/Register")
-    Call<ModelCommenResponse> callRegister(@Part MultipartBody.Part CarImage,
+    Call<ModelCommenResponse> callRegister(/*@Part MultipartBody.Part CarImage,*/
                                            @Query("Email") String email,
                                            @Query("Password") String password,
                                            @Query("Mobile") String mobile,
