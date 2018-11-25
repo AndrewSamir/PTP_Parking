@@ -24,8 +24,11 @@ import parking.com.slash.parking.R;
 import parking.com.slash.parking.fragments.BaseFragment;
 import parking.com.slash.parking.fragments.HistoryFragment;
 import parking.com.slash.parking.fragments.NavigateFragment;
+import parking.com.slash.parking.fragments.ParkingDetails;
 import parking.com.slash.parking.fragments.UserFragment;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
+import parking.com.slash.parking.model.ModelHistory.Model;
+import parking.com.slash.parking.utlities.DataEnum;
 import parking.com.slash.parking.utlities.SharedPrefHelper;
 
 
@@ -50,7 +53,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         ButterKnife.bind(this);
         initBottomBar();
 
-        addContentFragment(new NavigateFragment(), false);
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(DataEnum.intentDetails.name()))
+
+            addContentFragment(ParkingDetails.init((Model) intent.getSerializableExtra(DataEnum.intentDetails.name())), true);
+        else
+            addContentFragment(new NavigateFragment(), false);
    /*     if (SharedPrefHelper.getInstance(this).getAccessToken() == null)
             addContentFragment(new IntroFragment(), false);
         else
@@ -148,6 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @OnClick(R.id.navHistory)
     public void onClicknavHistory() {
+
         Drawable topH = getResources().getDrawable(R.drawable.btnav_history_active);
         navHistory.setCompoundDrawablesWithIntrinsicBounds(null, topH, null, null);
         Drawable topN = getResources().getDrawable(R.drawable.btnav_navigate);
@@ -155,6 +165,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Drawable topU = getResources().getDrawable(R.drawable.btnav_user);
         navUser.setCompoundDrawablesWithIntrinsicBounds(null, topU, null, null);
 
+        navHistory.setTextColor(getResources().getColor(R.color.colorAccent));
+        navNavigation.setTextColor(getResources().getColor(R.color.colorSecondTextColor));
+        navUser.setTextColor(getResources().getColor(R.color.colorSecondTextColor));
 
         addContentFragment(new HistoryFragment(), false);
     }
@@ -168,6 +181,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         navNavigation.setCompoundDrawablesWithIntrinsicBounds(null, topN, null, null);
         Drawable topU = getResources().getDrawable(R.drawable.btnav_user);
         navUser.setCompoundDrawablesWithIntrinsicBounds(null, topU, null, null);
+
+
+        navHistory.setTextColor(getResources().getColor(R.color.colorSecondTextColor));
+        navNavigation.setTextColor(getResources().getColor(R.color.colorAccent));
+        navUser.setTextColor(getResources().getColor(R.color.colorSecondTextColor));
+
         addContentFragment(new NavigateFragment(), false);
     }
 
@@ -181,6 +200,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         navNavigation.setCompoundDrawablesWithIntrinsicBounds(null, topN, null, null);
         Drawable topU = getResources().getDrawable(R.drawable.btnav_user_active);
         navUser.setCompoundDrawablesWithIntrinsicBounds(null, topU, null, null);
+
+
+        navHistory.setTextColor(getResources().getColor(R.color.colorSecondTextColor));
+        navNavigation.setTextColor(getResources().getColor(R.color.colorSecondTextColor));
+        navUser.setTextColor(getResources().getColor(R.color.colorAccent));
+
         addContentFragment(new UserFragment(), false);
     }
 

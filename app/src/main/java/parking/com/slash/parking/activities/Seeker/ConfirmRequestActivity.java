@@ -24,16 +24,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import parking.com.slash.parking.R;
+import parking.com.slash.parking.activities.MainActivity;
 import parking.com.slash.parking.model.ModelConfirmRequest.ModelConfirmRequest;
 import parking.com.slash.parking.model.ModelGetNearBy.Model;
 import parking.com.slash.parking.utlities.DataEnum;
 
-public class ConfirmRequestActivity extends Activity implements OnMapReadyCallback
-{
+public class ConfirmRequestActivity extends Activity implements OnMapReadyCallback {
 
     //region fields
     ModelConfirmRequest modelConfirmRequest;
@@ -61,8 +63,7 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
 
     //region life cycle
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_request);
         ButterKnife.bind(this);
@@ -78,22 +79,22 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
     //region clicks
 
     @OnClick(R.id.btnConfirmRequestBackToHome)
-    void onClickbtnConfirmRequestBackToHome(View view)
-    {
-        startActivity(new Intent(this, SeekerMapsActivity.class));
+    void onClickbtnConfirmRequestBackToHome(View view) {
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @OnClick(R.id.btnConfirmRequestShowFullReceipt)
-    void onClickbtnConfirmRequestShowFullReceipt(View view)
-    {
+    void onClickbtnConfirmRequestShowFullReceipt(View view) {
 
+        Intent intent = new Intent(ConfirmRequestActivity.this, MainActivity.class);
+        intent.putExtra(DataEnum.intentDetails.name(), (Serializable) model.convertToDetails(model));
+        startActivity(intent);
     }
     //endregion
 
     //region functions
 
-    private void adjustView()
-    {
+    private void adjustView() {
         tvConfirmRequestPrice.setText("E£ " + model.getFees());
         tvConfirmRequestDate.setText(model.getLeavingtime());
         tvConfirmRequestWithName.setText(getString(R.string.exchanged_parking_with_s, model.getLeavername()));
@@ -103,15 +104,12 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
     //endregion
 
     //region map
-    protected void initMap(Bundle savedInstanceState)
-    {
+    protected void initMap(Bundle savedInstanceState) {
         mvConfirmRequest.onCreate(savedInstanceState);
 
-        try
-        {
+        try {
             MapsInitializer.initialize(this.getApplicationContext());
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("mapError", e.getMessage());
         }
 
@@ -119,8 +117,7 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
     }
 
     @Override
-    public void onMapReady(GoogleMap map)
-    {
+    public void onMapReady(GoogleMap map) {
         this.googleMap = map;
 
         LatLng latLng = new LatLng(model.getLatitude(), model.getLongitude());
@@ -128,10 +125,8 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
     }
 
 
-    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng)
-    {
-        if (googleMap != null)
-        {
+    private void adjustMapLatLng(@android.support.annotation.NonNull LatLng latLng) {
+        if (googleMap != null) {
             googleMap.clear();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             googleMap.addMarker(new MarkerOptions().position(latLng)
@@ -141,20 +136,16 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
         }
     }
 
-    private Bitmap getBitmapMarker(String mText, boolean isSelected)
-    {
-        try
-        {
+    private Bitmap getBitmapMarker(String mText, boolean isSelected) {
+        try {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
             Resources resources = getResources();
             float scale = resources.getDisplayMetrics().density;
             Bitmap bitmap = null;
-            if (!isSelected)
-            {
+            if (!isSelected) {
                 paint.setColor(Color.WHITE);
                 bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin_avaliable_selected); // pin_with_price
-            } else
-            {
+            } else {
                 paint.setColor(Color.BLACK);
                 bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin_now);
             }
@@ -186,8 +177,7 @@ public class ConfirmRequestActivity extends Activity implements OnMapReadyCallba
             canvas.drawText(mText, x, y - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()), paint);
             return bitmap;
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
     }

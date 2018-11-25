@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     android:padding="@dimen/_15sdp">
 
     <TextView
@@ -39,6 +40,7 @@
         android:textSize="@dimen/_18sdp" />
 
     <TextView
+        android:id="@+id/tvWallet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="E£ 0"

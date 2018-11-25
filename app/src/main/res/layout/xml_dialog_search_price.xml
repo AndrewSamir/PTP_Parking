@@ -24,12 +24,45 @@
 
         <com.warkiz.widget.IndicatorStayLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
             <com.warkiz.widget.IndicatorSeekBar
                 android:id="@+id/seekBarDialogSearchRange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:isb_indicator_color="@color/colorAccent"
+                app:isb_indicator_text_color="@color/colorWhite"
+                app:isb_indicator_text_size="@dimen/_7sdp"
+                app:isb_max="90"
+                app:isb_min="1"
+                app:isb_only_thumb_draggable="true"
+                app:isb_progress="5"
+                app:isb_seek_smoothly="true"
+                app:isb_show_indicator="rounded_rectangle"
+                app:isb_show_thumb_text="false"
+                app:isb_thumb_color="@color/colorAccent"
+                app:isb_thumb_size="@dimen/_15sdp"
+                app:isb_thumb_text_color="@color/colorAccent"
+                app:isb_tick_marks_size="13dp"
+                app:isb_track_background_color="@color/colorSeekBar"
+                app:isb_track_background_size="2dp"
+                app:isb_track_progress_color="@color/colorAccent"
+                app:isb_track_progress_size="2dp" />
+
+        </com.warkiz.widget.IndicatorStayLayout>
+
+        <com.warkiz.widget.IndicatorStayLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <com.warkiz.widget.IndicatorSeekBar
+                android:id="@+id/seekBarDialogSearchRangeMax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
                 app:isb_indicator_color="@color/colorAccent"
                 app:isb_indicator_text_color="@color/colorWhite"
                 app:isb_indicator_text_size="@dimen/_7sdp"
@@ -64,14 +97,15 @@
                 android:gravity="start"
                 android:text="@string/_1k"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="invisible" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="@string/_90k"
+                android:text="EGP"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
         </LinearLayout>

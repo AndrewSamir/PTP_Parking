@@ -253,7 +253,7 @@ public class LeaverMapsActivity extends AppCompatActivity implements OnMapReadyC
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             mMap.addMarker(new MarkerOptions().position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_avaliable_selected)));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 15));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16));
             progressDialog.dismiss();
             callGetAddressFromMap();
 //            showLoading(false);

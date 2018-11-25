@@ -52,6 +52,9 @@ public class SharedPrefHelper {
     public String getAccessToken() {
         return prefs.getString(DataEnum.shAccessToken.name(), null);
     }
+    public String getName() {
+        return prefs.getString(DataEnum.shUserName.name(), null);
+    }
 
 
     public void shSignOut() {

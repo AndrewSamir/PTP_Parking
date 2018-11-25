@@ -5,8 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Model implements Serializable
-{
+public class Model implements Serializable {
     @Expose
     @SerializedName("address")
     private String address;
@@ -50,143 +49,133 @@ public class Model implements Serializable
     @SerializedName("requestID")
     private String requestid;
 
-    public String getAddress()
-    {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address)
-    {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getLeavermobile()
-    {
+    public String getLeavermobile() {
         return leavermobile;
     }
 
-    public void setLeavermobile(String leavermobile)
-    {
+    public void setLeavermobile(String leavermobile) {
         this.leavermobile = leavermobile;
     }
 
-    public String getLeavercarimage()
-    {
+    public String getLeavercarimage() {
         return leavercarimage;
     }
 
-    public void setLeavercarimage(String leavercarimage)
-    {
+    public void setLeavercarimage(String leavercarimage) {
         this.leavercarimage = leavercarimage;
     }
 
-    public String getLeavercarno()
-    {
+    public String getLeavercarno() {
         return leavercarno;
     }
 
-    public void setLeavercarno(String leavercarno)
-    {
+    public void setLeavercarno(String leavercarno) {
         this.leavercarno = leavercarno;
     }
 
-    public String getLeavercarcolor()
-    {
+    public String getLeavercarcolor() {
         return leavercarcolor;
     }
 
-    public void setLeavercarcolor(String leavercarcolor)
-    {
+    public void setLeavercarcolor(String leavercarcolor) {
         this.leavercarcolor = leavercarcolor;
     }
 
-    public String getLeavercarmodel()
-    {
+    public String getLeavercarmodel() {
         return leavercarmodel;
     }
 
-    public void setLeavercarmodel(String leavercarmodel)
-    {
+    public void setLeavercarmodel(String leavercarmodel) {
         this.leavercarmodel = leavercarmodel;
     }
 
-    public String getLeavercarbrand()
-    {
+    public String getLeavercarbrand() {
         return leavercarbrand;
     }
 
-    public void setLeavercarbrand(String leavercarbrand)
-    {
+    public void setLeavercarbrand(String leavercarbrand) {
         this.leavercarbrand = leavercarbrand;
     }
 
-    public String getLeavername()
-    {
+    public String getLeavername() {
         return leavername;
     }
 
-    public void setLeavername(String leavername)
-    {
+    public void setLeavername(String leavername) {
         this.leavername = leavername;
     }
 
-    public double getLatitude()
-    {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude)
-    {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude()
-    {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude)
-    {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public int getFees()
-    {
+    public int getFees() {
         return fees;
     }
 
-    public void setFees(int fees)
-    {
+    public void setFees(int fees) {
         this.fees = fees;
     }
 
-    public String getLeavingtime()
-    {
+    public String getLeavingtime() {
         return leavingtime;
     }
 
-    public void setLeavingtime(String leavingtime)
-    {
+    public void setLeavingtime(String leavingtime) {
         this.leavingtime = leavingtime;
     }
 
-    public int getSlottype()
-    {
+    public int getSlottype() {
         return slottype;
     }
 
-    public void setSlottype(int slottype)
-    {
+    public void setSlottype(int slottype) {
         this.slottype = slottype;
     }
 
-    public String getRequestid()
-    {
+    public String getRequestid() {
         return requestid;
     }
 
-    public void setRequestid(String requestid)
-    {
+    public void setRequestid(String requestid) {
         this.requestid = requestid;
+    }
+
+    public parking.com.slash.parking.model.ModelHistory.Model convertToDetails(Model model) {
+
+        parking.com.slash.parking.model.ModelHistory.Model modelHistory = new parking.com.slash.parking.model.ModelHistory.Model();
+        modelHistory.setAddress(model.getAddress());
+        modelHistory.setArea(model.getAddress());
+        modelHistory.setCarimage(model.getLeavercarimage());
+        modelHistory.setFees(model.getFees());
+        modelHistory.setLatitude(Double.toString(model.getLatitude()));
+        modelHistory.setLongitude(Double.toString(model.getLongitude()));
+        modelHistory.setName(model.getLeavername());
+        modelHistory.setRequestdate(model.leavingtime);
+        modelHistory.setRequestid(model.requestid);
+        modelHistory.setType(model.getSlottype());
+//        modelHistory.setUserid(model.get);
+
+        return modelHistory;
     }
 }

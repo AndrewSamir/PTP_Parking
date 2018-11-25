@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="@dimen/_20sdp"
-    android:layout_marginStart="@dimen/_20sdp"
+    android:paddingEnd="@dimen/_20sdp"
+    android:paddingStart="@dimen/_20sdp"
     android:scrollbars="none"
+    android:background="@color/colorWhite"
     tools:context=".activities.Account.SignUpCarDetailsActivity">
 
     <LinearLayout
@@ -248,14 +249,17 @@
             android:orientation="horizontal">
 
             <CheckBox
+                android:textColor="@color/black"
                 android:id="@+id/chSignUpAcceptTerms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:buttonTint="@color/black"
                 android:layout_marginEnd="@dimen/_2sdp"
                 android:text="@string/accept_all_the" />
 
 
             <TextView
+                android:textColor="@color/black"
                 android:id="@+id/tvSignUpTerms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

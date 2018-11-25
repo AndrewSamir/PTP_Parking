@@ -16,6 +16,7 @@ import parking.com.slash.parking.activities.Leaver.LeaverMapsActivity;
 import parking.com.slash.parking.activities.Seeker.SeekerMapsActivity;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
 import parking.com.slash.parking.retorfitconfig.HandleCalls;
+import parking.com.slash.parking.utlities.SharedPrefHelper;
 
 public class NavigateFragment extends BaseFragment implements HandleRetrofitResp
 {
@@ -40,6 +41,7 @@ public class NavigateFragment extends BaseFragment implements HandleRetrofitResp
 
         unbinder = ButterKnife.bind(this, view);
 
+        tvNavigationName.setText("Hi "+ SharedPrefHelper.getInstance(getBaseActivity()).getName());
         return view;
     }
 

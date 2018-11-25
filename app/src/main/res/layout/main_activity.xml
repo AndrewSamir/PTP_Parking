@@ -76,6 +76,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/btnav_history"
             android:gravity="center"
+            android:textColor="@color/colorSecondTextColor"
             android:text="@string/history"
             android:textSize="@dimen/_11sdp" />
 
@@ -95,6 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
             android:layout_weight="1"
+            android:textColor="@color/colorSecondTextColor"
             android:drawableTop="@drawable/btnav_user"
             android:gravity="center"
             android:text="@string/profile"

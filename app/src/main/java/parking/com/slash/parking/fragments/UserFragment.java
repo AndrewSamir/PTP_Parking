@@ -35,7 +35,7 @@ import retrofit2.Call;
 public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region fields
-
+    ModelUserProfile modelUserProfile;
     //endregion
 
     //region views
@@ -112,12 +112,11 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
         Gson gson = new Gson();
         JsonObject jsonObject = gson.toJsonTree(o).getAsJsonObject();
-        ModelUserProfile modelUserProfile = gson.fromJson(jsonObject, ModelUserProfile.class);
+        modelUserProfile = gson.fromJson(jsonObject, ModelUserProfile.class);
 
         adjustView(modelUserProfile);
 
     }
-
 
     @Override
     public void onNoContent(String flag, int code) {
@@ -150,7 +149,7 @@ public class UserFragment extends BaseFragment implements HandleRetrofitResp {
 
     @OnClick(R.id.tvProfileWalletAndPayment)
     public void onClicktvProfileWalletAndPayment() {
-        // TODO submit data to server...
+        addFragment(WalletFragment.init(modelUserProfile.getModel().getWallet()), true);
     }
 
     @OnClick(R.id.tvProfileInviteFriends)

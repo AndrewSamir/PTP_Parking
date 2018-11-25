@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import parking.com.slash.parking.R;
 import parking.com.slash.parking.interfaces.HandleRetrofitResp;
@@ -13,10 +15,13 @@ import parking.com.slash.parking.retorfitconfig.HandleCalls;
 
 public class WalletFragment extends BaseFragment implements HandleRetrofitResp {
     //region fields
-
+    private static int wallet;
     //endregion
 
     //region views
+
+    @BindView(R.id.tvWallet)
+    TextView tvWallet;
 
     //endregion
 
@@ -24,26 +29,24 @@ public class WalletFragment extends BaseFragment implements HandleRetrofitResp {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.wallet_fragment, container, false);
 
         unbinder = ButterKnife.bind(this, view);
 
+        tvWallet.setText(wallet + "");
         return view;
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         HandleCalls.getInstance(getBaseActivity()).setonRespnseSucess(this);
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
 //        appHeader.setRight(0, 0, 0);
     }
@@ -52,32 +55,27 @@ public class WalletFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region parent methods
     @Override
-    protected boolean canShowAppHeader()
-    {
+    protected boolean canShowAppHeader() {
         return false;
     }
 
     @Override
-    protected boolean canShowBottomBar()
-    {
+    protected boolean canShowBottomBar() {
         return false;
     }
 
     @Override
-    protected boolean canShowBackArrow()
-    {
+    protected boolean canShowBackArrow() {
         return false;
     }
 
     @Override
-    protected String getTitle()
-    {
+    protected String getTitle() {
         return null;
     }
 
     @Override
-    public int getSelectedMenuId()
-    {
+    public int getSelectedMenuId() {
         return 0;
     }
 
@@ -85,20 +83,17 @@ public class WalletFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region calls response
     @Override
-    public void onResponseSuccess(String flag, Object o)
-    {
+    public void onResponseSuccess(String flag, Object o) {
 
     }
 
     @Override
-    public void onNoContent(String flag, int code)
-    {
+    public void onNoContent(String flag, int code) {
 
     }
 
     @Override
-    public void onResponseSuccess(String flag, Object o, int position)
-    {
+    public void onResponseSuccess(String flag, Object o, int position) {
 
     }
 
@@ -114,10 +109,15 @@ public class WalletFragment extends BaseFragment implements HandleRetrofitResp {
 
     //region functions
 
-    public static WalletFragment init()
-    {
-        return new WalletFragment() ;
+    public static WalletFragment init(int wallet) {
+        setWallet(wallet);
+        return new WalletFragment();
     }
+
+    public static void setWallet(int wallet) {
+        WalletFragment.wallet = wallet;
+    }
+
     //endregion
 
 }
